@@ -1,5 +1,6 @@
 import PageHeader from '../components/common/PageHeader.jsx'
 import usePageMeta from '../hooks/usePageMeta.js'
+import { shortcuts } from '../data/shortcuts.js'
 
 export default function About() {
     usePageMeta({
@@ -39,10 +40,31 @@ export default function About() {
                             Privacy
                         </h2>
                         <p className="mt-2 text-fg-muted">
-                            Devora is a client-side application with no backend. Each tool's page states
-                            exactly how it handles your data, and a tool only claims local processing once
-                            it genuinely works that way.
+                            Devora is a client-side application with no backend of its own. Your favorites,
+                            recently used tools, and theme choice are stored only in your browser. The site's
+                            font is loaded from Google Fonts. Each tool's page states exactly how it handles
+                            your data, and a tool only claims local processing once it genuinely works that way.
                         </p>
+                    </section>
+
+                    <section aria-labelledby="about-shortcuts">
+                        <h2 id="about-shortcuts" className="text-xl font-semibold">
+                            Keyboard shortcuts
+                        </h2>
+                        <ul className="mt-3 flex flex-col gap-2">
+                            {shortcuts.map((shortcut) => (
+                                <li key={shortcut.id} className="flex items-center justify-between gap-4 text-fg-muted">
+                                    <span>{shortcut.description}</span>
+                                    <span className="flex shrink-0 gap-1">
+                                        {shortcut.keys.map((key) => (
+                                            <kbd key={key} className="kbd">
+                                                {key}
+                                            </kbd>
+                                        ))}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
                     </section>
 
                     <section aria-labelledby="about-next">
@@ -50,8 +72,8 @@ export default function About() {
                             What's next
                         </h2>
                         <p className="mt-2 text-fg-muted">
-                            More tools will be added over time. The project is built so new utilities can
-                            be added without reworking the rest of the app.
+                            More tools will be added over time. The project is built so new utilities can be
+                            added without reworking the rest of the app.
                         </p>
                     </section>
                 </div>

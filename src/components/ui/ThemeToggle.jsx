@@ -1,4 +1,5 @@
 import { Moon, Sun } from 'lucide-react'
+import IconButton from './IconButton.jsx'
 import useTheme from '../../hooks/useTheme.js'
 
 export default function ThemeToggle() {
@@ -7,14 +8,8 @@ export default function ThemeToggle() {
     const Icon = theme === 'dark' ? Sun : Moon
 
     return (
-        <button
-            type="button"
-            className="icon-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${nextTheme} theme`}
-            title={`Switch to ${nextTheme} theme`}
-        >
+        <IconButton label={`Switch to ${nextTheme} theme`} onClick={toggleTheme}>
             <Icon size={18} aria-hidden="true" />
-        </button>
+        </IconButton>
     )
 }
