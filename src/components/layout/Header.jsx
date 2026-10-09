@@ -7,7 +7,9 @@ export default function Header() {
         <header className="site-header">
             <div className="container-page site-header__inner">
                 <Link to="/" className="brand" aria-label="Devora home">
-                    <Terminal size={20} aria-hidden="true" />
+                    <span className="brand-mark">
+                        <Terminal size={16} strokeWidth={2.25} aria-hidden="true" />
+                    </span>
                     <span>Devora</span>
                 </Link>
 
