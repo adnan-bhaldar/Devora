@@ -70,7 +70,11 @@ export default function CommandPalette({ onClose }) {
     }
 
     const handleKeyDown = (event) => {
+        // While an input method (IME) is composing text, Enter and arrow keys belong to it.
+        // keyCode 229 covers Safari, where composition ends before the confirming Enter arrives.
+        if (event.nativeEvent.isComposing || event.keyCode === 229) return
         if (items.length === 0) return
+
         if (event.key === 'ArrowDown') {
             event.preventDefault()
             setActiveIndex((safeIndex + 1) % items.length)
