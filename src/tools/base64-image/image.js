@@ -1,4 +1,4 @@
-import { BASE64_ERRORS, base64ToBytes, bytesToBase64 } from '../../utils/base64.js'
+import { base64ToBytes, bytesToBase64 } from '../../utils/base64.js'
 
 export const MAX_IMAGE_MB = 5
 export const MAX_IMAGE_BYTES = MAX_IMAGE_MB * 1024 * 1024
