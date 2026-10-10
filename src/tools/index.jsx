@@ -39,4 +39,8 @@ export const toolComponents = {
     ),
     binary: lazyTool(() => import('./binary/index.jsx'), () => import('./binary/docs.js')),
     jwt: lazyTool(() => import('./jwt/index.jsx'), () => import('./jwt/docs.js')),
+    'qr-generator': lazyTool(
+        () => import('./qr-generator/index.jsx'),
+        () => import('./qr-generator/docs.js'),
+    ),
 }
