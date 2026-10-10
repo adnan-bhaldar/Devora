@@ -79,7 +79,7 @@ export const tools = [
         route: '/base64',
         icon: FileText,
         keywords: ['base64', 'encode', 'decode', 'text', 'string'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Base64 Encoder & Decoder',
             description: 'Encode and decode Base64 text directly in your browser.',

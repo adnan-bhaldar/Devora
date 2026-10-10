@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-10-base64',
+        date: '2026-10-10',
+        type: 'new',
+        title: 'Base64 Encoder & Decoder',
+        description:
+            'Encode text to Base64 and decode it back as you type, with a URL-safe option, clear error messages, and one-click copy.',
+    },
+    {
         id: '2026-10-10-gradient-types',
         date: '2026-10-10',
         type: 'improved',
