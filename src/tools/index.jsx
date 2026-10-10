@@ -9,7 +9,7 @@ import ToolDocs from '../components/tools/ToolDocs.jsx'
  * tool page gets the same structure without each tool repeating it.
  *
  * Registering a tool (after adding its entry to src/data/tools.js):
- *   base64: lazyTool(() => import('./base64/index.jsx'), () => import('./base64/docs.js')),
+ *   uuid: lazyTool(() => import('./uuid/index.jsx'), () => import('./uuid/docs.js')),
  */
 export function lazyTool(loadTool, loadDocs) {
     return lazy(async () => {
@@ -32,4 +32,5 @@ export function lazyTool(loadTool, loadDocs) {
 
 export const toolComponents = {
     gradient: lazyTool(() => import('./gradient/index.jsx'), () => import('./gradient/docs.js')),
+    base64: lazyTool(() => import('./base64/index.jsx'), () => import('./base64/docs.js')),
 }
