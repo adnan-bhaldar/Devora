@@ -14,7 +14,7 @@ const docs = {
     notes: [
         'Decoding is not verifying. Anyone can create a JWT with any contents, so decoded claims prove nothing on their own. Only a server that checks the signature with the right key can trust a token.',
         'Devora does not verify signatures. Do not use it to decide whether a token is valid.',
-        'The expiry status compares the token’s own exp, nbf, and iat claims with your device’s clock. A token that is not expired is not necessarily valid, and the claims themselves could be false.',
+        'The expiry status compares the token’s own exp and nbf claims with your device’s clock. A token that is not expired is not necessarily valid, and the claims themselves could be false.',
         'The payload of a standard JWT can be read by anyone who has the token. Do not put secrets in it.',
         'A token with "alg": "none", or with an empty signature, has no signature at all and can be created by anyone.',
         'Encrypted tokens (JWE, which have five parts) cannot be read without the key and are not supported.',
