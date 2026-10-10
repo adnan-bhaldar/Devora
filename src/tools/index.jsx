@@ -33,4 +33,8 @@ export function lazyTool(loadTool, loadDocs) {
 export const toolComponents = {
     gradient: lazyTool(() => import('./gradient/index.jsx'), () => import('./gradient/docs.js')),
     base64: lazyTool(() => import('./base64/index.jsx'), () => import('./base64/docs.js')),
+    'base64-image': lazyTool(
+        () => import('./base64-image/index.jsx'),
+        () => import('./base64-image/docs.js'),
+    ),
 }

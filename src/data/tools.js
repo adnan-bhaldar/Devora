@@ -93,7 +93,7 @@ export const tools = [
         route: '/base64-image',
         icon: Image,
         keywords: ['base64', 'image', 'data uri', 'encode', 'decode', 'png', 'jpg'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Base64 Image Encoder & Decoder',
             description: 'Convert images to Base64 data and decode Base64 back into images.',
