@@ -59,15 +59,16 @@ export const tools = [
     {
         id: 'gradient',
         name: 'CSS Gradient Generator',
-        description: 'Build linear and radial gradients and copy the CSS.',
+        description: 'Build linear, radial, reflected, and diamond gradients and copy the CSS.',
         categories: ['generators'],
         route: '/gradient-generator',
         icon: Palette,
-        keywords: ['css', 'gradient', 'linear', 'radial', 'color', 'background'],
-        status: 'coming-soon',
+        keywords: ['css', 'gradient', 'linear', 'radial', 'reflected', 'diamond', 'color', 'background'],
+        status: 'live',
         seo: {
             title: 'CSS Gradient Generator',
-            description: 'Create linear and radial CSS gradients with a live preview and copy the code.',
+            description:
+                'Create linear, radial, reflected, and diamond CSS gradients with a live preview and copy the code.',
         },
     },
     {
