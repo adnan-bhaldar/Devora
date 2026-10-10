@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-10-base64-image',
+        date: '2026-10-10',
+        type: 'new',
+        title: 'Base64 Image Converter',
+        description:
+            'Convert images to Base64 or data URIs by dropping them in, and turn Base64 back into an image you can preview and download. Everything happens in your browser.',
+    },
+    {
         id: '2026-10-10-base64',
         date: '2026-10-10',
         type: 'new',

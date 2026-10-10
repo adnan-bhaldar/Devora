@@ -44,3 +44,16 @@ export function validateFiles(files, { accept = [], maxSizeBytes, multiple = fal
 
     return { valid: files, error: '' }
 }
+
+// Saves a Blob as a file. The temporary link is how browsers start a download from code.
+export function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.append(link)
+    link.click()
+    link.remove()
+    // Wait a moment so the browser has started the download before the URL is released.
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
