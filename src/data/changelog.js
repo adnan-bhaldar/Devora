@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-10-binary',
+        date: '2026-10-10',
+        type: 'new',
+        title: 'Binary ↔ Text Converter',
+        description:
+            'Convert text to binary and binary back to text as you type, with a spaced or continuous output option, clear error messages, and a swap button.',
+    },
+    {
         id: '2026-10-10-base64-image',
         date: '2026-10-10',
         type: 'new',
