@@ -19,6 +19,12 @@ export const ERROR_LEVEL_INFO = {
 // Most plain text a code can hold (at its largest size) for each error-correction level.
 const CAPACITY = { L: 2953, M: 2331, Q: 1663, H: 1273 }
 
+// The most any QR code can hold: 7,089 digits (largest size, Low error correction, digits
+// only). Digits are the most compact content, so longer text cannot fit in any mode. The
+// check runs before encoding because uqr builds one array entry per bit of the text before
+// it notices the text is too long, which would freeze the page on a huge paste.
+const MAX_TEXT_LENGTH = 7089
+
 export const MARGINS = [
     { value: 0, label: 'None' },
     { value: 2, label: 'Small (2 modules)' },
@@ -61,6 +67,8 @@ function tooLongMessage(level) {
     return `This text is too long for a QR code at the ${name} error-correction level. At this level a code holds about ${CAPACITY[level].toLocaleString()} characters of ordinary text, and fewer with emoji or non-English text. ${advice}`
 }
 
+const OVER_LIMIT_MESSAGE = `This text is longer than any QR code can hold. The absolute limit is ${MAX_TEXT_LENGTH.toLocaleString()} digits, and ordinary text fits far less (about ${CAPACITY.L.toLocaleString()} characters at best). Try much shorter text.`
+
 /*
  * Returns { ok: true, qr } (qr is null for empty text) or { ok: false, error }.
  * qr.matrix is a grid read as matrix[row][column], true for a dark module. It already
@@ -68,6 +76,7 @@ function tooLongMessage(level) {
  */
 export function generateQr(text, { errorLevel, margin }) {
     if (text === '') return { ok: true, qr: null }
+    if (text.length > MAX_TEXT_LENGTH) return { ok: false, error: OVER_LIMIT_MESSAGE }
 
     try {
         const result = encode(text, { ecc: errorLevel, border: margin })

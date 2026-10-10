@@ -43,7 +43,7 @@ export default function QrOptions({ settings, colorWarning, onChange }) {
                         id="qr-margin"
                         options={MARGINS}
                         value={settings.margin}
-                        onChange={(event) => onChange({ margin: Number(event.target.value) })}
+                        onChange={(margin) => onChange({ margin })}
                     />
                 </Field>
 
@@ -52,7 +52,7 @@ export default function QrOptions({ settings, colorWarning, onChange }) {
                         id="qr-size"
                         options={SIZES}
                         value={settings.size}
-                        onChange={(event) => onChange({ size: Number(event.target.value) })}
+                        onChange={(size) => onChange({ size })}
                     />
                 </Field>
             </div>
