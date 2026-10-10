@@ -1,5 +1,9 @@
+import { useId, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
+
 /*
- * Renders a tool's documentation. Every field is optional:
+ * Renders a tool's documentation as an accordion (one section open at a time). Every
+ * field is optional:
  *   about:      string
  *   howItWorks: string | string[]   (an array renders as numbered steps)
  *   example:    { input: string, output: string }
@@ -20,26 +24,75 @@ function Block({ value, ordered = false }) {
     return <p>{value}</p>
 }
 
-export default function ToolDocs({ docs }) {
-    const { about, howItWorks, example, notes, privacy } = docs
+/*
+ * Accessible accordion item: a heading containing a button (aria-expanded) that controls
+ * a panel. The panel animates its height by transitioning a grid row between 0fr and 1fr,
+ * which works in every browser. `visibility` is transitioned too: it flips to hidden only
+ * after the closing animation ends (and to visible immediately on open), so collapsed
+ * content is never focusable or read by screen readers.
+ */
+function DocSection({ baseId, id, title, openId, onToggle, children }) {
+    const open = openId === id
+    const triggerId = `${baseId}-${id}-trigger`
+    const panelId = `${baseId}-${id}-panel`
 
     return (
-        <div className="docs">
+        <section className="rounded-xl border border-border bg-surface">
+            <h2 className="mb-0 text-base font-semibold">
+                <button
+                    type="button"
+                    id={triggerId}
+                    aria-expanded={open}
+                    aria-controls={panelId}
+                    onClick={() => onToggle(id)}
+                    className={`flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl px-4 py-3 text-left hover:bg-surface-2 ${open ? 'rounded-b-none' : ''}`}
+                >
+                    <span>{title}</span>
+                    <ChevronDown
+                        size={18}
+                        aria-hidden="true"
+                        className={`shrink-0 text-fg-muted transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+                    />
+                </button>
+            </h2>
+            <div
+                id={panelId}
+                role="region"
+                aria-labelledby={triggerId}
+                className={`grid transition-[grid-template-rows,visibility] duration-300 ease-out ${open ? 'visible grid-rows-[1fr]' : 'invisible grid-rows-[0fr]'}`}
+            >
+                {/* min-h-0 + overflow-hidden let this row shrink to nothing. Padding lives on the inner div so it can't hold the row open. */}
+                <div className="min-h-0 overflow-hidden">
+                    <div className="grid gap-2 px-4 pb-4">{children}</div>
+                </div>
+            </div>
+        </section>
+    )
+}
+
+export default function ToolDocs({ docs }) {
+    const { about, howItWorks, example, notes, privacy } = docs
+    const baseId = useId()
+    // One value is the whole accordion state: the id of the open section, or null for none.
+    const [openId, setOpenId] = useState('about')
+
+    const toggle = (id) => setOpenId((current) => (current === id ? null : id))
+    const sectionProps = { baseId, openId, onToggle: toggle }
+
+    return (
+        <div className="docs gap-3">
             {about && (
-                <section aria-labelledby="docs-about">
-                    <h2 id="docs-about">About</h2>
+                <DocSection id="about" title="About" {...sectionProps}>
                     <Block value={about} />
-                </section>
+                </DocSection>
             )}
             {howItWorks && (
-                <section aria-labelledby="docs-how">
-                    <h2 id="docs-how">How it works</h2>
+                <DocSection id="how" title="How it works" {...sectionProps}>
                     <Block value={howItWorks} ordered />
-                </section>
+                </DocSection>
             )}
             {example && (
-                <section aria-labelledby="docs-example">
-                    <h2 id="docs-example">Example</h2>
+                <DocSection id="example" title="Example" {...sectionProps}>
                     <div className="docs-example">
                         <div>
                             <p className="docs-label">Input</p>
@@ -50,19 +103,17 @@ export default function ToolDocs({ docs }) {
                             <pre className="code-block">{example.output}</pre>
                         </div>
                     </div>
-                </section>
+                </DocSection>
             )}
             {notes && (
-                <section aria-labelledby="docs-notes">
-                    <h2 id="docs-notes">Notes &amp; limitations</h2>
+                <DocSection id="notes" title="Notes & limitations" {...sectionProps}>
                     <Block value={notes} />
-                </section>
+                </DocSection>
             )}
             {privacy && (
-                <section aria-labelledby="docs-privacy">
-                    <h2 id="docs-privacy">Security &amp; privacy</h2>
+                <DocSection id="privacy" title="Security & privacy" {...sectionProps}>
                     <Block value={privacy} />
-                </section>
+                </DocSection>
             )}
         </div>
     )

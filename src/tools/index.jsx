@@ -2,29 +2,34 @@ import { lazy } from 'react'
 import ToolDocs from '../components/tools/ToolDocs.jsx'
 
 /*
- * Tool module contract. A tool lives in src/tools/<name>/index.jsx and:
- *   - default-exports its workspace component
- *   - optionally exports `docs` (see ToolDocs for the shape)
- * lazyTool() loads the module on demand and appends its documentation, so every
+ * Tool module contract. A tool lives in src/tools/<name>/ and provides:
+ *   - index.jsx  default-exports its workspace component
+ *   - docs.js    default-exports its documentation object (see ToolDocs for the shape)
+ * lazyTool() loads both on demand and renders the docs under the workspace, so every
  * tool page gets the same structure without each tool repeating it.
  *
  * Registering a tool (after adding its entry to src/data/tools.js):
- *   base64: lazyTool(() => import('./base64/index.jsx')),
+ *   base64: lazyTool(() => import('./base64/index.jsx'), () => import('./base64/docs.js')),
  */
-export function lazyTool(loader) {
+export function lazyTool(loadTool, loadDocs) {
     return lazy(async () => {
-        const { default: Tool, docs } = await loader()
-        return {
-            default: function ToolWithDocs() {
-                return (
-                    <>
-                        <Tool />
-                        {docs && <ToolDocs docs={docs} />}
-                    </>
-                )
-            },
+        const [toolModule, docsModule] = await Promise.all([loadTool(), loadDocs?.()])
+        const Tool = toolModule.default
+        const docs = docsModule?.default
+
+        function ToolWithDocs() {
+            return (
+                <>
+                    <Tool />
+                    {docs && <ToolDocs docs={docs} />}
+                </>
+            )
         }
+
+        return { default: ToolWithDocs }
     })
 }
 
-export const toolComponents = {}
+export const toolComponents = {
+    gradient: lazyTool(() => import('./gradient/index.jsx'), () => import('./gradient/docs.js')),
+}
