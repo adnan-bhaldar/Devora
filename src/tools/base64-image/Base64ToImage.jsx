@@ -74,6 +74,8 @@ export default function Base64ToImage() {
                             alt="Decoded image"
                             className="mx-auto max-h-80 max-w-full rounded-lg border border-border bg-surface-2 object-contain"
                             onError={() => setFailedUri(image.dataUri)}
+                            draggable={false}
+                            onContextMenu={(e) => e.preventDefault()} 
                             onLoad={(event) =>
                                 setMeasured({
                                     uri: image.dataUri,

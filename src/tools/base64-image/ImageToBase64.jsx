@@ -87,6 +87,8 @@ export default function ImageToBase64() {
                                 src={dataUri}
                                 alt={`Preview of ${image.name}`}
                                 className="mx-auto max-h-64 max-w-full rounded-lg border border-border bg-surface-2 object-contain"
+                                draggable={false}
+                                onContextMenu={(e) => e.preventDefault()} 
                             />
                             <figcaption className="text-sm text-fg-muted">
                                 <span className="font-medium text-fg">{image.name}</span> · {image.label} ·{' '}
