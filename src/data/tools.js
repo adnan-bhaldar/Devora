@@ -135,7 +135,7 @@ export const tools = [
         route: '/qr-generator',
         icon: QrCode,
         keywords: ['qr', 'qr code', 'generate', 'url', 'barcode'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'QR Code Generator',
             description: 'Generate a QR code from text or a URL and download it.',

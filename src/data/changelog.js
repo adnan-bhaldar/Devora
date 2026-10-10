@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-10-qr-generator',
+        date: '2026-10-10',
+        type: 'new',
+        title: 'QR Code Generator',
+        description:
+            'Turn text or a URL into a QR code with adjustable error correction, margin, and colors. Download it as PNG or SVG, or copy the SVG code.',
+    },
+    {
         id: '2026-10-10-jwt',
         date: '2026-10-10',
         type: 'new',

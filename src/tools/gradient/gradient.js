@@ -1,3 +1,8 @@
+import { isValidHex, normalizeHex } from '../../utils/color.js'
+
+// The color-stop rows import these from here, so they are re-exported.
+export { isValidHex, normalizeHex }
+
 export const MIN_STOPS = 2
 export const MAX_STOPS = 8
 
@@ -25,7 +30,6 @@ export const RADIAL_POSITIONS = [
     { value: 'bottom right', label: 'Bottom right' },
 ]
 
-const HEX_PATTERN = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i
 const URL_HEX_PATTERN = /^[0-9a-f]{6}$/i
 
 // Types whose direction is controlled by an angle.
@@ -46,17 +50,6 @@ export function clampNumber(value, min, max, fallback = min) {
 // Whole numbers print as "135", decimals keep one digit ("33.3").
 export function formatNumber(value) {
     return String(Number(value.toFixed(1)))
-}
-
-export function isValidHex(value) {
-    return HEX_PATTERN.test(value.trim())
-}
-
-// "#FFF", "fff" and "#ffffff" all become "#ffffff".
-export function normalizeHex(value) {
-    const digits = value.trim().replace('#', '').toLowerCase()
-    const full = digits.length === 3 ? [...digits].map((char) => char + char).join('') : digits
-    return `#${full}`
 }
 
 function hexToRgb(hex) {

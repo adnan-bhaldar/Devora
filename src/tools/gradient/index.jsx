@@ -155,7 +155,7 @@ export default function GradientTool() {
                                         id="gradient-position"
                                         options={RADIAL_POSITIONS}
                                         value={config.position}
-                                        onChange={(event) => update({ position: event.target.value })}
+                                        onChange={(position) => update({ position })}
                                     />
                                 </Field>
                             </>
