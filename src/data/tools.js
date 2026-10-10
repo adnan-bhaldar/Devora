@@ -121,7 +121,7 @@ export const tools = [
         route: '/jwt',
         icon: ShieldCheck,
         keywords: ['jwt', 'json web token', 'token', 'decode', 'header', 'payload'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'JWT Decoder',
             description: 'Decode a JSON Web Token to inspect its header and payload.',

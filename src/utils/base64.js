@@ -19,6 +19,11 @@ export function bytesToBase64(bytes) {
     return btoa(binary)
 }
 
+// URL-safe Base64 ("Base64URL"): - and _ replace + and /, and the = padding is dropped.
+export function bytesToBase64Url(bytes) {
+    return bytesToBase64(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
 // Accepts standard and URL-safe Base64, ignores whitespace, and does not require padding.
 // Returns { ok: true, bytes } or { ok: false, error }.
 export function base64ToBytes(input) {

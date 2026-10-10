@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-10-jwt',
+        date: '2026-10-10',
+        type: 'new',
+        title: 'JWT Decoder',
+        description:
+            'Decode a JSON Web Token to read its header, payload, and signature, with readable dates and an expiry status. It decodes only and does not verify signatures.',
+    },
+    {
         id: '2026-10-10-binary',
         date: '2026-10-10',
         type: 'new',

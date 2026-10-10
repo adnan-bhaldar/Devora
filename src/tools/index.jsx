@@ -38,4 +38,5 @@ export const toolComponents = {
         () => import('./base64-image/docs.js'),
     ),
     binary: lazyTool(() => import('./binary/index.jsx'), () => import('./binary/docs.js')),
+    jwt: lazyTool(() => import('./jwt/index.jsx'), () => import('./jwt/docs.js')),
 }

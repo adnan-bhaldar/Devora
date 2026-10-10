@@ -1,4 +1,4 @@
-import { base64ToBytes, bytesToBase64 } from '../../utils/base64.js'
+import { base64ToBytes, bytesToBase64, bytesToBase64Url } from '../../utils/base64.js'
 import { decodeUtf8 } from '../../utils/text.js'
 
 export const MODES = [
@@ -17,9 +17,8 @@ const NOT_TEXT_ERROR =
 
 export function encodeText(text, { urlSafe = false } = {}) {
     // TextEncoder always produces UTF-8, so emoji and non-English text encode correctly.
-    const encoded = bytesToBase64(new TextEncoder().encode(text))
-    if (!urlSafe) return encoded
-    return encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    const bytes = new TextEncoder().encode(text)
+    return urlSafe ? bytesToBase64Url(bytes) : bytesToBase64(bytes)
 }
 
 export function decodeBase64(input) {
