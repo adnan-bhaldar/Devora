@@ -37,4 +37,5 @@ export const toolComponents = {
         () => import('./base64-image/index.jsx'),
         () => import('./base64-image/docs.js'),
     ),
+    binary: lazyTool(() => import('./binary/index.jsx'), () => import('./binary/docs.js')),
 }

@@ -1,4 +1,5 @@
 import { base64ToBytes, bytesToBase64 } from '../../utils/base64.js'
+import { decodeUtf8 } from '../../utils/text.js'
 
 export const MODES = [
     { value: 'encode', label: 'Encode' },
@@ -25,13 +26,8 @@ export function decodeBase64(input) {
     const decoded = base64ToBytes(input)
     if (!decoded.ok) return decoded
 
-    try {
-        // fatal: true makes invalid UTF-8 throw instead of silently becoming "�" characters.
-        const text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(decoded.bytes)
-        return { ok: true, output: text }
-    } catch {
-        return { ok: false, error: NOT_TEXT_ERROR }
-    }
+    const text = decodeUtf8(decoded.bytes)
+    return text.ok ? { ok: true, output: text.text } : { ok: false, error: NOT_TEXT_ERROR }
 }
 
 export function convert(mode, input, { urlSafe = false } = {}) {

@@ -107,7 +107,7 @@ export const tools = [
         route: '/binary-text',
         icon: Binary,
         keywords: ['binary', 'text', 'convert', 'encode', 'decode', 'bits'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Binary to Text Converter',
             description: 'Convert text to binary and binary to text.',

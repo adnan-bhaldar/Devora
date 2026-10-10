@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Plus } from 'lucide-react'
+import { Link2, Plus } from 'lucide-react'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ExampleButton from '../../components/common/ExampleButton.jsx'
 import ResetButton from '../../components/common/ResetButton.jsx'
@@ -204,7 +204,7 @@ export default function GradientTool() {
                 actions={
                     <>
                         <CopyButton text={css} label="Copy CSS" variant="primary" />
-                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" />
+                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" icon={Link2} />
                     </>
                 }
             >
