@@ -117,6 +117,7 @@ export default function QrGeneratorTool() {
                             src={svgUrl}
                             alt="QR code for the text you entered"
                             className="mx-auto aspect-square w-full max-w-sm rounded-lg border border-border"
+                            draggable={false}
                         />
                         <figcaption className="text-center text-sm text-fg-muted">
                             Version {qr.version} ({modulesPerSide(qr.version)} × {modulesPerSide(qr.version)}{' '}

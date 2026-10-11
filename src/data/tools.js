@@ -149,7 +149,7 @@ export const tools = [
         route: '/qr-decoder',
         icon: ScanLine,
         keywords: ['qr', 'qr code', 'decode', 'scan', 'read', 'image'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'QR Code Decoder',
             description: 'Upload an image of a QR code to read its contents.',
