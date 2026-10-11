@@ -47,6 +47,7 @@ export default function QrDecoderTool() {
         setOutcome(null)
         setBusy(true)
 
+        // scanImageUrl always resolves (it never throws), so busy is always cleared below.
         const result = await scanImageUrl(url, { isSvg: file.type === 'image/svg+xml' })
         if (id !== requestId.current) return
 
@@ -89,7 +90,9 @@ export default function QrDecoderTool() {
                     )}
 
                     {source && (
-                        <figure ref={figureRef} tabIndex={-1} className="grid gap-2 outline-none">
+                        // Focus lands here after a scan starts. The global focus-visible style draws
+                        // the ring, which browsers show for keyboard use and usually hide for mouse use.
+                        <figure ref={figureRef} tabIndex={-1} className="grid gap-2 rounded-lg">
                             <img
                                 src={source.url}
                                 alt={`Preview of ${source.name}`}

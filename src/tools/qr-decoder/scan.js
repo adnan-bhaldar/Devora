@@ -27,11 +27,7 @@ function loadImage(url) {
     })
 }
 
-/*
- * Reads a QR code from an image at `url` (usually a blob URL). Returns
- * { ok: true, result: { text, version, byteLength } } or { ok: false, error }.
- */
-export async function scanImageUrl(url, { isSvg = false } = {}) {
+async function readQrCode(url, { isSvg }) {
     let image
     try {
         image = await loadImage(url)
@@ -58,12 +54,7 @@ export async function scanImageUrl(url, { isSvg = false } = {}) {
     context.fillRect(0, 0, width, height)
     context.drawImage(image, 0, 0, width, height)
 
-    let imageData
-    try {
-        imageData = context.getImageData(0, 0, width, height)
-    } catch {
-        return { ok: false, error: ERRORS.canvas }
-    }
+    const imageData = context.getImageData(0, 0, width, height)
 
     // jsQR tries the image as-is and inverted, so light-on-dark codes are read too.
     const code = jsQR(imageData.data, width, height)
@@ -73,6 +64,20 @@ export async function scanImageUrl(url, { isSvg = false } = {}) {
     return {
         ok: true,
         result: { text: code.data, version: code.version, byteLength: code.binaryData.length },
+    }
+}
+
+/*
+ * Reads a QR code from an image at `url` (usually a blob URL). Always resolves, and never
+ * throws: { ok: true, result: { text, version, byteLength } } or { ok: false, error }.
+ * Drawing a huge image, reading its pixels, or the decoder itself can all fail in ways we
+ * can't predict, and callers must never be left waiting on a promise that rejected.
+ */
+export async function scanImageUrl(url, { isSvg = false } = {}) {
+    try {
+        return await readQrCode(url, { isSvg })
+    } catch {
+        return { ok: false, error: ERRORS.canvas }
     }
 }
 

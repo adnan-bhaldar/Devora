@@ -91,7 +91,9 @@ export default function ImageToBase64() {
                     )}
 
                     {image && (
-                        <figure ref={figureRef} tabIndex={-1} className="grid gap-2 outline-none">
+                        // Focus lands here when an image loads. The global focus-visible style draws
+                        // the ring, which browsers show for keyboard use and usually hide for mouse use.
+                        <figure ref={figureRef} tabIndex={-1} className="grid gap-2 rounded-lg">
                             <img
                                 src={dataUri}
                                 alt={`Preview of ${image.name}`}
