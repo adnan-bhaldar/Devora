@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ClearButton from '../../components/common/ClearButton.jsx'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ExampleButton from '../../components/common/ExampleButton.jsx'
@@ -22,6 +22,12 @@ export default function ImageToBase64() {
     const [outputFormat, setOutputFormat] = useState('datauri')
     // Each read gets a number, so a slow earlier read can't overwrite a newer choice.
     const requestId = useRef(0)
+    const figureRef = useRef(null)
+
+    // When the drop zone disappears, move focus to the preview so keyboard users aren't lost.
+    useEffect(() => {
+        if (image) figureRef.current?.focus({ preventScroll: true })
+    }, [image])
 
     const dataUri = useMemo(() => (image ? toDataUri(image.mime, image.base64) : ''), [image])
     const output = outputFormat === 'datauri' ? dataUri : (image?.base64 ?? '')
@@ -67,13 +73,16 @@ export default function ImageToBase64() {
                 }
             >
                 <div className="grid gap-4">
-                    <FileDropZone
-                        accept={ACCEPTED_FILES}
-                        maxSizeMB={MAX_IMAGE_MB}
-                        onFiles={handleFiles}
-                        title="Drop an image here, or click to browse"
-                        hint={`PNG, JPEG, GIF, WebP, SVG, BMP, or AVIF · up to ${MAX_IMAGE_MB} MB`}
-                    />
+                    {/* Hidden once an image is loaded. Clear brings it back. */}
+                    {!image && (
+                        <FileDropZone
+                            accept={ACCEPTED_FILES}
+                            maxSizeMB={MAX_IMAGE_MB}
+                            onFiles={handleFiles}
+                            title="Drop an image here, or click to browse"
+                            hint={`PNG, JPEG, GIF, WebP, SVG, BMP, or AVIF · up to ${MAX_IMAGE_MB} MB`}
+                        />
+                    )}
 
                     {error && (
                         <p role="alert" className="text-sm text-danger">
@@ -82,7 +91,7 @@ export default function ImageToBase64() {
                     )}
 
                     {image && (
-                        <figure className="grid gap-2">
+                        <figure ref={figureRef} tabIndex={-1} className="grid gap-2 outline-none">
                             <img
                                 src={dataUri}
                                 alt={`Preview of ${image.name}`}

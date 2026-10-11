@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-11-qr-decoder',
+        date: '2026-10-11',
+        type: 'new',
+        title: 'QR Code Decoder',
+        description:
+            'Read the contents of a QR code from an image by dropping it in. The result is labelled by type and shown as plain text, with a reminder that reading a code does not make its content safe.',
+    },
+    {
         id: '2026-10-10-qr-generator',
         date: '2026-10-10',
         type: 'new',

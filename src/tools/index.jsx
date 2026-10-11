@@ -43,4 +43,8 @@ export const toolComponents = {
         () => import('./qr-generator/index.jsx'),
         () => import('./qr-generator/docs.js'),
     ),
+    'qr-decoder': lazyTool(
+        () => import('./qr-decoder/index.jsx'),
+        () => import('./qr-decoder/docs.js'),
+    ),
 }
