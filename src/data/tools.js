@@ -163,7 +163,7 @@ export const tools = [
         route: '/hash',
         icon: Hash,
         keywords: ['hash', 'checksum', 'sha', 'sha256', 'digest'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Hash & Checksum Generator',
             description: 'Generate SHA-256, SHA-384, and SHA-512 hashes for text.',
