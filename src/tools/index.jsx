@@ -47,4 +47,5 @@ export const toolComponents = {
         () => import('./qr-decoder/index.jsx'),
         () => import('./qr-decoder/docs.js'),
     ),
+    hash: lazyTool(() => import('./hash/index.jsx'), () => import('./hash/docs.js')),
 }

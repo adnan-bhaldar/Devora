@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-11-hash',
+        date: '2026-10-11',
+        type: 'new',
+        title: 'Hash Generator',
+        description:
+            'Generate SHA-256, SHA-384, and SHA-512 hashes of text as you type, shown as hex or Base64. Hashing happens in your browser with the Web Crypto API.',
+    },
+    {
         id: '2026-10-11-qr-decoder',
         date: '2026-10-11',
         type: 'new',
