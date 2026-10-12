@@ -29,7 +29,7 @@ export default function Layout() {
             <a href="#main" className="skip-link">
                 Skip to content
             </a>
-            <Header onOpenPalette={() => setPaletteOpen(true)} />
+            <Header />
             <main id="main" tabIndex={-1} className="flex-1">
                 <Outlet />
             </main>

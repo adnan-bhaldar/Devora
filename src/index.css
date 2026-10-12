@@ -238,22 +238,32 @@
     top: 0.75rem;
   }
 
-  /* Header */
+  /* Header: a floating bar. The wrapper ignores pointer events, so the empty space beside
+     the bar never blocks clicks on content that scrolls underneath it. */
   .site-header {
     position: sticky;
-    top: 0;
+    top: 0.75rem;
     z-index: 40;
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    backdrop-filter: blur(14px) saturate(1.5);
-    border-bottom: 1px solid var(--border);
+    margin-top: 0.75rem;
+    padding-inline: 1rem;
+    pointer-events: none;
   }
 
-  .site-header__inner {
+  .site-header__bar {
+    pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 3.75rem;
+    max-width: 52rem;
+    height: 3.5rem;
+    margin-inline: auto;
+    padding: 0 0.75rem 0 1rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(1.5);
+    box-shadow: var(--highlight), var(--shadow-md);
   }
 
   .brand {
@@ -299,12 +309,22 @@
     background: var(--surface-2);
   }
 
+  /* The phone menu overlays the page instead of pushing it down. It is positioned under the
+     bar: 3.5rem (bar height) plus a 0.5rem gap, measured from the top of the header. */
   .mobile-nav {
+    pointer-events: auto;
+    position: absolute;
+    top: 4rem;
+    left: 1rem;
+    right: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    padding-block: 0.5rem 0.75rem;
-    border-top: 1px solid var(--border);
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+    box-shadow: var(--highlight), var(--shadow-lg);
   }
 
   .mobile-nav .nav-link {
@@ -314,55 +334,6 @@
   @media (min-width: 640px) {
     .mobile-nav {
       display: none;
-    }
-  }
-
-  .search-trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    height: 2.5rem;
-    min-width: 2.5rem;
-    padding: 0 0.625rem;
-    border: 1px solid var(--border);
-    border-radius: 0.625rem;
-    background: var(--surface);
-    color: var(--fg-muted);
-    font: inherit;
-    font-size: 0.875rem;
-    cursor: pointer;
-    box-shadow: var(--highlight), var(--shadow-sm);
-    transition:
-      border-color 0.15s,
-      color 0.15s;
-  }
-
-  .search-trigger:hover {
-    color: var(--fg);
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  }
-
-  .search-trigger__text,
-  .search-trigger .kbd {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
-    .search-trigger {
-      min-width: 13rem;
-      margin-inline: 0.5rem;
-      justify-content: flex-start;
-    }
-
-    .search-trigger__text {
-      display: inline;
-      flex: 1;
-      text-align: left;
-    }
-
-    .search-trigger .kbd {
-      display: inline-flex;
     }
   }
 
@@ -1117,10 +1088,14 @@
     border-top: 1px solid var(--border);
   }
 
-  /* Hero */
+  /* Hero. It slides up behind the floating header, so the grid and glow run to the top of
+     the page instead of starting below a blank strip. 4.25rem is the header's top margin
+     (0.75rem) plus the bar's height (3.5rem). */
   .hero {
     position: relative;
     overflow: hidden;
+    margin-top: -4.25rem;
+    padding-top: 4.25rem;
     border-bottom: 1px solid var(--border);
   }
 
