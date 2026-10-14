@@ -177,7 +177,7 @@ export const tools = [
         route: '/lorem-ipsum',
         icon: Type,
         keywords: ['lorem', 'ipsum', 'placeholder', 'dummy', 'text', 'filler'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Lorem Ipsum Generator',
             description: 'Generate lorem ipsum words, sentences, and paragraphs.',
