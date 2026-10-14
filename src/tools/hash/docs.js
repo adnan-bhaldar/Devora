@@ -6,10 +6,6 @@ const docs = {
         'The bytes are passed to your browser’s built-in Web Crypto API, which calculates the SHA-2 hash you chose.',
         'The result is shown as hexadecimal (the usual way to write hashes), uppercase hexadecimal, or Base64.',
     ],
-    example: {
-        input: 'hello',
-        output: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824 (SHA-256, hex)',
-    },
     notes: [
         'Hashing is one-way. It is not encryption, and the original text cannot be recovered from a hash. Short or common inputs can still be guessed by trying many candidates and comparing hashes.',
         'Every character counts, including spaces and line breaks. A trailing newline gives a different hash, which is a common reason two hashes do not match.',

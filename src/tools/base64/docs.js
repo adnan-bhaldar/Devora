@@ -7,10 +7,6 @@ const docs = {
         'If the last group is short, = characters pad the result to a multiple of four. The URL-safe option swaps + and / for - and _ and leaves out the padding.',
         'Decoding reverses the steps: each character becomes six bits, the bits are regrouped into bytes, and the bytes are read as UTF-8 text.',
     ],
-    example: {
-        input: 'Hello, Devora!',
-        output: 'SGVsbG8sIERldm9yYSE=',
-    },
     notes: [
         'Base64 is an encoding, not encryption. Anyone can decode it, so never use it to hide passwords or other secrets.',
         'Encoded output is about one third larger than the original.',

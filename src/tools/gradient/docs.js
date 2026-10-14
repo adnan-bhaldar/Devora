@@ -7,10 +7,6 @@ const docs = {
         'Set the direction. For linear and reflected gradients, the angle sets the line: 0° points up, 90° points right, and angles increase clockwise. For radial gradients, choose a shape and where the center sits. Diamond has no direction settings.',
         'Copy the generated background declaration into your stylesheet.',
     ],
-    example: {
-        input: 'Linear, 135°\n#5b4bff at 0%\n#c147ff at 100%',
-        output: 'background: linear-gradient(135deg, #5b4bff 0%, #c147ff 100%);',
-    },
     notes: [
         'Colors are opaque 6-digit hex values. Transparency (alpha) is not supported.',
         'You can use 2 to 8 stops. Giving two stops the same position produces a hard edge instead of a blend.',

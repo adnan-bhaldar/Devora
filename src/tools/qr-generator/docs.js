@@ -7,10 +7,6 @@ const docs = {
         'Choose how much error correction to add, how wide the empty margin around the code is, the colors, and the size for downloads.',
         'Download the code as PNG or SVG, or copy the SVG code.',
     ],
-    example: {
-        input: 'https://example.com',
-        output: 'A square QR code that opens https://example.com when scanned.',
-    },
     notes: [
         'Higher error-correction levels let a code survive more damage but make it denser, which holds less text and can be harder to scan from a distance. Medium is a good default.',
         'At the Medium level a QR code holds roughly 2,300 characters of ordinary text. Emoji and non-English text use more space. Shorter text gives a simpler code that is easier to scan.',

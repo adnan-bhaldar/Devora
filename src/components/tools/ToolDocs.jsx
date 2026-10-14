@@ -91,20 +91,6 @@ export default function ToolDocs({ docs }) {
                     <Block value={howItWorks} ordered />
                 </DocSection>
             )}
-            {example && (
-                <DocSection id="example" title="Example" {...sectionProps}>
-                    <div className="docs-example">
-                        <div>
-                            <p className="docs-label">Input</p>
-                            <pre className="code-block">{example.input}</pre>
-                        </div>
-                        <div>
-                            <p className="docs-label">Output</p>
-                            <pre className="code-block">{example.output}</pre>
-                        </div>
-                    </div>
-                </DocSection>
-            )}
             {notes && (
                 <DocSection id="notes" title="Notes & limitations" {...sectionProps}>
                     <Block value={notes} />

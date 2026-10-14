@@ -7,10 +7,6 @@ const docs = {
         'It reads the pattern of dark and light squares, uses the built-in error-correction data to repair small mistakes, and turns the result into text.',
         'The text is shown with a label for what it looks like (web link, Wi-Fi network, email, and so on). It is shown as plain text, never as a clickable link.',
     ],
-    example: {
-        input: 'A picture of a QR code',
-        output: 'https://example.com',
-    },
     notes: [
         'Decoding a QR code does not check that its content is safe. Codes can point to fake websites or contain misleading text, so check any address carefully before opening it.',
         'Links are deliberately not clickable here. Copy the address and inspect it before you decide whether to visit it.',

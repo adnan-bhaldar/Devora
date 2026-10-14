@@ -7,10 +7,6 @@ const docs = {
         'The signature is a value created with a secret or private key. A server uses it to check that the header and payload have not been changed.',
         'Devora also reads standard claims such as exp (expiry), nbf (not valid before), and iat (issued at) and shows them as dates.',
     ],
-    example: {
-        input: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 (the header part of a token)',
-        output: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}',
-    },
     notes: [
         'Decoding is not verifying. Anyone can create a JWT with any contents, so decoded claims prove nothing on their own. Only a server that checks the signature with the right key can trust a token.',
         'Devora does not verify signatures. Do not use it to decide whether a token is valid.',

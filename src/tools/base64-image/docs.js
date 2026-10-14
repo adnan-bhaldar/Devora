@@ -6,10 +6,6 @@ const docs = {
         'Image → Base64: drop an image on the box or click to choose one. Its bytes are read in your browser and written as Base64. A data URI adds a prefix such as data:image/png;base64, so the result can be used directly as an image source.',
         'Base64 → Image: paste a data URI or raw Base64. Devora decodes the bytes, works out the real image type from the first bytes of the data, and shows a preview you can download.',
     ],
-    example: {
-        input: 'A small image file, such as logo.png',
-        output: 'data:image/png;base64,iVBORw0KGgo…',
-    },
     notes: [
         'Supported types are PNG, JPEG, GIF, WebP, SVG, BMP, and AVIF, up to 5 MB.',
         'Base64 is about one third larger than the image file. For large images, a normal image file is usually a better choice than a data URI.',

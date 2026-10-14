@@ -7,10 +7,6 @@ const docs = {
         'The bytes are shown separated by spaces so they are easier to read. You can turn that off to get one continuous string.',
         'Binary → Text reverses the steps: spaces and line breaks are ignored, the digits are grouped into bytes, and the bytes are read as UTF-8 text.',
     ],
-    example: {
-        input: 'Hi',
-        output: '01001000 01101001',
-    },
     notes: [
         'Only the digits 0 and 1 are accepted, with spaces or line breaks between groups. Each group must be a multiple of 8 digits, so a 7-bit value such as 1001000 needs a leading zero (01001000).',
         'This tool reads and writes UTF-8. The same bits can mean different text in other encodings, such as UTF-16 or Latin-1.',
