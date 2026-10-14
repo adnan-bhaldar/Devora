@@ -19,9 +19,9 @@ function HeroPreview() {
         <div className="preview rise rise-3" aria-hidden="true">
             <div className="preview-window">
                 <div className="preview-bar">
-                    <span className="preview-dot" />
-                    <span className="preview-dot" />
-                    <span className="preview-dot" />
+                    <span className="preview-dot bg-red-400" />
+                    <span className="preview-dot bg-yellow-400" />
+                    <span className="preview-dot bg-green-400" />
                     <span className="preview-title">gradient.css</span>
                 </div>
                 <pre className="preview-code">
@@ -78,8 +78,7 @@ export default function Home() {
     return (
         <>
             <section className="hero">
-                <div className="hero-bg" aria-hidden="true" />
-                <div className="container-page hero-content py-16 sm:py-24">
+                <div className="container-page py-16 sm:py-24">
                     <div className="hero-grid">
                         <div>
                             <span className="pill rise">

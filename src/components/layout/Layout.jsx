@@ -25,7 +25,10 @@ export default function Layout() {
     }, [pathname])
 
     return (
-        <div className="flex min-h-screen flex-col">
+        // "isolate" gives this wrapper its own stacking context, so the background layer's
+        // z-index of -1 stays above the page color but below all of the page's content.
+        <div className="isolate flex min-h-screen flex-col">
+            <div className="site-bg" aria-hidden="true" />
             <a href="#main" className="skip-link">
                 Skip to content
             </a>
