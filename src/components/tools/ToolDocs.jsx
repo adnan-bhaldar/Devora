@@ -71,7 +71,7 @@ function DocSection({ baseId, id, title, openId, onToggle, children }) {
 }
 
 export default function ToolDocs({ docs }) {
-    const { about, howItWorks, example, notes, privacy } = docs
+    const { about, howItWorks, notes, privacy } = docs
     const baseId = useId()
     // One value is the whole accordion state: the id of the open section, or null for none.
     const [openId, setOpenId] = useState('about')
