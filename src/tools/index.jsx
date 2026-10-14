@@ -48,4 +48,8 @@ export const toolComponents = {
         () => import('./qr-decoder/docs.js'),
     ),
     hash: lazyTool(() => import('./hash/index.jsx'), () => import('./hash/docs.js')),
+    'lorem-ipsum': lazyTool(
+        () => import('./lorem-ipsum/index.jsx'),
+        () => import('./lorem-ipsum/docs.js'),
+    ),
 }

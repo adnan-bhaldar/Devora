@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-14-lorem-ipsum',
+        date: '2026-10-14',
+        type: 'new',
+        title: 'Lorem Ipsum Generator',
+        description:
+            'Generate placeholder words, sentences, or paragraphs with an amount control, the classic opening line, and one-click copy. Everything happens in your browser.',
+    },
+    {
         id: '2026-10-11-hash',
         date: '2026-10-11',
         type: 'new',
