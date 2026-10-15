@@ -123,7 +123,7 @@ export default function PasswordTool() {
                     <>
                         <Button variant="primary" onClick={generate}>
                             <RefreshCw size={16} aria-hidden="true" />
-                            {password ? 'Regenerate' : 'Generate password'}
+                            {password ? 'Regenerate' : 'Generate'}
                         </Button>
                         <CopyButton text={password} label="Copy password" />
                         <ClearButton onClick={clear} disabled={!result} />
@@ -140,7 +140,7 @@ export default function PasswordTool() {
                             type={visible ? 'text' : 'password'}
                             value={password}
                             readOnly
-                            placeholder="Press Generate password"
+                            placeholder="Press Generate"
                             autoComplete="off"
                             spellCheck={false}
                             className="field field-mono min-w-0 flex-1 text-lg tracking-wide"
