@@ -205,7 +205,7 @@ export const tools = [
         route: '/uuid',
         icon: Fingerprint,
         keywords: ['uuid', 'guid', 'identifier', 'id', 'random', 'v4'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'UUID Generator',
             description: 'Generate random version 4 UUIDs in your browser.',

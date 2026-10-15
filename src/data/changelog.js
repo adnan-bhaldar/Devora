@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-15-uuid',
+        date: '2026-10-15',
+        type: 'new',
+        title: 'UUID Generator',
+        description:
+            'Generate one to a hundred random version 4 UUIDs, with uppercase and no-hyphen options and one-click copy. They are created in your browser and never saved.',
+    },
+    {
         id: '2026-10-14-password',
         date: '2026-10-14',
         type: 'new',
