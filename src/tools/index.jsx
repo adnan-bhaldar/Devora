@@ -53,4 +53,5 @@ export const toolComponents = {
         () => import('./lorem-ipsum/docs.js'),
     ),
     password: lazyTool(() => import('./password/index.jsx'), () => import('./password/docs.js')),
+    uuid: lazyTool(() => import('./uuid/index.jsx'), () => import('./uuid/docs.js')),
 }
