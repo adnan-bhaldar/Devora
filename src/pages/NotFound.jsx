@@ -28,6 +28,7 @@ export default function NotFound() {
         <div className="container-page page">
             <EmptyState
                 icon={Compass}
+                headingLevel={1}
                 title="Page not found"
                 description="That address doesn't match anything on Devora. It may have moved or never existed."
             >
