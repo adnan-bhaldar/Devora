@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-14-password',
+        date: '2026-10-14',
+        type: 'new',
+        title: 'Password Generator',
+        description:
+            'Create random passwords with a length slider, character types, and an estimated strength. Passwords are generated in your browser with a cryptographic random number generator and are never stored or sent anywhere.',
+    },
+    {
         id: '2026-10-14-lorem-ipsum',
         date: '2026-10-14',
         type: 'new',

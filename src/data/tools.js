@@ -191,7 +191,7 @@ export const tools = [
         route: '/password-generator',
         icon: KeyRound,
         keywords: ['password', 'random', 'secure', 'generate', 'strong'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'Password Generator',
             description: 'Generate random passwords using your browser’s cryptographic random number generator.',
