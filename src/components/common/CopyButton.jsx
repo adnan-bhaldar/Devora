@@ -6,7 +6,7 @@ import useToast from '../../hooks/useToast.js'
 // Both variants are 44px squares so they line up with the text buttons beside them.
 const VARIANT_CLASSES = {
     primary:
-        'size-11 rounded-xl bg-[image:var(--grad)] text-[var(--accent-fg)] enabled:hover:brightness-110',
+        'size-11 rounded-xl bg-[image:var(--grad-strong)] text-[var(--accent-fg)] enabled:hover:brightness-110',
     secondary: 'size-11 rounded-xl border border-border bg-surface enabled:hover:bg-surface-2',
 }
 

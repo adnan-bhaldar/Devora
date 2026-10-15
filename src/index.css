@@ -22,6 +22,8 @@
   --success: #0f7d57;
   --star: #d98a00;
   --grad: linear-gradient(135deg, var(--accent), var(--accent-2));
+  /* For buttons with text on them: the pink end is deeper, so white text keeps 4.5:1 contrast. */
+  --grad-strong: linear-gradient(135deg, var(--accent), #a63ae8);
   --grid: rgb(30 30 90 / 0.06);
   --glow: rgb(91 75 255 / 0.18);
   --glow-2: rgb(193 71 255 / 0.13);
@@ -55,6 +57,8 @@
   --danger: #ff7b72;
   --success: #4fd1a1;
   --star: #ffc247;
+  /* Dark text on this gradient already has strong contrast, so it needs no deeper end. */
+  --grad-strong: var(--grad);
   --grid: rgb(255 255 255 / 0.045);
   --glow: rgb(143 125 255 / 0.26);
   --glow-2: rgb(210 123 255 / 0.16);
@@ -122,6 +126,9 @@
     background: var(--bg);
     color: var(--fg);
     -webkit-text-size-adjust: 100%;
+    /* The floating header covers the top 4.25rem. This keeps a focused control or an anchor
+       target from being scrolled underneath it. */
+    scroll-padding-top: 5rem;
   }
 
   body {
@@ -421,7 +428,7 @@
   }
 
   .btn-primary {
-    background: var(--grad);
+    background: var(--grad-strong);
     color: var(--accent-fg);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.28),
@@ -703,7 +710,10 @@
     background: color-mix(in oklch, var(--tone, var(--accent)) 8%, var(--surface));
   }
 
-  .chip[aria-pressed='true'] {
+  /* aria-pressed is used by toggle chips (the home page filters); aria-checked by radio
+     chips (ChoiceGroup). Both look the same when chosen. */
+  .chip[aria-pressed='true'],
+  .chip[aria-checked='true'] {
     border-color: color-mix(in oklch, var(--tone, var(--accent)) 60%, var(--border));
     background: color-mix(in oklch, var(--tone, var(--accent)) 14%, var(--surface));
   }
@@ -1155,6 +1165,15 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  /* Windows High Contrast and similar modes replace backgrounds, which would leave this
+     transparent text invisible. Fall back to the normal text color there. */
+  @media (forced-colors: active) {
+    .text-gradient {
+      background: none;
+      color: inherit;
+    }
   }
 
   /* Hero preview (decorative) */
