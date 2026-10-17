@@ -8,8 +8,8 @@ import ToolDocs from '../components/tools/ToolDocs.jsx'
  * lazyTool() loads both on demand and renders the docs under the workspace, so every
  * tool page gets the same structure without each tool repeating it.
  *
- * Registering a tool (after adding its entry to src/data/tools.js):
- *   uuid: lazyTool(() => import('./uuid/index.jsx'), () => import('./uuid/docs.js')),
+ * Registering a tool needs nothing here: create the folder, and add its entry to
+ * src/data/tools.js (see the note above toolComponents below).
  */
 export function lazyTool(loadTool, loadDocs) {
     return lazy(async () => {
@@ -30,28 +30,15 @@ export function lazyTool(loadTool, loadDocs) {
     })
 }
 
-export const toolComponents = {
-    gradient: lazyTool(() => import('./gradient/index.jsx'), () => import('./gradient/docs.js')),
-    base64: lazyTool(() => import('./base64/index.jsx'), () => import('./base64/docs.js')),
-    'base64-image': lazyTool(
-        () => import('./base64-image/index.jsx'),
-        () => import('./base64-image/docs.js'),
-    ),
-    binary: lazyTool(() => import('./binary/index.jsx'), () => import('./binary/docs.js')),
-    jwt: lazyTool(() => import('./jwt/index.jsx'), () => import('./jwt/docs.js')),
-    'qr-generator': lazyTool(
-        () => import('./qr-generator/index.jsx'),
-        () => import('./qr-generator/docs.js'),
-    ),
-    'qr-decoder': lazyTool(
-        () => import('./qr-decoder/index.jsx'),
-        () => import('./qr-decoder/docs.js'),
-    ),
-    hash: lazyTool(() => import('./hash/index.jsx'), () => import('./hash/docs.js')),
-    'lorem-ipsum': lazyTool(
-        () => import('./lorem-ipsum/index.jsx'),
-        () => import('./lorem-ipsum/docs.js'),
-    ),
-    password: lazyTool(() => import('./password/index.jsx'), () => import('./password/docs.js')),
-    uuid: lazyTool(() => import('./uuid/index.jsx'), () => import('./uuid/docs.js')),
-}
+// Every folder in src/tools/ that has an index.jsx is registered automatically, under its
+// folder name. That name must match the tool's `id` in src/data/tools.js. A registry entry with
+// no folder yet simply shows the "coming soon" page.
+const toolModules = import.meta.glob('./*/index.jsx')
+const docsModules = import.meta.glob('./*/docs.js')
+
+export const toolComponents = Object.fromEntries(
+    Object.entries(toolModules).map(([path, loadTool]) => {
+        const id = path.split('/')[1]
+        return [id, lazyTool(loadTool, docsModules[`./${id}/docs.js`])]
+    }),
+)

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Clock, Search, Star } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState.jsx'
 import SearchInput from '../components/common/SearchInput.jsx'
+import CategorySection from '../components/tools/CategorySection.jsx'
 import ToolCard from '../components/tools/ToolCard.jsx'
 import Button from '../components/ui/Button.jsx'
 import useHotkey from '../hooks/useHotkey.js'
@@ -202,32 +203,13 @@ export default function Home() {
                             </section>
                         )}
 
-                        {visibleCategories.map((category) => {
-                            const categoryTools = getToolsByCategory(category.id)
-                            const CategoryIcon = category.icon
-
-                            return (
-                                <section key={category.id} data-tone={category.id} aria-labelledby={`category-${category.id}`}>
-                                    <div className="mb-5 flex items-center gap-3">
-                                        <span className="icon-tile">
-                                            <CategoryIcon size={20} strokeWidth={1.75} aria-hidden="true" />
-                                        </span>
-                                        <div className="min-w-0 flex-1">
-                                            <h2 id={`category-${category.id}`} className="text-xl font-semibold tracking-tight">
-                                                {category.name}
-                                            </h2>
-                                            <p className="text-sm text-fg-muted">{category.description}</p>
-                                        </div>
-                                        <span className="badge">{categoryTools.length}</span>
-                                    </div>
-                                    <div className="tool-grid">
-                                        {categoryTools.map((tool) => (
-                                            <ToolCard key={tool.id} tool={tool} />
-                                        ))}
-                                    </div>
-                                </section>
-                            )
-                        })}
+                        {visibleCategories.map((category) => (
+                            <CategorySection
+                                key={category.id}
+                                category={category}
+                                tools={getToolsByCategory(category.id)}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
