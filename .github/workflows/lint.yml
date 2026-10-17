@@ -31,3 +31,6 @@ jobs:
 
       - name: Run lint
         run: npm run lint
+
+      - name: Check tool registry
+        run: npm run check:tools

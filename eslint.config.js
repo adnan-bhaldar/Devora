@@ -19,6 +19,11 @@ export default defineConfig([
     },
   },
   {
+    // Build and check scripts run in Node, not in a page.
+    files: ['scripts/**/*.mjs', 'vite.config.js'],
+    languageOptions: { globals: globals.node },
+  },
+  {
     // The service worker runs in its own environment (self, caches, clients...), not in a page.
     files: ['public/sw.js'],
     languageOptions: { globals: globals.serviceworker },
