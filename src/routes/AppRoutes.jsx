@@ -5,7 +5,6 @@ import LoadingState from '../components/common/LoadingState.jsx'
 import CategoryPage from '../pages/CategoryPage.jsx'
 import Home from '../pages/Home.jsx'
 import About from '../pages/About.jsx'
-import WhatsNew from '../pages/WhatsNew.jsx'
 import NotFound from '../pages/NotFound.jsx'
 import ToolPage from '../pages/ToolPage.jsx'
 import { tools } from '../data/tools.js'
@@ -19,7 +18,8 @@ export default function AppRoutes() {
             <Route element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
-                <Route path="whats-new" element={<WhatsNew />} />
+                {/* The changelog now lives in CHANGELOG.md. Keep old links and bookmarks working. */}
+                <Route path="whats-new" element={<Navigate to="/about" replace />} />
                 <Route path="categories" element={<Navigate to="/" replace />} />
                 <Route path="categories/:categoryId" element={<CategoryPage />} />
                 {tools.map((tool) => (

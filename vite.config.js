@@ -4,11 +4,54 @@ import { join, relative } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { categories, tools } from './src/data/tools.js'
 
 function listFiles(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ? listFiles(join(directory, entry.name)) : [join(directory, entry.name)],
   )
+}
+
+/*
+ * Writes sitemap.xml and robots.txt (which points to it) so search engines can find every page.
+ * It needs the site's address: set SITE_URL (for example https://devora.example.com) when
+ * building. Vercel provides its own production address automatically, so no setup is needed there.
+ * Without an address a sitemap can't be written, so the plain public/robots.txt is used instead.
+ */
+function seoFilesPlugin() {
+  let outDir
+
+  return {
+    name: 'devora-seo-files',
+    apply: 'build',
+    configResolved(config) {
+      outDir = join(config.root, config.build.outDir)
+    },
+    closeBundle() {
+      const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL
+      const base = (process.env.SITE_URL ?? (vercelHost ? `https://${vercelHost}` : '')).replace(/\/+$/, '')
+      if (!base) {
+        console.warn('[devora] SITE_URL is not set, so sitemap.xml was not generated.')
+        return
+      }
+
+      const paths = [
+        '/',
+        '/about',
+        ...categories
+          .filter((category) => tools.some((tool) => tool.categories.includes(category.id)))
+          .map((category) => `/categories/${category.id}`),
+        ...tools.filter((tool) => tool.status === 'live').map((tool) => tool.route),
+      ]
+      const entries = paths.map((path) => `  <url><loc>${base}${path}</loc></url>`).join('\n')
+
+      writeFileSync(
+        join(outDir, 'sitemap.xml'),
+        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`,
+      )
+      writeFileSync(join(outDir, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`)
+    },
+  }
 }
 
 /*
@@ -28,7 +71,7 @@ function precachePlugin() {
     closeBundle() {
       const files = listFiles(outDir)
         .map((file) => '/' + relative(outDir, file).split('\\').join('/'))
-        .filter((path) => path !== '/sw.js' && !path.endsWith('.map'))
+        .filter((path) => !['/sw.js', '/robots.txt', '/sitemap.xml'].includes(path) && !path.endsWith('.map'))
         .sort()
 
       const hash = createHash('sha256')
@@ -48,6 +91,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    seoFilesPlugin(),
     precachePlugin()
   ],
 })
