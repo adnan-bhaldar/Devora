@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Clock, Search, Star } from 'lucide-react'
 import EmptyState from '../components/common/EmptyState.jsx'
 import SearchInput from '../components/common/SearchInput.jsx'
+import CategoryCard from '../components/tools/CategoryCard.jsx'
 import CategorySection from '../components/tools/CategorySection.jsx'
 import ToolCard from '../components/tools/ToolCard.jsx'
 import Button from '../components/ui/Button.jsx'
@@ -10,7 +11,7 @@ import useHotkey from '../hooks/useHotkey.js'
 import usePageMeta from '../hooks/usePageMeta.js'
 import useToolPrefs from '../hooks/useToolPrefs.js'
 import { modKeyLabel } from '../data/shortcuts.js'
-import { categories, getToolById, getToolsByCategory, tools } from '../data/tools.js'
+import { categories, getToolById, getToolsByCategory } from '../data/tools.js'
 import { searchTools } from '../utils/search.js'
 
 const visibleCategories = categories.filter((category) => getToolsByCategory(category.id).length > 0)
@@ -51,7 +52,6 @@ export default function Home() {
 
     const { favorites, recent } = useToolPrefs()
     const [query, setQuery] = useState('')
-    const [activeCategory, setActiveCategory] = useState('all')
     const searchRef = useRef(null)
 
     useHotkey({ key: '/' }, (event) => {
@@ -59,22 +59,13 @@ export default function Home() {
         searchRef.current?.focus()
     })
 
-    const results = useMemo(
-        () =>
-            searchTools(query).filter(
-                (tool) => activeCategory === 'all' || tool.categories.includes(activeCategory),
-            ),
-        [query, activeCategory],
-    )
+    const results = useMemo(() => searchTools(query), [query])
 
-    const isFiltering = query.trim() !== '' || activeCategory !== 'all'
+    const isSearching = query.trim() !== ''
     const favoriteTools = favorites.map(getToolById)
     const recentTools = recent.map(getToolById)
 
-    const clearFilters = () => {
-        setQuery('')
-        setActiveCategory('all')
-    }
+    const clearSearch = () => setQuery('')
 
     return (
         <>
@@ -113,32 +104,22 @@ export default function Home() {
             </section>
 
             <div id="tools" className="container-page page">
-                <div role="group" aria-label="Filter by category" className="mb-10 flex flex-wrap gap-2">
-                    <button
-                        type="button"
-                        className="chip"
-                        aria-pressed={activeCategory === 'all'}
-                        onClick={() => setActiveCategory('all')}
-                    >
-                        All tools
-                        <span className="badge">{tools.length}</span>
-                    </button>
-                    {visibleCategories.map((category) => (
-                        <button
-                            key={category.id}
-                            type="button"
-                            data-tone={category.id}
-                            className="chip"
-                            aria-pressed={activeCategory === category.id}
-                            onClick={() => setActiveCategory(category.id)}
-                        >
-                            <span className="chip-dot" aria-hidden="true" />
-                            {category.name}
-                        </button>
-                    ))}
-                </div>
+                <section aria-labelledby="browse-heading" className="mb-14">
+                    <h2 id="browse-heading" className="mb-5 text-xl font-semibold tracking-tight">
+                        Browse by category
+                    </h2>
+                    <div className="tool-grid">
+                        {visibleCategories.map((category) => (
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                                count={getToolsByCategory(category.id).length}
+                            />
+                        ))}
+                    </div>
+                </section>
 
-                {isFiltering ? (
+                {isSearching ? (
                     <section aria-label="Search results">
                         <p role="status" className="mb-4 text-sm text-fg-muted">
                             {results.length} {results.length === 1 ? 'tool' : 'tools'} found
@@ -153,9 +134,9 @@ export default function Home() {
                             <EmptyState
                                 icon={Search}
                                 title="No tools found"
-                                description="Try a different search term or category."
+                                description="Try a different search term."
                             >
-                                <Button onClick={clearFilters}>Clear filters</Button>
+                                <Button onClick={clearSearch}>Clear search</Button>
                             </EmptyState>
                         )}
                     </section>

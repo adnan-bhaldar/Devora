@@ -8,12 +8,15 @@ import FavoriteButton from '../components/tools/FavoriteButton.jsx'
 import Button from '../components/ui/Button.jsx'
 import usePageMeta from '../hooks/usePageMeta.js'
 import useToolPrefs from '../hooks/useToolPrefs.js'
+import { categories } from '../data/tools.js'
 import { toolComponents } from '../tools/index.jsx'
 
 export default function ToolPage({ tool }) {
     usePageMeta(tool.seo)
     const { addRecent } = useToolPrefs()
     const ToolComponent = toolComponents[tool.id]
+    // The breadcrumb leads back to the tool's main category.
+    const category = categories.find((item) => item.id === tool.categories[0])
 
     // Only tools that actually exist count as "recently used".
     useEffect(() => {
@@ -25,8 +28,13 @@ export default function ToolPage({ tool }) {
             <nav aria-label="Breadcrumb" className="breadcrumb">
                 <ol>
                     <li>
-                        <Link to="/">Tools</Link>
+                        <Link to="/">Home</Link>
                     </li>
+                    {category && (
+                        <li>
+                            <Link to={`/categories/${category.id}`}>{category.name}</Link>
+                        </li>
+                    )}
                     <li aria-current="page">{tool.name}</li>
                 </ol>
             </nav>
