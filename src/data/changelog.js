@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-17-offline',
+        date: '2026-10-17',
+        type: 'new',
+        title: 'Install Devora and use it offline',
+        description:
+            'Devora can now be installed as an app, and after your first visit every tool opens and works without an internet connection. Your data still never leaves your browser.',
+    },
+    {
         id: '2026-10-17-share-links',
         date: '2026-10-17',
         type: 'new',
