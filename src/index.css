@@ -1254,7 +1254,7 @@
   }
 
   .tok-s {
-    color: oklch(var(--tone-l) 0.15 160);
+    color: var(--success);
   }
 
   .tok-n {

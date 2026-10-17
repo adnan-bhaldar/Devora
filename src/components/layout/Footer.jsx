@@ -9,9 +9,17 @@ export default function Footer() {
                     <p className="font-semibold">{siteConfig.name}</p>
                     <p className="text-sm text-fg-muted">{siteConfig.tagline}</p>
                 </div>
-                <nav aria-label="Footer" className="flex gap-5 text-sm">
-                    <Link to="/whats-new">What&rsquo;s New</Link>
+                <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
                     <Link to="/about">About</Link>
+                    <a href={siteConfig.repo.url} target="_blank" rel="noopener noreferrer">
+                        GitHub<span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <a href={siteConfig.repo.contributing} target="_blank" rel="noopener noreferrer">
+                        Contributing<span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <a href={siteConfig.repo.changelog} target="_blank" rel="noopener noreferrer">
+                        Changelog<span className="sr-only"> (opens in a new tab)</span>
+                    </a>
                 </nav>
             </div>
         </footer>
