@@ -1,22 +1,33 @@
-import { useId, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
-import Button from '../ui/Button.jsx'
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
+import { PREVIEW_COUNT, sortLiveFirst } from '../../utils/toolOrder.js'
 import ToolCard from './ToolCard.jsx'
 
-// A category with more tools than FOLD_AFTER shows only the first PREVIEW_COUNT, so the home
-// page stays short however many tools exist. Small categories are always shown in full.
-const PREVIEW_COUNT = 6
-const FOLD_AFTER = 9
+function ShowAllCard({ category, count }) {
+    return (
+        <article data-tone={category.id} className="card card-link flex h-full flex-col justify-between gap-4">
+            <span className="icon-tile">
+                <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <div>
+                <h3 className="text-base font-semibold tracking-tight">
+                    <Link to={`/categories/${category.id}`} className="card-stretch">
+                        Show all {count} tools
+                    </Link>
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
+                    See everything in {category.name}.
+                </p>
+            </div>
+        </article>
+    )
+}
 
 export default function CategorySection({ category, tools }) {
-    const [expanded, setExpanded] = useState(false)
-    const gridId = useId()
     const CategoryIcon = category.icon
-
-    // Finished tools come first, so unfinished ones never push them out of the preview.
-    const ordered = [...tools].sort((a, b) => Number(b.status === 'live') - Number(a.status === 'live'))
-    const canFold = ordered.length > FOLD_AFTER
-    const shown = canFold && !expanded ? ordered.slice(0, PREVIEW_COUNT) : ordered
+    const ordered = sortLiveFirst(tools)
+    const hasMore = ordered.length > PREVIEW_COUNT
+    const shown = hasMore ? ordered.slice(0, PREVIEW_COUNT) : ordered
 
     return (
         <section data-tone={category.id} aria-labelledby={`category-${category.id}`}>
@@ -26,36 +37,19 @@ export default function CategorySection({ category, tools }) {
                 </span>
                 <div className="min-w-0 flex-1">
                     <h2 id={`category-${category.id}`} className="text-xl font-semibold tracking-tight">
-                        {category.name}
+                        <Link to={`/categories/${category.id}`}>{category.name}</Link>
                     </h2>
                     <p className="text-sm text-fg-muted">{category.description}</p>
                 </div>
                 <span className="badge">{ordered.length}</span>
             </div>
 
-            <div id={gridId} className="tool-grid">
+            <div className="tool-grid">
                 {shown.map((tool) => (
                     <ToolCard key={tool.id} tool={tool} />
                 ))}
+                {hasMore && <ShowAllCard category={category} count={ordered.length} />}
             </div>
-
-            {canFold && (
-                <div className="mt-4">
-                    <Button
-                        variant="ghost"
-                        aria-expanded={expanded}
-                        aria-controls={gridId}
-                        onClick={() => setExpanded((current) => !current)}
-                    >
-                        {expanded ? 'Show fewer' : `Show all ${ordered.length} ${category.name.toLowerCase()} tools`}
-                        <ChevronDown
-                            size={16}
-                            aria-hidden="true"
-                            className={`transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
-                        />
-                    </Button>
-                </div>
-            )}
         </section>
     )
 }

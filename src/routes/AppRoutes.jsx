@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from '../components/layout/Layout.jsx'
 import LoadingState from '../components/common/LoadingState.jsx'
+import CategoryPage from '../pages/CategoryPage.jsx'
 import Home from '../pages/Home.jsx'
 import About from '../pages/About.jsx'
 import WhatsNew from '../pages/WhatsNew.jsx'
@@ -19,6 +20,8 @@ export default function AppRoutes() {
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
                 <Route path="whats-new" element={<WhatsNew />} />
+                <Route path="categories" element={<Navigate to="/" replace />} />
+                <Route path="categories/:categoryId" element={<CategoryPage />} />
                 {tools.map((tool) => (
                     <Route key={tool.id} path={tool.route} element={<ToolPage tool={tool} />} />
                 ))}

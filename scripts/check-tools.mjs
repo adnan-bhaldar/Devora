@@ -13,7 +13,7 @@ const root = fileURLToPath(new URL('..', import.meta.url))
 const problems = []
 const problem = (message) => problems.push(message)
 
-const RESERVED_ROUTES = ['/', '/about', '/whats-new', '/_playground']
+const RESERVED_ROUTES = ['/', '/about', '/whats-new', '/_playground', '/categories']
 const STATUSES = ['live', 'coming-soon']
 const categoryIds = new Set(categories.map((category) => category.id))
 
@@ -37,7 +37,9 @@ for (const tool of tools) {
     seenIds.add(tool.id)
 
     if (!tool.route?.startsWith('/')) problem(`${label}: route must start with "/".`)
-    if (RESERVED_ROUTES.includes(tool.route)) problem(`${label}: route ${tool.route} is reserved.`)
+    if (RESERVED_ROUTES.includes(tool.route) || tool.route?.startsWith('/categories/')) {
+        problem(`${label}: route ${tool.route} is reserved.`)
+    }
     if (seenRoutes.has(tool.route)) problem(`${label}: route ${tool.route} is used twice.`)
     seenRoutes.add(tool.route)
 

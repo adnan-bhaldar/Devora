@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CornerDownLeft, House, Info, Moon, Search, Sparkles, Sun } from 'lucide-react'
 import useTheme from '../../hooks/useTheme.js'
+import { categories } from '../../data/tools.js'
 import { searchTools } from '../../utils/search.js'
 
 // With many tools, an empty query shows only a few so the list stays scannable.
@@ -41,6 +42,22 @@ export default function CommandPalette({ onClose }) {
                 run: () => navigate(tool.route),
             }))
 
+        // Categories are only suggested once something is typed, so the empty palette stays short.
+        const categoryItems = trimmed
+            ? categories
+                .filter((category) =>
+                    words.every((word) => `${category.name} ${category.description}`.toLowerCase().includes(word)),
+                )
+                .map((category) => ({
+                    id: `category-${category.id}`,
+                    group: 'Categories',
+                    label: category.name,
+                    description: category.description,
+                    icon: category.icon,
+                    run: () => navigate(`/categories/${category.id}`),
+                }))
+            : []
+
         const actionItems = [
             { id: 'home', label: 'Go to Home', icon: House, run: () => navigate('/') },
             { id: 'about', label: 'About Devora', icon: Info, run: () => navigate('/about') },
@@ -55,7 +72,7 @@ export default function CommandPalette({ onClose }) {
             .filter((action) => words.every((word) => action.label.toLowerCase().includes(word)))
             .map((action) => ({ ...action, id: `action-${action.id}`, group: 'Actions' }))
 
-        return [...toolItems, ...actionItems]
+        return [...toolItems, ...categoryItems, ...actionItems]
     }, [query, navigate, theme, toggleTheme])
 
     const safeIndex = Math.min(activeIndex, Math.max(items.length - 1, 0))
