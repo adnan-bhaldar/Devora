@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { RefreshCw } from 'lucide-react'
+import { Link2, RefreshCw } from 'lucide-react'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ResetButton from '../../components/common/ResetButton.jsx'
 import ToolPanel from '../../components/tools/ToolPanel.jsx'
@@ -7,6 +7,8 @@ import Button from '../../components/ui/Button.jsx'
 import Checkbox from '../../components/ui/Checkbox.jsx'
 import ChoiceGroup from '../../components/ui/ChoiceGroup.jsx'
 import Field from '../../components/ui/Field.jsx'
+import useInitialParams from '../../hooks/useInitialParams.js'
+import { buildShareUrl } from '../../utils/shareLink.js'
 import {
     DEFAULT_SETTINGS,
     INITIAL_SEED,
@@ -18,13 +20,16 @@ import {
     isDefaultSettings,
     parseAmount,
 } from './lorem.js'
+import { readSharedSettings, toShareQuery } from './share.js'
 
 const AMOUNT_ID = 'lorem-amount'
 const AMOUNT_ERROR_ID = 'lorem-amount-error'
 const OUTPUT_ID = 'lorem-output'
 
 export default function LoremTool() {
-    const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+    // A shared link can set the settings. They are read once, then removed from the address.
+    const params = useInitialParams()
+    const [settings, setSettings] = useState(() => readSharedSettings(params))
     const [seed, setSeed] = useState(INITIAL_SEED)
     // While the user types in the number box, `draft` holds their raw text (which may be empty
     // or out of range). It is cleared on blur so the box shows the real amount again.
@@ -33,6 +38,8 @@ export default function LoremTool() {
     // The text is derived from the settings and the seed, so it needs no state of its own.
     const output = useMemo(() => generateLorem(settings, seed), [settings, seed])
     const wordCount = useMemo(() => countWords(output), [output])
+
+    const shareUrl = buildShareUrl(toShareQuery(settings))
 
     const { min, max } = LIMITS[settings.unit]
     const amountText = draft ?? String(settings.amount)
@@ -68,7 +75,10 @@ export default function LoremTool() {
             <ToolPanel
                 title="Settings"
                 actions={
-                    <ResetButton onClick={reset} disabled={isDefaultSettings(settings) && seed === INITIAL_SEED} />
+                    <>
+                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" icon={Link2} />
+                        <ResetButton onClick={reset} disabled={isDefaultSettings(settings) && seed === INITIAL_SEED} />
+                    </>
                 }
             >
                 <div className="grid gap-5">

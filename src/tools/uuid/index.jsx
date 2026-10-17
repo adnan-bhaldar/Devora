@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RefreshCw } from 'lucide-react'
+import { Link2, RefreshCw } from 'lucide-react'
 import ClearButton from '../../components/common/ClearButton.jsx'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ResetButton from '../../components/common/ResetButton.jsx'
@@ -7,6 +7,8 @@ import ToolPanel from '../../components/tools/ToolPanel.jsx'
 import Button from '../../components/ui/Button.jsx'
 import Checkbox from '../../components/ui/Checkbox.jsx'
 import RangeField from '../../components/ui/RangeField.jsx'
+import useInitialParams from '../../hooks/useInitialParams.js'
+import { buildShareUrl } from '../../utils/shareLink.js'
 import {
     DEFAULT_SETTINGS,
     LIMITS,
@@ -15,12 +17,15 @@ import {
     generateUuids,
     isDefaultSettings,
 } from './uuid.js'
+import { readSharedSettings, toShareQuery } from './share.js'
 
 const COUNT_ID = 'uuid-count'
 const OUTPUT_ID = 'uuid-output'
 
 export default function UuidTool() {
-    const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+    // A shared link can set the settings (never the UUIDs). They are read once, then removed from the address.
+    const params = useInitialParams()
+    const [settings, setSettings] = useState(() => readSharedSettings(params))
     // The raw UUIDs (always lowercase with hyphens). Formatting is applied when they are shown.
     const [uuids, setUuids] = useState([])
     const [error, setError] = useState('')
@@ -56,6 +61,7 @@ export default function UuidTool() {
         clear()
     }
 
+    const shareUrl = buildShareUrl(toShareQuery(settings))
     const output = uuids.map((uuid) => formatUuid(uuid, settings)).join('\n')
     const hasUuids = uuids.length > 0
 
@@ -63,7 +69,12 @@ export default function UuidTool() {
         <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
             <ToolPanel
                 title="Settings"
-                actions={<ResetButton onClick={reset} disabled={isDefaultSettings(settings) && !hasUuids} />}
+                actions={
+                    <>
+                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" icon={Link2} />
+                        <ResetButton onClick={reset} disabled={isDefaultSettings(settings) && !hasUuids} />
+                    </>
+                }
             >
                 <div className="grid gap-5">
                     <RangeField

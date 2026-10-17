@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Eye, EyeOff, RefreshCw } from 'lucide-react'
+import { Eye, EyeOff, Link2, RefreshCw } from 'lucide-react'
 import ClearButton from '../../components/common/ClearButton.jsx'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ResetButton from '../../components/common/ResetButton.jsx'
@@ -8,6 +8,8 @@ import Button from '../../components/ui/Button.jsx'
 import Checkbox from '../../components/ui/Checkbox.jsx'
 import IconButton from '../../components/ui/IconButton.jsx'
 import RangeField from '../../components/ui/RangeField.jsx'
+import useInitialParams from '../../hooks/useInitialParams.js'
+import { buildShareUrl } from '../../utils/shareLink.js'
 import {
     CHARACTER_TYPES,
     DEFAULT_SETTINGS,
@@ -16,6 +18,7 @@ import {
     estimateStrength,
     isDefaultSettings,
 } from './password.js'
+import { readSharedSettings, toShareQuery } from './share.js'
 
 const LENGTH_ID = 'password-length'
 const PASSWORD_ID = 'password-output'
@@ -28,7 +31,9 @@ const METER_TONES = {
 }
 
 export default function PasswordTool() {
-    const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+    // A shared link can set the settings (never a password). They are read once, then removed from the address.
+    const params = useInitialParams()
+    const [settings, setSettings] = useState(() => readSharedSettings(params))
     // The latest result, or null before anything has been generated. It only ever lives here,
     // in memory: it is never stored, logged, or put in the address.
     const [result, setResult] = useState(null)
@@ -51,13 +56,19 @@ export default function PasswordTool() {
     const password = result?.ok ? result.password : ''
     const error = result && !result.ok ? result.error : ''
     const strength = estimateStrength(settings)
+    const shareUrl = buildShareUrl(toShareQuery(settings))
     const selectedCount = CHARACTER_TYPES.filter((type) => settings[type.key]).length
 
     return (
         <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
             <ToolPanel
                 title="Settings"
-                actions={<ResetButton onClick={reset} disabled={isDefaultSettings(settings) && !result} />}
+                actions={
+                    <>
+                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" icon={Link2} />
+                        <ResetButton onClick={reset} disabled={isDefaultSettings(settings) && !result} />
+                    </>
+                }
             >
                 <div className="grid gap-5">
                     <RangeField
