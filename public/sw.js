@@ -36,16 +36,28 @@ self.addEventListener('activate', (event) => {
     )
 })
 
-async function fontResponse(request) {
+async function fontResponse(event) {
+    const { request } = event
     const cache = await caches.open(FONT_CACHE)
     const saved = await cache.match(request)
-    // Serve the saved font at once, and refresh it in the background.
+
+    // The latest save, so the worker can be kept alive until it finishes.
+    let saving = Promise.resolve()
     const refresh = fetch(request)
         .then((response) => {
-            if (response.ok || response.type === 'opaque') cache.put(request, response.clone())
+            if (response.ok || response.type === 'opaque') {
+                // A failed save must never stop the font from being shown, so errors are ignored.
+                saving = cache.put(request, response.clone()).catch(() => { })
+            }
             return response
         })
         .catch(() => undefined)
+
+    // Without this, the browser may stop the worker as soon as the response is sent, before the
+    // font has been saved for offline use.
+    event.waitUntil(refresh.then(() => saving))
+
+    // Serve the saved font at once (and refresh it in the background), or wait for the network.
     return saved ?? (await refresh) ?? Response.error()
 }
 
@@ -56,7 +68,7 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(request.url)
 
     if (FONT_HOSTS.includes(url.hostname)) {
-        event.respondWith(fontResponse(request))
+        event.respondWith(fontResponse(event))
         return
     }
 
