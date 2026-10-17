@@ -1,6 +1,14 @@
 // type: 'new' | 'improved' | 'fixed'. Newest entries first.
 export const changelog = [
     {
+        id: '2026-10-17-share-links',
+        date: '2026-10-17',
+        type: 'new',
+        title: 'Copy link for tool settings',
+        description:
+            'The Hash, Password, UUID, and Lorem Ipsum tools now have a Copy link button that shares your settings (such as the algorithm or length). Your text, passwords, and generated results are never included. Opening a link loads the settings, then tidies the address bar.',
+    },
+    {
         id: '2026-10-15-uuid',
         date: '2026-10-15',
         type: 'new',

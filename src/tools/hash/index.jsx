@@ -1,18 +1,24 @@
 import { useRef, useState } from 'react'
+import { Link2 } from 'lucide-react'
 import ClearButton from '../../components/common/ClearButton.jsx'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import ExampleButton from '../../components/common/ExampleButton.jsx'
 import ToolPanel from '../../components/tools/ToolPanel.jsx'
 import ChoiceGroup from '../../components/ui/ChoiceGroup.jsx'
+import useInitialParams from '../../hooks/useInitialParams.js'
+import { buildShareUrl } from '../../utils/shareLink.js'
 import { ALGORITHMS, EXAMPLE_TEXT, FORMATS, computeDigest, formatDigest } from './hash.js'
+import { readSharedSettings, toShareQuery } from './share.js'
 
 const INPUT_ID = 'hash-input'
 const OUTPUT_ID = 'hash-output'
 
 export default function HashTool() {
+    // A shared link can set the algorithm and output format. The text to hash is never part of a link.
+    const params = useInitialParams()
     const [input, setInput] = useState('')
-    const [algorithm, setAlgorithm] = useState('SHA-256')
-    const [format, setFormat] = useState('hex')
+    const [algorithm, setAlgorithm] = useState(() => readSharedSettings(params).algorithm)
+    const [format, setFormat] = useState(() => readSharedSettings(params).format)
     // The latest finished hash, together with the text and algorithm it was made from.
     const [outcome, setOutcome] = useState(null)
     // Each calculation gets a number, so a slow earlier one can't overwrite a newer one.
@@ -47,6 +53,8 @@ export default function HashTool() {
 
     const clear = () => handleInputChange('')
 
+    const shareUrl = buildShareUrl(toShareQuery({ algorithm, format }))
+
     const output = outcome?.ok ? formatDigest(outcome.digest, format) : ''
     const error = outcome && !outcome.ok ? outcome.error : ''
     const resultBits = outcome?.ok
@@ -62,6 +70,7 @@ export default function HashTool() {
                 title="Input"
                 actions={
                     <>
+                        <CopyButton text={shareUrl} label="Copy link" copiedLabel="Link copied" icon={Link2} />
                         <ExampleButton onClick={() => handleInputChange(EXAMPLE_TEXT)} />
                         <ClearButton onClick={clear} disabled={input === ''} />
                     </>
