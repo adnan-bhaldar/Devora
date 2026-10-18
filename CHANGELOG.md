@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to Devora are listed here, newest first. Dates are written as year-month-day.
+All notable changes to Devora are listed here, newest first. Each heading is a version number.
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under **Unreleased**. At release time, move those lines under a new dated heading.
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under **Unreleased**. At release time, move those lines under a new version heading (for example `## 1.9.7`).
 
 ## Unreleased
 
-## 2026-10-17
+## 1.9.6
 
 ### Added
 
@@ -20,27 +20,27 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 - The About page was redesigned and now links to the GitHub repository, the contribution guide and the developer.
 - The changelog moved from a page on the site to this file. The old `/whats-new` address now opens the About page.
 
-## 2026-10-15
+## 1.8.0
 
 ### Added
 
 - **UUID Generator.** Generate one to a hundred random version 4 UUIDs, with uppercase and no-hyphen options and one-click copy.
 
-## 2026-10-14
+## 1.6.0
 
 ### Added
 
 - **Password Generator.** Create random passwords with a length slider, character types and an estimated strength. They are generated with a cryptographic random number generator and are never stored or sent anywhere.
 - **Lorem Ipsum Generator.** Generate placeholder words, sentences or paragraphs with the classic opening line option.
 
-## 2026-10-11
+## 1.4.0
 
 ### Added
 
 - **Hash Generator.** SHA-256, SHA-384 and SHA-512 hashes of text as you type, shown as hex or Base64, using the Web Crypto API.
 - **QR Code Decoder.** Read the contents of a QR code from an image. The result is labelled by type and shown as plain text.
 
-## 2026-10-10
+## 1.2.0
 
 ### Added
 
@@ -54,7 +54,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 
 - The CSS Gradient Generator now also creates reflected and diamond gradients.
 
-## 2026-10-09
+## 1.0.0
 
 ### Added
 
