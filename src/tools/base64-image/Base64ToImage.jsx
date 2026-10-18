@@ -46,14 +46,21 @@ export default function Base64ToImage() {
     const download = async () => {
         setConverting(true)
         setDownloadError('')
-        const result = await convertImage(image, downloadFormat, quality)
-        setConverting(false)
 
-        if (!result.ok) {
-            setDownloadError(result.error)
-            return
+        // "finally" runs whether the conversion worked or threw, so the button can never get
+        // stuck on "Converting…".
+        try {
+            const result = await convertImage(image, downloadFormat, quality)
+            if (!result.ok) {
+                setDownloadError(result.error)
+                return
+            }
+            downloadBlob(result.blob, `decoded-image.${result.extension}`)
+        } catch {
+            setDownloadError('Something went wrong while converting the image. Please try again.')
+        } finally {
+            setConverting(false)
         }
-        downloadBlob(result.blob, `decoded-image.${result.extension}`)
     }
 
     return (

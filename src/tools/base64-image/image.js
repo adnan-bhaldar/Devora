@@ -241,19 +241,26 @@ export async function convertImage(image, target, quality = DEFAULT_QUALITY) {
     if (width === 0 || height === 0) return { ok: false, error: CONVERT_ERRORS.load }
     if (width * height > MAX_PIXELS) return { ok: false, error: CONVERT_ERRORS.tooBig }
 
-    const canvas = document.createElement('canvas')
-    canvas.width = width
-    canvas.height = height
-    const context = canvas.getContext('2d')
-    if (!context) return { ok: false, error: CONVERT_ERRORS.canvas }
+    // Drawing and saving can throw (for example on a very large image), so errors are caught
+    // and reported like any other conversion problem.
+    let blob
+    try {
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const context = canvas.getContext('2d')
+        if (!context) return { ok: false, error: CONVERT_ERRORS.canvas }
 
-    if (target === 'jpeg') {
-        context.fillStyle = '#ffffff'
-        context.fillRect(0, 0, width, height)
+        if (target === 'jpeg') {
+            context.fillStyle = '#ffffff'
+            context.fillRect(0, 0, width, height)
+        }
+        context.drawImage(picture, 0, 0, width, height)
+
+        blob = await canvasToBlob(canvas, format.mime, quality / 100)
+    } catch {
+        return { ok: false, error: CONVERT_ERRORS.canvas }
     }
-    context.drawImage(picture, 0, 0, width, height)
-
-    const blob = await canvasToBlob(canvas, format.mime, quality / 100)
 
     // A browser that cannot write a format quietly saves PNG instead, so the type is checked.
     if (!blob || blob.type !== format.mime) {
