@@ -1,19 +1,9 @@
-import {
-    ArrowUpRight,
-    Bug,
-    GitPullRequest,
-    Keyboard,
-    Lightbulb,
-    Lock,
-    WifiOff,
-    Zap,
-} from 'lucide-react'
+import { ArrowUpRight, GitPullRequest, Keyboard, Lock, WifiOff, Zap } from 'lucide-react'
 import GithubIcon from '../components/common/GithubIcon.jsx'
 import usePageMeta from '../hooks/usePageMeta.js'
 import { shortcuts } from '../data/shortcuts.js'
 import { siteConfig } from '../data/site.js'
 import { categories, tools } from '../data/tools.js'
-import './about.css'
 
 const liveTools = tools.filter((tool) => tool.status === 'live')
 
@@ -39,24 +29,6 @@ const PRINCIPLES = [
         icon: WifiOff,
         title: 'Works offline',
         text: 'After your first visit, every tool keeps working without a connection, and you can install Devora as an app.',
-    },
-]
-
-const STEPS = [
-    {
-        icon: Lightbulb,
-        title: 'Pick something to improve',
-        text: 'Browse the open issues, or suggest a new tool or a fix of your own.',
-    },
-    {
-        icon: GitPullRequest,
-        title: 'Make the change',
-        text: 'Fork the repository, add or fix a tool, and run the checks listed in the guide.',
-    },
-    {
-        icon: Bug,
-        title: 'Open a pull request',
-        text: 'Describe what changed and why. Small, focused pull requests are reviewed fastest.',
     },
 ]
 
@@ -92,7 +64,7 @@ export default function About() {
                 </h1>
                 <p className="rise rise-2 mt-5 max-w-2xl text-lg text-fg-muted sm:text-xl">
                     Devora is a collection of developer utilities that open instantly in your browser. No
-                    installation, no account, and nothing leaves your device.
+                    installation, no account, and what you type never leaves your browser.
                 </p>
                 <div className="rise rise-3 mt-8 flex flex-wrap gap-3">
                     <ExternalLink href={repo.url} className="btn btn-primary">
@@ -154,56 +126,13 @@ export default function About() {
                 </div>
             </section>
 
-            <section aria-labelledby="about-contribute" className="about-section">
-                <h2 id="about-contribute" className="about-heading">
-                    Contribute
-                </h2>
-                <p className="about-lead">
-                    Devora is open source and contributions are welcome, from a typo fix to a whole new tool.
-                    The contribution guide explains how to set the project up and how to add a tool.
-                </p>
-                <ol className="about-grid">
-                    {STEPS.map(({ icon: Icon, title, text }, index) => (
-                        <li key={title} className="card about-card">
-                            <div className="flex items-center justify-between">
-                                <span className="icon-tile">
-                                    <Icon size={20} aria-hidden="true" />
-                                </span>
-                                <span className="about-step" aria-hidden="true">
-                                    0{index + 1}
-                                </span>
-                            </div>
-                            <h3 className="mt-4 text-lg font-semibold">
-                                <span className="sr-only">Step {index + 1}: </span>
-                                {title}
-                            </h3>
-                            <p className="mt-2 text-fg-muted">{text}</p>
-                        </li>
-                    ))}
-                </ol>
-                <div className="mt-6 flex flex-wrap gap-3">
-                    <ExternalLink href={repo.contributing} className="btn btn-secondary">
-                        Read the contribution guide
-                        <ArrowUpRight size={16} aria-hidden="true" />
-                    </ExternalLink>
-                    <ExternalLink href={repo.newIssue} className="btn btn-secondary">
-                        Report a bug or suggest a tool
-                        <ArrowUpRight size={16} aria-hidden="true" />
-                    </ExternalLink>
-                    <ExternalLink href={repo.changelog} className="btn btn-ghost">
-                        Changelog
-                        <ArrowUpRight size={16} aria-hidden="true" />
-                    </ExternalLink>
-                </div>
-            </section>
-
             <section aria-labelledby="about-developer" className="about-section">
                 <h2 id="about-developer" className="about-heading">
                     The developer
                 </h2>
                 <article className="card dev-card">
                     <div className="dev-card__avatar" aria-hidden="true">
-                        {author.name.charAt(0)}
+                        <GithubIcon size={44} />
                     </div>
                     <div className="min-w-0">
                         <h3 className="text-xl font-semibold">{author.name}</h3>
@@ -219,6 +148,10 @@ export default function About() {
                         <div className="mt-5 flex flex-wrap gap-3">
                             <ExternalLink href={author.github} className="btn btn-secondary">
                                 <GithubIcon size={18} />@{author.githubHandle}
+                            </ExternalLink>
+                            <ExternalLink href={repo.changelog} className="btn btn-ghost">
+                                Changelog
+                                <ArrowUpRight size={16} aria-hidden="true" />
                             </ExternalLink>
                             <ExternalLink href={repo.url} className="btn btn-ghost">
                                 Star the project

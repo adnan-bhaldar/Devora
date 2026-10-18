@@ -22,7 +22,7 @@ Create a branch for your change, for example `fix/hash-copy-button` or `feat/url
 
 ## Before you open a pull request
 
-Run all of these. The same checks run automatically on every pull request.
+Run all of these. GitHub runs `npm run lint` and `npm run check:tools` automatically on every pull request, but not the build, so please run `npm run build` yourself.
 
 ```bash
 npm run lint

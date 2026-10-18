@@ -12,6 +12,13 @@ function listFiles(directory) {
   )
 }
 
+// The site's public address, from SITE_URL or Vercel. Empty when unknown.
+function getSiteUrl() {
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  return (process.env.SITE_URL ?? (vercelHost ? `https://${vercelHost}` : '')).replace(/\/+$/, '')
+}
+
+
 /*
  * Writes sitemap.xml and robots.txt (which points to it) so search engines can find every page.
  * It needs the site's address: set SITE_URL (for example https://devora.example.com) when
@@ -27,9 +34,19 @@ function seoFilesPlugin() {
     configResolved(config) {
       outDir = join(config.root, config.build.outDir)
     },
+    // Link previews need full web addresses for og:url and og:image, which are only known at
+    // build time. Without a site address they are left out rather than written wrongly.
+    transformIndexHtml() {
+      const base = getSiteUrl()
+      if (!base) return []
+      return [
+        { tag: 'meta', attrs: { property: 'og:url', content: `${base}/` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { property: 'og:image', content: `${base}/icons/icon-512.png` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: `${base}/icons/icon-512.png` }, injectTo: 'head' },
+      ]
+    },
     closeBundle() {
-      const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL
-      const base = (process.env.SITE_URL ?? (vercelHost ? `https://${vercelHost}` : '')).replace(/\/+$/, '')
+      const base = getSiteUrl()
       if (!base) {
         console.warn('[devora] SITE_URL is not set, so sitemap.xml was not generated.')
         return

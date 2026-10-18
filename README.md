@@ -51,6 +51,8 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
 ├── vite.config.js             Vite + Tailwind + offline file list + sitemap
 ├── vercel.json                SPA rewrite and security headers (CSP)
 ├── eslint.config.js
+├── CHANGELOG.md               What changed, newest first
+├── CONTRIBUTING.md            How to contribute
 ├── scripts/check-tools.mjs    Registry checks (npm run check:tools)
 ├── public/                    Copied as-is into the build
 │   ├── sw.js                  Service worker (offline support)
@@ -65,10 +67,9 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
     ├── routes/AppRoutes.jsx   All routes, built from the registry
     ├── data/
     │   ├── tools.js           THE tool registry (categories and tools)
-    │   ├── changelog.js       "What's New" entries
     │   ├── site.js            Site name and description
     │   └── shortcuts.js       Keyboard shortcuts shown on About
-    ├── pages/                 Home, CategoryPage, ToolPage, About, WhatsNew, NotFound
+    ├── pages/                 Home, CategoryPage, ToolPage, About, NotFound
     ├── tools/
     │   ├── index.jsx          Finds every tool folder and loads it on demand
     │   └── <tool-id>/         One folder per tool (index.jsx, docs.js, logic files)
@@ -93,13 +94,13 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
 
 **Pages**
 
-| Address                | Page                                                       |
-| ---------------------- | ---------------------------------------------------------- |
-| `/`                    | Home: browse by category, favorites, recently used, search |
-| `/categories/<id>`     | All tools in one category                                  |
-| `/<tool-route>`        | A tool, for example `/uuid`                                |
-| `/about`, `/whats-new` | Information pages                                          |
-| anything else          | 404 page                                                   |
+| Address            | Page                                                                 |
+| ------------------ | -------------------------------------------------------------------- |
+| `/`                | Home: browse by category, favorites, recently used, search           |
+| `/categories/<id>` | All tools in one category                                            |
+| `/<tool-route>`    | A tool, for example `/uuid`                                          |
+| `/about`           | About, privacy, and the developer card (`/whats-new` redirects here) |
+| anything else      | 404 page                                                             |
 
 ## Privacy and security
 
@@ -152,7 +153,7 @@ Devora is a static site, so any static host works. It needs two things: every ad
    ```
 
 3. **Check it.** Run `npm run check:tools`.
-4. **Optional:** add an entry to `src/data/changelog.js` so it shows on What's New.
+4. Add a line under **Unreleased** in `CHANGELOG.md`.
 
 Nothing else needs touching. The tool appears on the home page, its category page, search, the command palette, favorites, recently used, the sitemap and the offline cache.
 
@@ -167,3 +168,7 @@ If a tool offers shareable settings, follow `src/tools/hash/share.js`: share onl
 - **If the old version keeps showing after a deploy:** close all Devora tabs, or unregister the service worker in the browser's developer tools (Application → Service Workers).
 - **Fonts:** the font loads from Google Fonts and is cached by the service worker. If you self-host it later, remove the Google Fonts hosts from the CSP and from `public/sw.js`.
 - **Docs for tools:** keep each tool's `docs.js` honest. Its privacy line must match what the tool really does.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Notable changes are listed in [CHANGELOG.md](CHANGELOG.md).
