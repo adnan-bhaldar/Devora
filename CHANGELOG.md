@@ -6,6 +6,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 
 ## Unreleased
 
+## 1.9.7
+
+### Added
+
+- **Download as PNG, JPG or WebP.** The Base64 Image Converter can now save a decoded image in another format, with a quality setting for JPG and WebP.
+- Link previews: shared links to Devora now carry a page address and an image, so they show a proper preview.
+
+### Changed
+
+- The Base64 Image Converter's example is now the Devora app icon.
+- The About page says exactly what stays in your browser: what you type never leaves it.
+
+### Fixed
+
+- Opening `/sitemap.xml` or `/robots.txt` in a browser that had installed Devora no longer shows "page not found".
+
 ## 1.9.6
 
 ### Added
