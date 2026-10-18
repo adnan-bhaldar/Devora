@@ -145,19 +145,21 @@ export function parseImageInput(input) {
     }
 }
 
-// A small, safe sample generated in code, so the example is always valid.
+// The sample is Devora's own app icon, written out in code so the example is always valid.
+// It has a fixed width and height so it shows at a sensible size when previewed.
 const EXAMPLE_SVG =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">' +
-    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
-    '<stop offset="0" stop-color="#5b4bff"/><stop offset="1" stop-color="#c147ff"/>' +
+    '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 24 24">' +
+    '<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">' +
+    '<stop offset="0%" stop-color="#5b4bff"/><stop offset="100%" stop-color="#c147ff"/>' +
     '</linearGradient></defs>' +
-    '<rect width="160" height="160" rx="32" fill="url(#g)"/>' +
-    '<circle cx="80" cy="80" r="36" fill="none" stroke="#fff" stroke-width="10"/></svg>'
+    '<rect width="24" height="24" rx="6" fill="url(#g)"/>' +
+    '<g stroke="#ffffff" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(3 3) scale(0.75)">' +
+    '<path d="M12 19h8"/><path d="m4 17 6-6-6-6"/></g></svg>'
 
 export function createExampleImage() {
     const bytes = new TextEncoder().encode(EXAMPLE_SVG)
     return {
-        name: 'example.svg',
+        name: 'devora-icon.svg',
         mime: 'image/svg+xml',
         label: 'SVG',
         size: bytes.length,
@@ -168,4 +170,95 @@ export function createExampleImage() {
 export function createExampleDataUri() {
     const { mime, base64 } = createExampleImage()
     return toDataUri(mime, base64)
+}
+
+// ---------- Saving the decoded image in another format ----------
+
+// The formats the download can be converted to. Browsers can write all three from a canvas.
+export const DOWNLOAD_FORMATS = [
+    { value: 'original', label: 'Original' },
+    { value: 'png', label: 'PNG' },
+    { value: 'jpeg', label: 'JPG' },
+    { value: 'webp', label: 'WebP' },
+]
+
+// JPG and WebP are "lossy": a lower quality gives a smaller file with less detail.
+export const LOSSY_FORMATS = ['jpeg', 'webp']
+export const DEFAULT_QUALITY = 90
+
+// Very large pictures can make a browser run out of memory, so conversion stops above this.
+const MAX_PIXELS = 50_000_000
+// SVG images may have no size of their own, so they are drawn at this size when that happens.
+const FALLBACK_SVG_SIZE = 1024
+
+const CONVERT_ERRORS = {
+    load: 'The image could not be loaded for conversion.',
+    tooBig: 'This image is too large to convert in the browser. Download the original instead.',
+    canvas: 'Your browser could not prepare the image for conversion.',
+}
+
+function loadImage(dataUri) {
+    return new Promise((resolve, reject) => {
+        const element = new Image()
+        element.onload = () => resolve(element)
+        element.onerror = () => reject(new Error(CONVERT_ERRORS.load))
+        element.src = dataUri
+    })
+}
+
+function canvasToBlob(canvas, mime, quality) {
+    return new Promise((resolve) => canvas.toBlob(resolve, mime, quality))
+}
+
+/*
+ * Converts a decoded image (from parseImageInput) to PNG, JPG, or WebP by drawing it on a
+ * canvas and saving the canvas. quality is 1-100 and only affects JPG and WebP.
+ * Returns { ok: true, blob, extension } or { ok: false, error }.
+ *
+ * - Choosing "original", or the format the image already has, returns the untouched bytes,
+ *   so nothing is lost.
+ * - JPG cannot store transparency, so transparent areas are filled with white.
+ * - Animated images (GIF, WebP) are saved as their first frame.
+ */
+export async function convertImage(image, target, quality = DEFAULT_QUALITY) {
+    if (target === 'original' || target === image.id) {
+        return { ok: true, blob: new Blob([image.bytes], { type: image.mime }), extension: image.extension }
+    }
+
+    const format = FORMAT_BY_ID[target]
+    if (!format) return { ok: false, error: CONVERT_ERRORS.canvas }
+
+    let picture
+    try {
+        picture = await loadImage(image.dataUri)
+    } catch (error) {
+        return { ok: false, error: error.message }
+    }
+
+    const isSvg = image.id === 'svg'
+    const width = picture.naturalWidth || (isSvg ? FALLBACK_SVG_SIZE : 0)
+    const height = picture.naturalHeight || (isSvg ? FALLBACK_SVG_SIZE : 0)
+    if (width === 0 || height === 0) return { ok: false, error: CONVERT_ERRORS.load }
+    if (width * height > MAX_PIXELS) return { ok: false, error: CONVERT_ERRORS.tooBig }
+
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    const context = canvas.getContext('2d')
+    if (!context) return { ok: false, error: CONVERT_ERRORS.canvas }
+
+    if (target === 'jpeg') {
+        context.fillStyle = '#ffffff'
+        context.fillRect(0, 0, width, height)
+    }
+    context.drawImage(picture, 0, 0, width, height)
+
+    const blob = await canvasToBlob(canvas, format.mime, quality / 100)
+
+    // A browser that cannot write a format quietly saves PNG instead, so the type is checked.
+    if (!blob || blob.type !== format.mime) {
+        return { ok: false, error: `Your browser cannot save images as ${format.label}. Try another format.` }
+    }
+
+    return { ok: true, blob, extension: format.extension }
 }

@@ -4,17 +4,31 @@ import ClearButton from '../../components/common/ClearButton.jsx'
 import ExampleButton from '../../components/common/ExampleButton.jsx'
 import ToolPanel from '../../components/tools/ToolPanel.jsx'
 import Button from '../../components/ui/Button.jsx'
+import ChoiceGroup from '../../components/ui/ChoiceGroup.jsx'
+import RangeField from '../../components/ui/RangeField.jsx'
 import { downloadBlob, formatBytes } from '../../utils/files.js'
-import { createExampleDataUri, parseImageInput } from './image.js'
+import {
+    convertImage,
+    createExampleDataUri,
+    DEFAULT_QUALITY,
+    DOWNLOAD_FORMATS,
+    LOSSY_FORMATS,
+    parseImageInput,
+} from './image.js'
 
 const INPUT_ID = 'base64-image-input'
 const ERROR_ID = 'base64-image-error'
+const QUALITY_ID = 'base64-image-quality'
 
 export default function Base64ToImage() {
     const [input, setInput] = useState('')
     // Remember which image the browser failed to show / measured, so stale results are ignored.
     const [failedUri, setFailedUri] = useState('')
     const [measured, setMeasured] = useState(null)
+    const [downloadFormat, setDownloadFormat] = useState('original')
+    const [quality, setQuality] = useState(DEFAULT_QUALITY)
+    const [converting, setConverting] = useState(false)
+    const [downloadError, setDownloadError] = useState('')
 
     const result = useMemo(() => parseImageInput(input), [input])
     const image = result.ok ? result.image : null
@@ -22,8 +36,24 @@ export default function Base64ToImage() {
     const previewFailed = image !== null && failedUri === image.dataUri
     const dimensions = image && measured?.uri === image.dataUri && measured.width > 0 ? measured : null
 
-    const download = () => {
-        downloadBlob(new Blob([image.bytes], { type: image.mime }), `decoded-image.${image.extension}`)
+    const isLossy = LOSSY_FORMATS.includes(downloadFormat)
+
+    const changeInput = (value) => {
+        setInput(value)
+        setDownloadError('')
+    }
+
+    const download = async () => {
+        setConverting(true)
+        setDownloadError('')
+        const result = await convertImage(image, downloadFormat, quality)
+        setConverting(false)
+
+        if (!result.ok) {
+            setDownloadError(result.error)
+            return
+        }
+        downloadBlob(result.blob, `decoded-image.${result.extension}`)
     }
 
     return (
@@ -32,8 +62,8 @@ export default function Base64ToImage() {
                 title="Base64"
                 actions={
                     <>
-                        <ExampleButton onClick={() => setInput(createExampleDataUri())} />
-                        <ClearButton onClick={() => setInput('')} disabled={input === ''} />
+                        <ExampleButton onClick={() => changeInput(createExampleDataUri())} />
+                        <ClearButton onClick={() => changeInput('')} disabled={input === ''} />
                     </>
                 }
             >
@@ -45,7 +75,7 @@ export default function Base64ToImage() {
                     className="field field-mono"
                     rows={10}
                     value={input}
-                    onChange={(event) => setInput(event.target.value)}
+                    onChange={(event) => changeInput(event.target.value)}
                     placeholder="Paste a data URI (data:image/png;base64,…) or raw Base64…"
                     spellCheck={false}
                     aria-invalid={Boolean(error)}
@@ -61,9 +91,9 @@ export default function Base64ToImage() {
             <ToolPanel
                 title="Image"
                 actions={
-                    <Button variant="primary" onClick={download} disabled={!image || previewFailed}>
+                    <Button variant="primary" onClick={download} disabled={!image || previewFailed || converting}>
                         <Download size={16} aria-hidden="true" />
-                        Download
+                        {converting ? 'Converting…' : 'Download'}
                     </Button>
                 }
             >
@@ -88,6 +118,45 @@ export default function Base64ToImage() {
                             {dimensions && ` · ${dimensions.width} × ${dimensions.height} px`}
                         </figcaption>
                     </figure>
+                )}
+
+                {image && !previewFailed && (
+                    <div className="mt-5 grid gap-4 border-t border-border pt-4">
+                        <ChoiceGroup
+                            label="Download as"
+                            options={DOWNLOAD_FORMATS.map((format) =>
+                                format.value === 'original'
+                                    ? { ...format, label: `Original (${image.label})` }
+                                    : format,
+                            )}
+                            value={downloadFormat}
+                            onChange={(value) => {
+                                setDownloadFormat(value)
+                                setDownloadError('')
+                            }}
+                        />
+                        {isLossy && (
+                            <RangeField
+                                id={QUALITY_ID}
+                                label="Quality"
+                                hint="Lower quality makes a smaller file with less detail."
+                                min={1}
+                                max={100}
+                                value={quality}
+                                onChange={setQuality}
+                            />
+                        )}
+                        {downloadFormat === 'jpeg' && (
+                            <p className="text-sm text-fg-muted">
+                                JPG cannot store transparency, so transparent areas become white.
+                            </p>
+                        )}
+                        {downloadError && (
+                            <p role="alert" className="text-sm text-danger">
+                                {downloadError}
+                            </p>
+                        )}
+                    </div>
                 )}
 
                 {previewFailed && (

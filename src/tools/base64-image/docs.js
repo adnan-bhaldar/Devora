@@ -5,10 +5,12 @@ const docs = {
         'Choose a mode: Image → Base64 or Base64 → Image.',
         'Image → Base64: drop an image on the box or click to choose one. Its bytes are read in your browser and written as Base64. A data URI adds a prefix such as data:image/png;base64, so the result can be used directly as an image source.',
         'Base64 → Image: paste a data URI or raw Base64. Devora decodes the bytes, works out the real image type from the first bytes of the data, and shows a preview you can download.',
+        'Before downloading, choose the format: keep the original, or save as PNG, JPG, or WebP. For JPG and WebP you can also set the quality.',
     ],
     notes: [
         'Supported types are PNG, JPEG, GIF, WebP, SVG, BMP, and AVIF, up to 5 MB.',
         'Base64 is about one third larger than the image file. For large images, a normal image file is usually a better choice than a data URI.',
+        'Converting to another format happens in your browser by redrawing the image. JPG cannot store transparency, so transparent areas become white, and animated images are saved as their first frame. Keeping the original downloads the exact decoded bytes with nothing lost.',
         'Long results show only the first 20,000 characters on screen. The copy button copies the full text.',
         'The image type is detected from the data itself. The type written in front of a data URI is ignored if it is different.',
         'Decoding only checks that the data is a recognizable image. It does not check that the image is safe or trustworthy.',
