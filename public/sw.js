@@ -4,7 +4,8 @@
  * - The build (see vite.config.js) fills in VERSION and PRECACHE below, so every file the app
  *   needs (every tool included) is saved on the first visit.
  * - Saved files are served first. Page loads fall back to the saved app shell (index.html),
- *   because Devora is a single-page app and every route is drawn by that one page.
+ *   because Devora is a single-page app and every route is drawn by that one page. Addresses
+ *   that point at a file (sitemap.xml, robots.txt, ...) are left to the network instead.
  * - The site font (Google Fonts) is saved as it is used, so it also works offline.
  * - Nothing else is intercepted: no tool data ever goes through this file.
  * - A new version waits until every open Devora tab is closed, then takes over. This avoids an
@@ -74,8 +75,10 @@ self.addEventListener('fetch', (event) => {
 
     if (url.origin !== self.location.origin) return
 
-    // Opening or reloading any page: use the saved app shell, then the network.
-    if (request.mode === 'navigate') {
+    // Opening or reloading a page: use the saved app shell, then the network. A file address
+    // such as /sitemap.xml has a dot in its last part, is not a page, and must not get the shell.
+    const lastPart = url.pathname.split('/').pop()
+    if (request.mode === 'navigate' && !lastPart.includes('.')) {
         event.respondWith(
             caches.match('/index.html').then((shell) => shell ?? fetch(request)),
         )
