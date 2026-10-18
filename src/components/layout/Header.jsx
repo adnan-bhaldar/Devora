@@ -6,7 +6,6 @@ import ThemeToggle from '../ui/ThemeToggle.jsx'
 import useHotkey from '../../hooks/useHotkey.js'
 
 const NAV_ITEMS = [
-    { to: '/whats-new', label: "What's New" },
     { to: '/about', label: 'About' },
 ]
 

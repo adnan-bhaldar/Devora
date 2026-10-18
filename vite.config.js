@@ -4,11 +4,71 @@ import { join, relative } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { categories, tools } from './src/data/tools.js'
 
 function listFiles(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ? listFiles(join(directory, entry.name)) : [join(directory, entry.name)],
   )
+}
+
+// The site's public address, from SITE_URL or Vercel. Empty when unknown.
+function getSiteUrl() {
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  return (process.env.SITE_URL ?? (vercelHost ? `https://${vercelHost}` : '')).replace(/\/+$/, '')
+}
+
+
+/*
+ * Writes sitemap.xml and robots.txt (which points to it) so search engines can find every page.
+ * It needs the site's address: set SITE_URL (for example https://devora.example.com) when
+ * building. Vercel provides its own production address automatically, so no setup is needed there.
+ * Without an address a sitemap can't be written, so the plain public/robots.txt is used instead.
+ */
+function seoFilesPlugin() {
+  let outDir
+
+  return {
+    name: 'devora-seo-files',
+    apply: 'build',
+    configResolved(config) {
+      outDir = join(config.root, config.build.outDir)
+    },
+    // Link previews need full web addresses for og:url and og:image, which are only known at
+    // build time. Without a site address they are left out rather than written wrongly.
+    transformIndexHtml() {
+      const base = getSiteUrl()
+      if (!base) return []
+      return [
+        { tag: 'meta', attrs: { property: 'og:url', content: `${base}/` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { property: 'og:image', content: `${base}/icons/icon-512.png` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: `${base}/icons/icon-512.png` }, injectTo: 'head' },
+      ]
+    },
+    closeBundle() {
+      const base = getSiteUrl()
+      if (!base) {
+        console.warn('[devora] SITE_URL is not set, so sitemap.xml was not generated.')
+        return
+      }
+
+      const paths = [
+        '/',
+        '/about',
+        ...categories
+          .filter((category) => tools.some((tool) => tool.categories.includes(category.id)))
+          .map((category) => `/categories/${category.id}`),
+        ...tools.filter((tool) => tool.status === 'live').map((tool) => tool.route),
+      ]
+      const entries = paths.map((path) => `  <url><loc>${base}${path}</loc></url>`).join('\n')
+
+      writeFileSync(
+        join(outDir, 'sitemap.xml'),
+        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`,
+      )
+      writeFileSync(join(outDir, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`)
+    },
+  }
 }
 
 /*
@@ -28,7 +88,7 @@ function precachePlugin() {
     closeBundle() {
       const files = listFiles(outDir)
         .map((file) => '/' + relative(outDir, file).split('\\').join('/'))
-        .filter((path) => path !== '/sw.js' && !path.endsWith('.map'))
+        .filter((path) => !['/sw.js', '/robots.txt', '/sitemap.xml'].includes(path) && !path.endsWith('.map'))
         .sort()
 
       const hash = createHash('sha256')
@@ -48,6 +108,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    seoFilesPlugin(),
     precachePlugin()
   ],
 })

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CornerDownLeft, House, Info, Moon, Search, Sparkles, Sun } from 'lucide-react'
+import { CornerDownLeft, House, Info, Moon, Search, Sun } from 'lucide-react'
 import useTheme from '../../hooks/useTheme.js'
 import { categories } from '../../data/tools.js'
 import { searchTools } from '../../utils/search.js'
@@ -61,7 +61,6 @@ export default function CommandPalette({ onClose }) {
         const actionItems = [
             { id: 'home', label: 'Go to Home', icon: House, run: () => navigate('/') },
             { id: 'about', label: 'About Devora', icon: Info, run: () => navigate('/about') },
-            { id: 'whats-new', label: "What's New", icon: Sparkles, run: () => navigate('/whats-new') },
             {
                 id: 'theme',
                 label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
