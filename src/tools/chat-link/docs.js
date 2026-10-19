@@ -8,10 +8,6 @@ const docs = {
         'The link and its QR code update as you type. Copy the link, open it to test it, or download the QR code as PNG or SVG.',
         'Anyone who clicks the link or scans the code gets a chat with your message ready to send. They still have to press send.',
     ],
-    example: {
-        input: '+44 7700 900123 with the message “Hi! I have a question.”',
-        output: 'https://wa.me/447700900123?text=Hi!%20I%20have%20a%20question.',
-    },
     notes: [
         'WhatsApp links use the wa.me format. The country code you pick is put in front of your number, and the 0 that local numbers start with is removed (07700 900123 in the UK becomes 447700900123). In Italy, San Marino, and Vatican City that 0 is part of the number, so it is kept. If you type a number that starts with +, it is used as the whole number and the country list is ignored.',
         'WhatsApp usernames are new and are still being rolled out country by country. A username link is wa.me followed by the username. It may not open for people whose WhatsApp does not have usernames yet, and a ready-typed message may not be carried over for usernames. The username rules used here (3 to 30 letters, digits, underscores, or periods, with at least one letter) follow what has been published so far and may change.',

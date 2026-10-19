@@ -8,10 +8,6 @@ const docs = {
         'Separators are never doubled and never placed at the start or end.',
         'Choose a hyphen, underscore, or dot as the separator. Hyphens are the usual choice for web addresses.',
     ],
-    example: {
-        input: 'Don’t Repeat Yourself (DRY): A Beginner’s Guide',
-        output: 'dont-repeat-yourself-dry-a-beginners-guide',
-    },
     notes: [
         'Letters from other alphabets (Greek, Cyrillic, Chinese, Japanese, and so on) are dropped unless you turn on “Keep non-Latin letters”. A line that has nothing left is shown empty, with a message.',
         'Browsers show addresses with non-Latin letters correctly, but they are sent as percent-encoded text such as %E6%97%A5. Many sites prefer Latin-only slugs for that reason.',

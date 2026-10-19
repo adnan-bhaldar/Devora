@@ -136,7 +136,7 @@ export default function ChatLinkTool() {
                                 htmlFor={IDS.phone}
                                 hint={
                                     country === OTHER_COUNTRY
-                                        ? 'The whole number with its country code, for example +44 7700 900123.'
+                                        ? 'The whole number with its country code, for example +91 7700 900123.'
                                         : 'The local number, as you would dial it at home. A 0 at the start is removed for you.'
                                 }
                             >
@@ -148,7 +148,7 @@ export default function ChatLinkTool() {
                                     className="field"
                                     value={national}
                                     onChange={(event) => setNational(event.target.value)}
-                                    placeholder={country === OTHER_COUNTRY ? '+44 7700 900123' : '7700 900123'}
+                                    placeholder={country === OTHER_COUNTRY ? '+91 7700 900123' : '7700 900123'}
                                     {...invalidProps('phone')}
                                 />
                             </Field>

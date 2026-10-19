@@ -20,7 +20,7 @@ export const TELEGRAM_MODES = [
 export const MAX_MESSAGE_LENGTH = 1000
 
 export const EXAMPLES = {
-    phone: { country: 'GB', national: '7700 900123' },
+    phone: { country: 'IN', national: '7700 900123' },
     'whatsapp-username': { username: 'jane.doe' },
     username: { username: 'telegram' },
     share: { url: 'https://example.com' },
