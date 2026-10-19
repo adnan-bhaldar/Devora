@@ -4,6 +4,13 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.9.9`).
 
+## Unreleased
+
+### Added
+
+- **FFmpeg Commands.** A searchable reference of copy-ready FFmpeg commands for converting, compressing, resizing, cutting, joining, extracting audio, making GIFs, adding subtitles, and more. Each command explains what its options do, and every group has its own colour. It lives in the Reference category.
+- **WhatsApp & Telegram Link Generator.** Make a chat link with a message already typed in, for WhatsApp by phone number or username, or for Telegram by username, phone number, or shared link, and download a QR code for it as PNG or SVG. Phone numbers have a separate country-code list.
+
 ## 1.9.8
 
 ### Added

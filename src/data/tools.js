@@ -17,6 +17,8 @@ import {
     BookOpen,
     Link as LinkIcon,
     ServerCrash,
+    Film,
+    MessageCircle,
 } from 'lucide-react'
 
 export const categories = [
@@ -246,6 +248,36 @@ export const tools = [
         seo: {
             title: 'HTTP Status Codes',
             description: 'Searchable reference of every HTTP status code, with meanings and when to use each.',
+        },
+    },
+    {
+        id: 'ffmpeg',
+        name: 'FFmpeg Commands',
+        description: 'Copy-ready FFmpeg commands for converting, compressing, cutting, and more.',
+        categories: ['reference'],
+        route: '/ffmpeg-commands',
+        icon: Film,
+        keywords: ['ffmpeg', 'video', 'audio', 'convert', 'compress', 'gif', 'mp4', 'mp3', 'trim', 'cheat sheet', 'command line', 'terminal'],
+        status: 'live',
+        seo: {
+            title: 'FFmpeg Commands',
+            description:
+                'Searchable FFmpeg command reference: convert, compress, resize, cut, and join video, extract audio, make GIFs, and more, with explanations.',
+        },
+    },
+    {
+        id: 'chat-link',
+        name: 'WhatsApp & Telegram Link Generator',
+        description: 'Make a chat link with a ready-typed message, plus a QR code for it.',
+        categories: ['generators'],
+        route: '/whatsapp-telegram-link',
+        icon: MessageCircle,
+        keywords: ['whatsapp', 'telegram', 'link', 'chat', 'message', 'wa.me', 't.me', 'qr', 'contact', 'click to chat'],
+        status: 'live',
+        seo: {
+            title: 'WhatsApp & Telegram Link Generator',
+            description:
+                'Create a WhatsApp or Telegram chat link with a pre-filled message and download a QR code for it. Everything runs in your browser.',
         },
     },
 ]
