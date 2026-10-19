@@ -2,9 +2,19 @@
 
 All notable changes to Devora are listed here, newest first. Each heading is a version number.
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under **Unreleased**. At release time, move those lines under a new version heading (for example `## 1.9.7`).
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.9.9`).
 
-## Unreleased
+## 1.9.8
+
+### Added
+
+- **Slug Generator.** Turn titles and text into clean, URL-friendly slugs, with a choice of separator, an optional length limit, and a link that shares your options.
+- **HTTP Status Codes.** A searchable reference of every HTTP status code, with what each means and when to use it. It lives in a new Reference category.
+
+### Fixed
+
+- On tablet-sized screens the page no longer scrolls sideways because of the hidden theme-button tooltip in the header.
+- The Slug Generator keeps words in other scripts (such as Hindi) in one piece when "Keep non-Latin letters" is on, and a length limit never cuts a character in half.
 
 ## 1.9.7
 
