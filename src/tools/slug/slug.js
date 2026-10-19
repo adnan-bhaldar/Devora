@@ -44,18 +44,22 @@ function removeLatinAccents(text) {
         .normalize('NFC')
 }
 
+// Length is counted in whole characters (code points), not UTF-16 units, so a letter outside the
+// basic range (like 𐐨) counts as one and is never cut in half.
+const charLength = (text) => Array.from(text).length
+
 function takeWithinLength(words, separator, maxLength) {
     const kept = []
     let length = 0
 
     for (const word of words) {
-        const added = kept.length === 0 ? word.length : separator.length + word.length
+        const added = kept.length === 0 ? charLength(word) : separator.length + charLength(word)
         if (length + added <= maxLength) {
             kept.push(word)
             length += added
         } else {
             // A first word that is longer than the limit on its own is cut, so the result is never empty.
-            if (kept.length === 0) kept.push(word.slice(0, maxLength))
+            if (kept.length === 0) kept.push(Array.from(word).slice(0, maxLength).join(''))
             break
         }
     }
@@ -72,7 +76,9 @@ export function slugify(text, settings) {
     prepared = prepared.replace(/['’‘`´]/g, '')
     if (settings.lowercase) prepared = prepared.toLowerCase()
 
-    const pattern = settings.keepUnicode ? /[\p{L}\p{N}]+/gu : /[A-Za-z0-9]+/g
+    // With Unicode kept, a letter or number may be followed by combining marks (\p{M}), so a word
+    // like "नमस्ते" stays in one piece instead of splitting at each vowel sign.
+    const pattern = settings.keepUnicode ? /(?:[\p{L}\p{N}]\p{M}*)+/gu : /[A-Za-z0-9]+/g
     let words = prepared.match(pattern) ?? []
 
     if (settings.removeStopWords) {

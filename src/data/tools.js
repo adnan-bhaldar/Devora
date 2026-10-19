@@ -242,7 +242,7 @@ export const tools = [
         route: '/http-status-codes',
         icon: ServerCrash,
         keywords: ['http', 'status', 'code', 'error', '404', '500', 'redirect', 'response', 'api', 'rest', 'rfc'],
-        status: 'coming-soon',
+        status: 'live',
         seo: {
             title: 'HTTP Status Codes',
             description: 'Searchable reference of every HTTP status code, with meanings and when to use each.',
