@@ -14,6 +14,9 @@ import {
     Wand2,
     Lock,
     ImageIcon,
+    BookOpen,
+    Link as LinkIcon,
+    ServerCrash,
 } from 'lucide-react'
 
 export const categories = [
@@ -46,6 +49,12 @@ export const categories = [
         name: 'Text',
         description: 'Transform and generate text.',
         icon: Type,
+    },
+    {
+        id: 'reference',
+        name: 'Reference',
+        description: 'Look up codes, formats, and standards.',
+        icon: BookOpen,
     },
 ]
 
@@ -209,6 +218,34 @@ export const tools = [
         seo: {
             title: 'UUID Generator',
             description: 'Generate random version 4 UUIDs in your browser.',
+        },
+    },
+    {
+        id: 'slug',
+        name: 'Slug Generator',
+        description: 'Turn titles and text into clean, URL-friendly slugs.',
+        categories: ['text', 'generators'],
+        route: '/slug-generator',
+        icon: LinkIcon,
+        keywords: ['slug', 'url', 'permalink', 'seo', 'kebab', 'hyphen', 'slugify', 'address'],
+        status: 'live',
+        seo: {
+            title: 'Slug Generator',
+            description: 'Convert titles and text into URL-friendly slugs in your browser.',
+        },
+    },
+    {
+        id: 'http-status',
+        name: 'HTTP Status Codes',
+        description: 'Look up every HTTP status code: what it means and when to use it.',
+        categories: ['reference'],
+        route: '/http-status-codes',
+        icon: ServerCrash,
+        keywords: ['http', 'status', 'code', 'error', '404', '500', 'redirect', 'response', 'api', 'rest', 'rfc'],
+        status: 'live',
+        seo: {
+            title: 'HTTP Status Codes',
+            description: 'Searchable reference of every HTTP status code, with meanings and when to use each.',
         },
     },
 ]

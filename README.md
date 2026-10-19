@@ -4,13 +4,14 @@ Fast, focused developer utilities that run entirely in your browser. No account,
 
 ## Tools
 
-| Category            | Tools                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------- |
-| Encoders & Decoders | Base64 Encoder & Decoder, Base64 Image Converter, Binary ↔ Text Converter, JWT Decoder               |
-| Generators          | CSS Gradient Generator, QR Code Generator, Lorem Ipsum Generator, Password Generator, UUID Generator |
-| Security & Hashing  | JWT Decoder, Hash Generator (SHA-256/384/512), Password Generator                                    |
-| Images              | Base64 Image Converter, QR Code Decoder                                                              |
-| Text                | Base64 Encoder & Decoder, Binary ↔ Text Converter, Lorem Ipsum Generator                             |
+| Category            | Tools                                                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Encoders & Decoders | Base64 Encoder & Decoder, Base64 Image Converter, Binary ↔ Text Converter, JWT Decoder                               |
+| Generators          | CSS Gradient Generator, QR Code Generator, Lorem Ipsum Generator, Password Generator, UUID Generator, Slug Generator |
+| Security & Hashing  | JWT Decoder, Hash Generator (SHA-256/384/512), Password Generator                                                    |
+| Images              | Base64 Image Converter, QR Code Decoder                                                                              |
+| Text                | Base64 Encoder & Decoder, Binary ↔ Text Converter, Lorem Ipsum Generator, Slug Generator                             |
+| Reference           | HTTP Status Codes                                                                                                    |
 
 Some tools appear in more than one category.
 

@@ -12,7 +12,7 @@ Thanks for helping! Devora is a small, client-side app, so contributing is strai
 You need Node.js 20.19 or newer.
 
 ```bash
-git clone https://github.com/<your-username>/Devora.git
+git clone https://github.com/adnan-bhaldar/Devora.git
 cd Devora
 npm install
 npm run dev        # http://localhost:5173
