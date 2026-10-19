@@ -8,8 +8,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 
 ### Added
 
-- **FFmpeg Commands.** A searchable reference of copy-ready FFmpeg commands for converting, compressing, resizing, cutting, joining, extracting audio, making GIFs, adding subtitles, and more. Each command explains what its options do. It lives in the Reference category.
-- **WhatsApp & Telegram Link Generator.** Make a chat link with a message already typed in, for WhatsApp, or for Telegram by username, phone number, or shared link, and download a QR code for it as PNG or SVG.
+- **FFmpeg Commands.** A searchable reference of copy-ready FFmpeg commands for converting, compressing, resizing, cutting, joining, extracting audio, making GIFs, adding subtitles, and more. Each command explains what its options do, and every group has its own colour. It lives in the Reference category.
+- **WhatsApp & Telegram Link Generator.** Make a chat link with a message already typed in, for WhatsApp by phone number or username, or for Telegram by username, phone number, or shared link, and download a QR code for it as PNG or SVG. Phone numbers have a separate country-code list.
 
 ## 1.9.8
 

@@ -1768,3 +1768,38 @@
     background: var(--family-color);
   }
 }
+
+/* ---------- Searchable select ---------- */
+@layer components {
+
+  .search-select {
+    position: relative;
+  }
+
+  /* Room on the right so typed text never runs under the arrow. */
+  .search-select .search-select__input {
+    padding-right: 2.5rem;
+  }
+
+  /* The arrow sits inside the box, centred on the text field (the open list is absolutely
+     positioned, so it does not change the height this is centred against). */
+  .search-select__icon {
+    position: absolute;
+    top: 50%;
+    right: 0.875rem;
+    translate: 0 -50%;
+    color: var(--fg-muted);
+    pointer-events: none;
+    transition: rotate 0.15s;
+  }
+
+  .search-select__icon--open {
+    rotate: 180deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .search-select__icon {
+      transition: none;
+    }
+  }
+}

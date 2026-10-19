@@ -7,12 +7,15 @@ import ToolPanel from '../../components/tools/ToolPanel.jsx'
 import Button from '../../components/ui/Button.jsx'
 import ChoiceGroup from '../../components/ui/ChoiceGroup.jsx'
 import Field from '../../components/ui/Field.jsx'
+import SearchSelect from '../../components/ui/SearchSelect.jsx'
 import useToast from '../../hooks/useToast.js'
 import { downloadBlob } from '../../utils/files.js'
 import { buildSvg, generateQr, renderPngBlob } from '../qr-generator/qr.js'
-import { APPS, EXAMPLES, MAX_MESSAGE_LENGTH, TELEGRAM_MODES, buildLink } from './links.js'
+import { COUNTRY_OPTIONS, DEFAULT_COUNTRY, OTHER_COUNTRY } from './countries.js'
+import { APPS, EXAMPLES, MAX_MESSAGE_LENGTH, TELEGRAM_MODES, WHATSAPP_MODES, buildLink } from './links.js'
 
 const IDS = {
+    country: 'chat-link-country',
     phone: 'chat-link-phone',
     username: 'chat-link-username',
     url: 'chat-link-url',
@@ -28,24 +31,31 @@ const QR_SIZE = 512
 export default function ChatLinkTool() {
     const toast = useToast()
     const [app, setApp] = useState('whatsapp')
+    const [whatsappMode, setWhatsappMode] = useState('whatsapp-phone')
     const [telegramMode, setTelegramMode] = useState('username')
-    const [phone, setPhone] = useState('')
-    const [username, setUsername] = useState('')
+    const [country, setCountry] = useState(DEFAULT_COUNTRY)
+    const [national, setNational] = useState('')
+    const [whatsappUsername, setWhatsappUsername] = useState('')
+    const [telegramUsername, setTelegramUsername] = useState('')
     const [url, setUrl] = useState('')
     const [message, setMessage] = useState('')
 
-    const mode = app === 'whatsapp' ? 'whatsapp' : telegramMode
+    const mode = app === 'whatsapp' ? whatsappMode : telegramMode
+    const isPhoneMode = mode === 'whatsapp-phone' || mode === 'phone'
+    const isUsernameMode = mode === 'whatsapp-username' || mode === 'username'
+    const username = app === 'whatsapp' ? whatsappUsername : telegramUsername
+    const setUsername = app === 'whatsapp' ? setWhatsappUsername : setTelegramUsername
     const appName = APPS.find((option) => option.value === app).label
 
     const result = useMemo(
-        () => buildLink({ mode, phone, username, url, message }),
-        [mode, phone, username, url, message],
+        () => buildLink({ mode, country, national, username, url, message }),
+        [mode, country, national, username, url, message],
     )
     const link = result.ok ? result.link : ''
     const error = result.ok ? '' : result.error
     const messageTooLong = message.trim().length > MAX_MESSAGE_LENGTH
     // Which box the error belongs to, so a screen reader announces it with that box.
-    const errorField = !error ? null : messageTooLong ? 'message' : mode === 'share' ? 'url' : mode === 'username' ? 'username' : 'phone'
+    const errorField = !error ? null : messageTooLong ? 'message' : mode === 'share' ? 'url' : isUsernameMode ? 'username' : 'phone'
 
     const qrResult = useMemo(() => (link ? generateQr(link, { errorLevel: 'M', margin: 4 }) : { ok: true, qr: null }), [link])
     const qr = qrResult.ok ? qrResult.qr : null
@@ -63,17 +73,20 @@ export default function ChatLinkTool() {
     }
 
     const fillExample = () => {
-        const example = EXAMPLES[mode === 'whatsapp' ? 'whatsapp' : mode === 'share' ? 'share' : 'telegram']
-        setMessage(example.message)
-        if (mode === 'whatsapp') setPhone(example.phone)
-        if (mode === 'username') setUsername(example.username)
-        if (mode === 'phone') setPhone(EXAMPLES.whatsapp.phone)
+        const example = EXAMPLES[isPhoneMode ? 'phone' : mode]
+        if (isPhoneMode) {
+            setCountry(example.country)
+            setNational(example.national)
+        }
+        if (isUsernameMode) setUsername(example.username)
         if (mode === 'share') setUrl(example.url)
+        setMessage(mode === 'share' ? EXAMPLES.shareMessage : EXAMPLES.message)
     }
 
     const clearAll = () => {
-        setPhone('')
-        setUsername('')
+        setNational('')
+        setWhatsappUsername('')
+        setTelegramUsername('')
         setUrl('')
         setMessage('')
     }
@@ -83,7 +96,7 @@ export default function ChatLinkTool() {
         'aria-describedby': errorField === field ? IDS.error : undefined,
     })
 
-    const hasInput = phone !== '' || username !== '' || url !== '' || message !== ''
+    const hasInput = national !== '' || whatsappUsername !== '' || telegramUsername !== '' || url !== '' || message !== ''
 
     return (
         <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
@@ -100,36 +113,69 @@ export default function ChatLinkTool() {
                 <div className="grid gap-5">
                     <ChoiceGroup label="App" options={APPS} value={app} onChange={setApp} />
 
-                    {app === 'telegram' && (
+                    {app === 'whatsapp' ? (
+                        <ChoiceGroup label="Link type" options={WHATSAPP_MODES} value={whatsappMode} onChange={setWhatsappMode} />
+                    ) : (
                         <ChoiceGroup label="Link type" options={TELEGRAM_MODES} value={telegramMode} onChange={setTelegramMode} />
                     )}
 
-                    {(mode === 'whatsapp' || mode === 'phone') && (
-                        <Field
-                            label={mode === 'whatsapp' ? 'Phone number (optional)' : 'Phone number'}
-                            htmlFor={IDS.phone}
-                            hint={
-                                mode === 'whatsapp'
-                                    ? 'With the country code, for example +44 7700 900123. Leave it empty to let people choose who to send the message to.'
-                                    : 'With the country code, for example +44 7700 900123. The person must have Telegram and allow people to find them by number.'
-                            }
-                        >
-                            <input
-                                id={IDS.phone}
-                                type="tel"
-                                inputMode="tel"
-                                autoComplete="off"
-                                className="field"
-                                value={phone}
-                                onChange={(event) => setPhone(event.target.value)}
-                                placeholder="+44 7700 900123"
-                                {...invalidProps('phone')}
-                            />
-                        </Field>
+                    {isPhoneMode && (
+                        <div className="grid gap-4 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
+                            <Field label="Country code" htmlFor={IDS.country}>
+                                <SearchSelect
+                                    id={IDS.country}
+                                    options={COUNTRY_OPTIONS}
+                                    value={country}
+                                    onChange={setCountry}
+                                    placeholder="Search a country or code"
+                                    noResultsText="No country found"
+                                />
+                            </Field>
+                            <Field
+                                label={mode === 'whatsapp-phone' ? 'Phone number (optional)' : 'Phone number'}
+                                htmlFor={IDS.phone}
+                                hint={
+                                    country === OTHER_COUNTRY
+                                        ? 'The whole number with its country code, for example +44 7700 900123.'
+                                        : 'The local number, as you would dial it at home. A 0 at the start is removed for you.'
+                                }
+                            >
+                                <input
+                                    id={IDS.phone}
+                                    type="tel"
+                                    inputMode="tel"
+                                    autoComplete="off"
+                                    className="field"
+                                    value={national}
+                                    onChange={(event) => setNational(event.target.value)}
+                                    placeholder={country === OTHER_COUNTRY ? '+44 7700 900123' : '7700 900123'}
+                                    {...invalidProps('phone')}
+                                />
+                            </Field>
+                        </div>
                     )}
 
-                    {mode === 'username' && (
-                        <Field label="Telegram username" htmlFor={IDS.username} hint="With or without the @, for example @telegram.">
+                    {mode === 'whatsapp-phone' && (
+                        <p className="-mt-2 text-sm text-fg-muted">
+                            Leave the number empty to let people choose who to send the message to.
+                        </p>
+                    )}
+                    {mode === 'phone' && (
+                        <p className="-mt-2 text-sm text-fg-muted">
+                            The person must have Telegram and allow people to find them by number.
+                        </p>
+                    )}
+
+                    {isUsernameMode && (
+                        <Field
+                            label={`${appName} username`}
+                            htmlFor={IDS.username}
+                            hint={
+                                app === 'whatsapp'
+                                    ? 'With or without the @, for example @jane.doe. WhatsApp usernames are still being rolled out, so the link may not open for everyone yet.'
+                                    : 'With or without the @, for example @telegram.'
+                            }
+                        >
                             <input
                                 id={IDS.username}
                                 type="text"
@@ -165,9 +211,9 @@ export default function ChatLinkTool() {
                         label="Message (optional)"
                         htmlFor={IDS.message}
                         hint={
-                            mode === 'phone' || mode === 'username'
-                                ? 'Appears ready to send in the chat box. The person still has to press send.'
-                                : 'Appears ready to send. The person still has to press send.'
+                            mode === 'whatsapp-username'
+                                ? 'Appears ready to send in the chat box. For usernames this may not work in every version of WhatsApp yet. The person still has to press send.'
+                                : 'Appears ready to send in the chat box. The person still has to press send.'
                         }
                     >
                         <textarea
