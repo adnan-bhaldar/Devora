@@ -20,6 +20,9 @@ import {
     Film,
     MessageCircle,
     FileX,
+    CaseSensitive,
+    CalendarClock,
+    LockKeyhole,
 } from 'lucide-react'
 
 export const categories = [
@@ -294,6 +297,51 @@ export const tools = [
             title: '.gitignore Generator',
             description:
                 'Generate a .gitignore file by choosing languages, frameworks, editors, and operating systems. Copy or download it. Everything runs in your browser.',
+        },
+    },
+    {
+        id: 'case-converter',
+        name: 'Case Converter',
+        description: 'Change text to UPPERCASE, Title Case, camelCase, snake_case, kebab-case, and more.',
+        categories: ['text'],
+        route: '/case-converter',
+        icon: CaseSensitive,
+        keywords: ['case', 'uppercase', 'lowercase', 'title case', 'sentence case', 'camelcase', 'pascalcase', 'snake_case', 'kebab-case', 'constant', 'dot case', 'capitalize', 'convert'],
+        status: 'live',
+        seo: {
+            title: 'Case Converter',
+            description:
+                'Convert text to uppercase, lowercase, title case, sentence case, camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, and more. Everything runs in your browser.',
+        },
+    },
+    {
+        id: 'timestamp',
+        name: 'Unix Timestamp Converter',
+        description: 'Convert Unix timestamps to dates and dates to timestamps, in any time zone.',
+        categories: ['encoders-decoders'],
+        route: '/unix-timestamp-converter',
+        icon: CalendarClock,
+        keywords: ['unix', 'timestamp', 'epoch', 'time', 'date', 'datetime', 'iso 8601', 'utc', 'timezone', 'milliseconds', 'seconds', 'convert'],
+        status: 'live',
+        seo: {
+            title: 'Unix Timestamp Converter',
+            description:
+                'Convert Unix timestamps (seconds, milliseconds, microseconds, nanoseconds) to readable dates and dates to timestamps, in any time zone. Runs in your browser.',
+        },
+    },
+    {
+        id: 'bcrypt',
+        name: 'Bcrypt Hash Generator',
+        description: 'Generate bcrypt password hashes and check a password against a hash.',
+        categories: ['security'],
+        route: '/bcrypt-generator',
+        icon: LockKeyhole,
+        keywords: ['bcrypt', 'hash', 'password', 'verify', 'compare', 'salt', 'cost', 'rounds', 'blowfish', 'security', 'check'],
+        status: 'live',
+        seo: {
+            title: 'Bcrypt Hash Generator and Verifier',
+            description:
+                'Generate bcrypt hashes with a cost you choose, and check whether a password matches a bcrypt hash. Runs in your browser, so your password is never sent anywhere.',
         },
     },
 ]
