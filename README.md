@@ -100,7 +100,7 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
 | `/`                | Home: browse by category, favorites, recently used, search           |
 | `/categories/<id>` | All tools in one category                                            |
 | `/<tool-route>`    | A tool, for example `/uuid`                                          |
-| `/about`           | About, privacy, and the developer card (`/whats-new` redirects here) |
+| `/about`           | About, privacy, and keyboard shortcuts (`/whats-new` redirects here) |
 | anything else      | 404 page                                                             |
 
 ## Privacy and security
