@@ -12,12 +12,4 @@ export const siteConfig = {
         contributing: `${repoUrl}/blob/main/CONTRIBUTING.md`,
         changelog: `${repoUrl}/blob/main/CHANGELOG.md`,
     },
-    // Shown on the About page. Edit these to change the developer card.
-    author: {
-        name: 'Adnan Bhaldar',
-        role: 'Creator & maintainer',
-        bio: 'A solo developer building small, fast, privacy-friendly tools. Devora is built and maintained in the open, one tool at a time.',
-        github: 'https://github.com/adnan-bhaldar',
-        githubHandle: 'adnan-bhaldar',
-    },
 }

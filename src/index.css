@@ -1412,50 +1412,6 @@
     border-left: 3px solid var(--accent);
   }
 
-  /* Developer card */
-  .dev-card {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-    padding: 1.75rem;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .dev-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      radial-gradient(60% 90% at 0% 0%, var(--glow), transparent 70%),
-      radial-gradient(50% 80% at 100% 100%, var(--glow-2), transparent 70%);
-    opacity: 0.7;
-  }
-
-  @media (min-width: 40rem) {
-    .dev-card {
-      flex-direction: row;
-      align-items: flex-start;
-      padding: 2.25rem;
-    }
-  }
-
-  .dev-card__avatar {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 5rem;
-    height: 5rem;
-    border-radius: 1.5rem;
-    background: var(--grad-strong);
-    color: var(--accent-fg);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.3),
-      0 12px 28px -10px var(--accent);
-  }
-
   .about-shortcuts {
     display: flex;
     flex-direction: column;
@@ -1799,6 +1755,59 @@
 
   @media (prefers-reduced-motion: reduce) {
     .search-select__icon {
+      transition: none;
+    }
+  }
+}
+
+/* ---------- Collapsible template groups (.gitignore generator) ---------- */
+@layer components {
+
+  .group-details {
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+
+  .group-details__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--r-md, 0.5rem);
+  }
+
+  /* Hides the browser's own triangle (Safari uses this one); the chevron below replaces it. */
+  .group-details__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .group-details__chevron {
+    flex-shrink: 0;
+    color: var(--fg-muted);
+    transition: rotate 0.15s;
+  }
+
+  .group-details[open]>.group-details__summary .group-details__chevron {
+    rotate: 90deg;
+  }
+
+  .group-details__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .group-details__count {
+    margin-left: auto;
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .group-details__chevron {
       transition: none;
     }
   }

@@ -4,14 +4,14 @@ Fast, focused developer utilities that run entirely in your browser. No account,
 
 ## Tools
 
-| Category            | Tools                                                                                                                                                    |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Encoders & Decoders | Base64 Encoder & Decoder, Base64 Image Converter, Binary ↔ Text Converter, JWT Decoder                                                                   |
-| Generators          | CSS Gradient Generator, QR Code Generator, Lorem Ipsum Generator, Password Generator, UUID Generator, Slug Generator, WhatsApp & Telegram Link Generator |
-| Security & Hashing  | JWT Decoder, Hash Generator (SHA-256/384/512), Password Generator                                                                                        |
-| Images              | Base64 Image Converter, QR Code Decoder                                                                                                                  |
-| Text                | Base64 Encoder & Decoder, Binary ↔ Text Converter, Lorem Ipsum Generator, Slug Generator                                                                 |
-| Reference           | HTTP Status Codes, FFmpeg Commands                                                                                                                       |
+| Category            | Tools                                                                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Encoders & Decoders | Base64 Encoder & Decoder, Base64 Image Converter, Binary ↔ Text Converter, JWT Decoder                                                                                         |
+| Generators          | CSS Gradient Generator, QR Code Generator, Lorem Ipsum Generator, Password Generator, UUID Generator, Slug Generator, WhatsApp & Telegram Link Generator, .gitignore Generator |
+| Security & Hashing  | JWT Decoder, Hash Generator (SHA-256/384/512), Password Generator                                                                                                              |
+| Images              | Base64 Image Converter, QR Code Decoder                                                                                                                                        |
+| Text                | Base64 Encoder & Decoder, Binary ↔ Text Converter, Lorem Ipsum Generator, Slug Generator                                                                                       |
+| Reference           | HTTP Status Codes, FFmpeg Commands                                                                                                                                             |
 
 Some tools appear in more than one category.
 
@@ -100,7 +100,7 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
 | `/`                | Home: browse by category, favorites, recently used, search           |
 | `/categories/<id>` | All tools in one category                                            |
 | `/<tool-route>`    | A tool, for example `/uuid`                                          |
-| `/about`           | About, privacy, and the developer card (`/whats-new` redirects here) |
+| `/about`           | About, privacy, and keyboard shortcuts (`/whats-new` redirects here) |
 | anything else      | 404 page                                                             |
 
 ## Privacy and security

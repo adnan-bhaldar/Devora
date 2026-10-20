@@ -1,4 +1,4 @@
-import { ArrowUpRight, GitPullRequest, Keyboard, Lock, WifiOff, Zap } from 'lucide-react'
+import { GitPullRequest, Keyboard, Lock, WifiOff, Zap } from 'lucide-react'
 import GithubIcon from '../components/common/GithubIcon.jsx'
 import usePageMeta from '../hooks/usePageMeta.js'
 import { shortcuts } from '../data/shortcuts.js'
@@ -32,8 +32,6 @@ const PRINCIPLES = [
     },
 ]
 
-const STACK = ['React', 'Vite', 'Tailwind CSS', 'React Router', 'Web Crypto API', 'Service Worker']
-
 function ExternalLink({ href, className, children }) {
     return (
         <a href={href} className={className} target="_blank" rel="noopener noreferrer">
@@ -47,10 +45,10 @@ export default function About() {
     usePageMeta({
         title: 'About',
         description:
-            'What Devora is, how it handles your privacy, how to contribute, and who builds it.',
+            'What Devora is, how it handles your privacy, and how to contribute.',
     })
 
-    const { author, repo } = siteConfig
+    const { repo } = siteConfig
 
     return (
         <div className="container-page page about">
@@ -124,42 +122,6 @@ export default function About() {
                         genuinely works that way.
                     </p>
                 </div>
-            </section>
-
-            <section aria-labelledby="about-developer" className="about-section">
-                <h2 id="about-developer" className="about-heading">
-                    The developer
-                </h2>
-                <article className="card dev-card">
-                    <div className="dev-card__avatar" aria-hidden="true">
-                        <GithubIcon size={44} />
-                    </div>
-                    <div className="min-w-0">
-                        <h3 className="text-xl font-semibold">{author.name}</h3>
-                        <p className="text-sm font-medium text-accent">{author.role}</p>
-                        <p className="mt-3 max-w-xl text-fg-muted">{author.bio}</p>
-                        <ul className="mt-4 flex flex-wrap gap-2" aria-label="Built with">
-                            {STACK.map((item) => (
-                                <li key={item} className="badge">
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="mt-5 flex flex-wrap gap-3">
-                            <ExternalLink href={author.github} className="btn btn-secondary">
-                                <GithubIcon size={18} />@{author.githubHandle}
-                            </ExternalLink>
-                            <ExternalLink href={repo.changelog} className="btn btn-ghost">
-                                Changelog
-                                <ArrowUpRight size={16} aria-hidden="true" />
-                            </ExternalLink>
-                            <ExternalLink href={repo.url} className="btn btn-ghost">
-                                Star the project
-                                <ArrowUpRight size={16} aria-hidden="true" />
-                            </ExternalLink>
-                        </div>
-                    </div>
-                </article>
             </section>
 
             <section aria-labelledby="about-shortcuts" className="about-section">
