@@ -8,10 +8,6 @@ const docs = {
         'Without an offset the date is read in the chosen time zone. Add Z (UTC) or an offset such as +05:30 to the end to set the zone in the date itself.',
         '“Use now” fills in the current time, and the box at the top shows the current Unix time as it ticks.',
     ],
-    example: {
-        input: '1700000000',
-        output: '2023-11-14T22:13:20.000Z (Tuesday, November 14, 2023 at 10:13:20 PM UTC)',
-    },
     notes: [
         'Unix time is always in UTC. A timestamp has no time zone, so the same number is the same moment everywhere. The time zone only changes how the date is shown.',
         'Auto-detect uses the number of digits before any decimal point: up to 11 digits are seconds, 12 to 14 are milliseconds, 15 to 17 are microseconds, and 18 or more are nanoseconds. Choose a unit yourself if a number is shorter or longer than usual.',

@@ -2,16 +2,12 @@ const docs = {
     about:
         'Change the case of any text in one step: UPPERCASE, lowercase, Title Case, and Sentence case for writing, and camelCase, PascalCase, snake_case, kebab-case, and more for variable names, file names, and web addresses.',
     howItWorks: [
-        'Type or paste text. Every case is shown at once and updates as you type.',
-        'The “For writing” cases keep your spaces, punctuation, and line breaks and only change the letters.',
-        'The “For code” cases split the text into words and join them again in the new style. Words are found at spaces, symbols, underscores, hyphens, and where a lower-case letter meets a capital (userId becomes user and id).',
+        'Type or paste text, then choose the case you want. Only that case is made, and the result updates as you type.',
+        'UPPERCASE, lowercase, Title Case, Sentence case, aLtErNaTiNg, and iNVERSE keep your spaces, punctuation, and line breaks and only change the letters.',
+        'The code cases (camelCase, snake_case, and so on) split the text into words and join them again in the new style. Words are found at spaces, symbols, underscores, hyphens, and where a lower-case letter meets a capital (userId becomes user and id).',
         'Each line is converted on its own, so you can paste a list of names and get a list of identifiers.',
-        'Use the copy button next to the style you need.',
+        'Use the copy button to copy the result. Choose another case to change it. “Try an example” lists every case at once so you can see what each one does; “Choose one case” brings back the case buttons and the single result.',
     ],
-    example: {
-        input: 'XMLHttpRequest and user_id',
-        output: 'snake_case: xml_http_request_and_user_id    camelCase: xmlHttpRequestAndUserId',
-    },
     notes: [
         'Capital letters in a row are treated as one word until the last one, so “XMLHttpRequest” is split into XML, Http, and Request.',
         'Apostrophes are removed in the code cases (“don’t” becomes dont). Digits stay with the word they touch, so “version2” stays one word.',

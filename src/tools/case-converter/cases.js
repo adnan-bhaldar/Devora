@@ -1,9 +1,10 @@
 // The longest text the tool will convert. Longer text would make every keystroke slow.
 export const MAX_LENGTH = 100000
 
-export const DEFAULT_SETTINGS = { smallWords: false }
+export const DEFAULT_SETTINGS = { caseId: 'upper', smallWords: false }
 
-export const isDefaultSettings = (settings) => settings.smallWords === DEFAULT_SETTINGS.smallWords
+export const isDefaultSettings = (settings) =>
+    settings.caseId === DEFAULT_SETTINGS.caseId && settings.smallWords === DEFAULT_SETTINGS.smallWords
 
 export const EXAMPLE_TEXT = 'the quick brown fox: XMLHttpRequest and user_id jump over the lazy dog. it’s 2024!'
 
@@ -84,19 +85,14 @@ const lowerAll = (words) => words.map((word) => word.toLowerCase())
 const upperAll = (words) => words.map((word) => word.toUpperCase())
 const capitalizeAll = (words) => words.map(capitalize)
 
-export const GROUPS = [
-    { id: 'writing', name: 'For writing', hint: 'Keeps your spaces, punctuation, and line breaks.' },
-    { id: 'code', name: 'For code', hint: 'Each line becomes one name. Spaces and punctuation are replaced.' },
-]
-
-// `convert(text, settings)` returns the converted text.
+// `convert(text, settings)` returns the converted text. Only the chosen case is ever calculated.
 export const CASES = [
-    { id: 'upper', group: 'writing', name: 'UPPERCASE', convert: (text) => text.toUpperCase() },
-    { id: 'lower', group: 'writing', name: 'lowercase', convert: (text) => text.toLowerCase() },
-    { id: 'title', group: 'writing', name: 'Title Case', convert: toTitleCase },
-    { id: 'sentence', group: 'writing', name: 'Sentence case', convert: (text) => toSentenceCase(text) },
-    { id: 'alternating', group: 'writing', name: 'aLtErNaTiNg case', convert: (text) => toAlternatingCase(text) },
-    { id: 'inverse', group: 'writing', name: 'iNVERSE cASE', convert: (text) => toInverseCase(text) },
+    { id: 'upper', name: 'UPPERCASE', convert: (text) => text.toUpperCase() },
+    { id: 'lower', name: 'lowercase', convert: (text) => text.toLowerCase() },
+    { id: 'title', name: 'Title Case', convert: toTitleCase },
+    { id: 'sentence', name: 'Sentence case', convert: (text) => toSentenceCase(text) },
+    { id: 'alternating', name: 'aLtErNaTiNg case', convert: (text) => toAlternatingCase(text) },
+    { id: 'inverse', name: 'iNVERSE cASE', convert: (text) => toInverseCase(text) },
 
     {
         id: 'camel',
@@ -105,16 +101,25 @@ export const CASES = [
         convert: (text) =>
             perLine(text, (words) => lowerAll(words).map((word, index) => (index === 0 ? word : capitalize(word))).join('')),
     },
-    { id: 'pascal', group: 'code', name: 'PascalCase', convert: (text) => perLine(text, (words) => capitalizeAll(words).join('')) },
-    { id: 'snake', group: 'code', name: 'snake_case', convert: (text) => perLine(text, (words) => lowerAll(words).join('_')) },
-    { id: 'constant', group: 'code', name: 'CONSTANT_CASE', convert: (text) => perLine(text, (words) => upperAll(words).join('_')) },
-    { id: 'kebab', group: 'code', name: 'kebab-case', convert: (text) => perLine(text, (words) => lowerAll(words).join('-')) },
-    { id: 'header', group: 'code', name: 'Header-Case', convert: (text) => perLine(text, (words) => capitalizeAll(words).join('-')) },
-    { id: 'cobol', group: 'code', name: 'COBOL-CASE', convert: (text) => perLine(text, (words) => upperAll(words).join('-')) },
-    { id: 'dot', group: 'code', name: 'dot.case', convert: (text) => perLine(text, (words) => lowerAll(words).join('.')) },
-    { id: 'path', group: 'code', name: 'path/case', convert: (text) => perLine(text, (words) => lowerAll(words).join('/')) },
+    { id: 'pascal', name: 'PascalCase', convert: (text) => perLine(text, (words) => capitalizeAll(words).join('')) },
+    { id: 'snake', name: 'snake_case', convert: (text) => perLine(text, (words) => lowerAll(words).join('_')) },
+    { id: 'constant', name: 'CONSTANT_CASE', convert: (text) => perLine(text, (words) => upperAll(words).join('_')) },
+    { id: 'kebab', name: 'kebab-case', convert: (text) => perLine(text, (words) => lowerAll(words).join('-')) },
+    { id: 'header', name: 'Header-Case', convert: (text) => perLine(text, (words) => capitalizeAll(words).join('-')) },
+    { id: 'cobol', name: 'COBOL-CASE', convert: (text) => perLine(text, (words) => upperAll(words).join('-')) },
+    { id: 'dot', name: 'dot.case', convert: (text) => perLine(text, (words) => lowerAll(words).join('.')) },
+    { id: 'path', name: 'path/case', convert: (text) => perLine(text, (words) => lowerAll(words).join('/')) },
 ]
 
+export function convertText(text, settings) {
+    if (text.length > MAX_LENGTH) {
+        return { ok: false, error: `The text is too long. The limit is ${MAX_LENGTH.toLocaleString('en-US')} characters.` }
+    }
+    const chosen = CASES.find((item) => item.id === settings.caseId) ?? CASES[0]
+    return { ok: true, output: chosen.convert(text, settings), name: chosen.name }
+}
+
+// Every case at once. Used by "Try an example" so a first-time visitor can see what each one does.
 export function convertAll(text, settings) {
     if (text.length > MAX_LENGTH) {
         return { ok: false, error: `The text is too long. The limit is ${MAX_LENGTH.toLocaleString('en-US')} characters.` }

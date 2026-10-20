@@ -7,10 +7,6 @@ const docs = {
         'Choose “Check a password”, type the password and paste the hash, then press Check. You see whether they match.',
         'Every hash contains its own random salt, so the same password gives a different hash each time. That is normal. It is why you check a password with the check mode, not by comparing two hashes.',
     ],
-    example: {
-        input: 'correct horse battery',
-        output: '$2b$10$8uNXOKG3ws0.On39Maw75.6Hnsp0Dtgkh27/vB7Wkkc3s9L1Zac7W (yours will differ, because the salt is random)',
-    },
     notes: [
         'A bcrypt hash is 60 characters: the version ($2b$), the cost (10), a 22-character salt, and a 31-character hash.',
         'Versions: $2b$ is the current one. $2a$ is older and still common. $2y$ is the PHP name for the same fixed algorithm (PHP’s password_hash makes $2y$ hashes). They all give the same result for the same password and salt, so any of them can be checked here.',

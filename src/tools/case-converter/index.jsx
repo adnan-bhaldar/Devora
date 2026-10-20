@@ -5,28 +5,29 @@ import CopyButton from '../../components/common/CopyButton.jsx'
 import ExampleButton from '../../components/common/ExampleButton.jsx'
 import ResetButton from '../../components/common/ResetButton.jsx'
 import ToolPanel from '../../components/tools/ToolPanel.jsx'
+import Button from '../../components/ui/Button.jsx'
 import Checkbox from '../../components/ui/Checkbox.jsx'
+import ChoiceGroup from '../../components/ui/ChoiceGroup.jsx'
 import useInitialParams from '../../hooks/useInitialParams.js'
 import { buildShareUrl } from '../../utils/shareLink.js'
-import { DEFAULT_SETTINGS, EXAMPLE_TEXT, GROUPS, convertAll, isDefaultSettings } from './cases.js'
+import { CASES, DEFAULT_SETTINGS, EXAMPLE_TEXT, convertAll, convertText, isDefaultSettings } from './cases.js'
 import { readSharedSettings, toShareQuery } from './share.js'
 
 const INPUT_ID = 'case-input'
+const OUTPUT_ID = 'case-output'
+const CASE_OPTIONS = CASES.map((item) => ({ value: item.id, label: item.name }))
 
+// One case and its result, with a copy button. Shown for every case after "Try an example".
 function ResultCard({ item }) {
     return (
         <li className="grid min-w-0 gap-2 rounded-xl border border-border bg-surface p-3">
             <div className="tip-end flex items-center justify-between gap-2">
-                <h4 className="min-w-0 break-words font-mono text-sm font-semibold">{item.name}</h4>
+                <h3 className="min-w-0 break-words font-mono text-sm font-semibold">{item.name}</h3>
                 <CopyButton text={item.output} label={`Copy ${item.name}`} copiedLabel="Copied" />
             </div>
             {/* tabIndex 0 lets keyboard users scroll a long result. */}
-            <pre
-                className="code-block max-h-40 min-h-12 overflow-auto whitespace-pre-wrap break-words"
-                tabIndex={0}
-                aria-label={`${item.name} result`}
-            >
-                {item.output === '' ? <span className="text-fg-muted">Your result appears here</span> : item.output}
+            <pre className="code-block max-h-40 min-h-12 overflow-auto whitespace-pre-wrap break-words" tabIndex={0} aria-label={`${item.name} result`}>
+                {item.output}
             </pre>
         </li>
     )
@@ -37,13 +38,17 @@ export default function CaseConverterTool() {
     const params = useInitialParams()
     const [settings, setSettings] = useState(() => readSharedSettings(params))
     const [text, setText] = useState('')
+    // True after "Try an example": every case is listed. Choosing a case goes back to the single result.
+    const [showAll, setShowAll] = useState(false)
 
-    const result = useMemo(() => convertAll(text, settings), [text, settings])
+    const result = useMemo(() => convertText(text, settings), [text, settings])
+    const everything = useMemo(() => (showAll ? convertAll(text, settings) : null), [showAll, text, settings])
     const shareUrl = buildShareUrl(toShareQuery(settings))
 
     const reset = () => {
         setSettings(DEFAULT_SETTINGS)
         setText('')
+        setShowAll(false)
     }
 
     return (
@@ -52,8 +57,19 @@ export default function CaseConverterTool() {
                 title="Text"
                 actions={
                     <>
-                        <ExampleButton onClick={() => setText(EXAMPLE_TEXT)} />
-                        <ClearButton onClick={() => setText('')} disabled={text === ''} />
+                        <ExampleButton
+                            onClick={() => {
+                                setText(EXAMPLE_TEXT)
+                                setShowAll(true)
+                            }}
+                        />
+                        <ClearButton
+                            onClick={() => {
+                                setText('')
+                                setShowAll(false)
+                            }}
+                            disabled={text === ''}
+                        />
                     </>
                 }
             >
@@ -66,7 +82,7 @@ export default function CaseConverterTool() {
                     rows={6}
                     value={text}
                     onChange={(event) => setText(event.target.value)}
-                    placeholder="Type or paste text. Every case below updates as you type."
+                    placeholder="Type or paste text, then choose a case below."
                     spellCheck={false}
                     aria-invalid={!result.ok}
                     aria-describedby={!result.ok ? 'case-error' : undefined}
@@ -78,27 +94,51 @@ export default function CaseConverterTool() {
                 )}
             </ToolPanel>
 
-            <ToolPanel title="Results">
-                {result.ok && (
-                    <div className="grid gap-6">
-                        {GROUPS.map((group) => (
-                            <section key={group.id} aria-labelledby={`case-group-${group.id}`}>
-                                <h3 id={`case-group-${group.id}`} className="text-sm font-semibold">
-                                    {group.name}
-                                </h3>
-                                <p className="mb-3 text-sm text-fg-muted">{group.hint}</p>
-                                <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                                    {result.results
-                                        .filter((item) => item.group === group.id)
-                                        .map((item) => (
-                                            <ResultCard key={item.id} item={item} />
-                                        ))}
-                                </ul>
-                            </section>
+            {everything?.ok ? (
+                <ToolPanel
+                    title="All cases"
+                    actions={
+                        <Button variant="ghost" onClick={() => setShowAll(false)}>
+                            Choose one case
+                        </Button>
+                    }
+                >
+                    <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {everything.results.map((item) => (
+                            <ResultCard key={item.id} item={item} />
                         ))}
-                    </div>
-                )}
-            </ToolPanel>
+                    </ul>
+                </ToolPanel>
+            ) : (
+                <>
+                    <ToolPanel title="Convert to">
+                        <ChoiceGroup
+                            label="Case"
+                            options={CASE_OPTIONS}
+                            value={settings.caseId}
+                            onChange={(caseId) => {
+                                setSettings((current) => ({ ...current, caseId }))
+                                setShowAll(false)
+                            }}
+                        />
+                    </ToolPanel>
+
+                    <ToolPanel title="Result" actions={<CopyButton text={result.ok ? result.output : ''} label="Copy result" copiedLabel="Copied" />}>
+                        <label htmlFor={OUTPUT_ID} className="sr-only">
+                            {result.ok ? `${result.name} result` : 'Result'}
+                        </label>
+                        <textarea
+                            id={OUTPUT_ID}
+                            className="field field-mono"
+                            rows={6}
+                            value={result.ok ? result.output : ''}
+                            readOnly
+                            spellCheck={false}
+                            placeholder="Your result appears here"
+                        />
+                    </ToolPanel>
+                </>
+            )}
 
             <ToolPanel
                 title="Options"
