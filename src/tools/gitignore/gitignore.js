@@ -22,7 +22,7 @@ export const PRESETS = [
     { id: 'rust', name: 'Rust', templates: ['rust', 'vscode', 'macos', 'windows', 'linux'] },
     { id: 'laravel', name: 'Laravel', templates: ['laravel', 'php', 'dotenv', 'jetbrains', 'macos', 'windows'] },
     { id: 'rails', name: 'Ruby on Rails', templates: ['ruby', 'rails', 'dotenv', 'vscode', 'macos', 'linux'] },
-    { id: 'flutter', name: 'Flutter', templates: ['dart', 'flutter', 'android', 'xcode', 'vscode', 'macos', 'windows'] },
+    { id: 'flutter', name: 'Flutter', templates: ['flutter', 'android', 'xcode', 'vscode', 'macos', 'windows'] },
     { id: 'dotnet', name: '.NET', templates: ['dotnet', 'visualstudio', 'vscode', 'windows'] },
     { id: 'unity', name: 'Unity game', templates: ['unity', 'visualstudio', 'jetbrains', 'macos', 'windows'] },
 ]

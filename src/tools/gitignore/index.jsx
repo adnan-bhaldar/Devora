@@ -45,10 +45,12 @@ export default function GitignoreTool() {
     const searchRef = useRef(null)
 
     const visible = useMemo(() => filterTemplates(query), [query])
-    const result = useMemo(() => buildGitignore(selected, settings, custom), [selected, settings, custom])
     const customTooLong = custom.length > MAX_CUSTOM_CHARS
+    // Oversized custom text is never processed, so the counts always match the output.
+    const usedCustom = customTooLong ? '' : custom
+    const result = useMemo(() => buildGitignore(selected, settings, usedCustom), [selected, settings, usedCustom])
     // Too much custom text is not used, so the output only ever grows to a sensible size.
-    const output = customTooLong ? buildGitignore(selected, settings).text : result.text
+    const output = result.text
 
     const selectedSet = new Set(selected)
     // Always listed in the same order as the templates, however the boxes were ticked.

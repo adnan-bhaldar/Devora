@@ -13,7 +13,7 @@ const docs = {
         'Order matters: a later rule can override an earlier one, so keep any “!” exceptions after the rule they undo.',
         '“Remove duplicate rules” keeps only the first copy of a rule that appears in more than one template (for example .DS_Store). If you turn it off, every template is shown in full.',
         'Never rely on .gitignore to protect secrets that were already committed. A secret that has been pushed once should be treated as leaked and replaced.',
-        'Most templates come from the open-source github/gitignore project (CC0 license) and are trimmed: comments and blank lines are removed. The React, Vue, Svelte, Vite, Nuxt, SvelteKit, Django, and .env templates are short lists written for Devora. Always check the result against your own project.',
+        'Most templates come from the open-source github/gitignore project (CC0 license) and are trimmed: comments and blank lines are removed. The React, Vue, Svelte, Vite, Nuxt, SvelteKit, Django, Flutter, and .env templates are short lists written for Devora. Always check the result against your own project.',
         'Commit the .gitignore file itself so everyone who clones the project gets the same rules.',
     ],
     privacy:
