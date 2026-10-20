@@ -219,16 +219,37 @@ export function parseTimestamp(input, unitChoice) {
 
 // A wall-clock time in a zone, turned into the real moment. Returns { ms, adjusted }.
 // `adjusted` is true when the time does not exist in that zone (clocks skipped forward).
+//
+// The zone's offset can change near the time (daylight saving), so the offsets one day before and one
+// day after are tried. Each gives a possible moment, and only the ones that really show the typed
+// wall-clock time are kept:
+//  - two kept (the clocks went back and the time happened twice): the earlier one is used.
+//  - one kept: that one.
+//  - none kept (the clocks jumped forward and the time never happened): the offset from before the
+//    jump is used, which lands on the same wall-clock time one hour later, as most software does.
+// Looking at both sides works for zones east and west of UTC alike.
 function zonedToMs(year, month, day, hour, minute, second, millisecond, zone) {
     const wall = utcFromParts(year, month, day, hour, minute, second, millisecond)
-    const firstGuess = wall - partsInZone(wall, zone).offset * 60000
-    const ms = wall - partsInZone(firstGuess, zone).offset * 60000
+    const DAY = 86400000
+    const before = partsInZone(wall - DAY, zone).offset
+    const after = partsInZone(wall + DAY, zone).offset
 
-    const check = partsInZone(ms, zone)
-    const adjusted = check.year !== year || check.month !== month || check.day !== day || check.hour !== hour || check.minute !== minute
-    // A time that does not exist (clocks jumped forward) is read with the offset from before the jump,
-    // which lands on the same wall-clock time one hour later, the way most software treats it.
-    return { ms: adjusted ? firstGuess : ms, adjusted }
+    const matches = [...new Set([before, after])]
+        .map((offset) => wall - offset * 60000)
+        .filter((candidate) => {
+            const shown = partsInZone(candidate, zone)
+            return (
+                shown.year === year &&
+                shown.month === month &&
+                shown.day === day &&
+                shown.hour === hour &&
+                shown.minute === minute &&
+                shown.second === second
+            )
+        })
+
+    if (matches.length > 0) return { ms: Math.min(...matches), adjusted: false }
+    return { ms: wall - before * 60000, adjusted: true }
 }
 
 const DATE_PATTERN =
