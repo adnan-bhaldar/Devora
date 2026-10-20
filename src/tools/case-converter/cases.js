@@ -6,7 +6,7 @@ export const DEFAULT_SETTINGS = { caseId: 'upper', smallWords: false }
 export const isDefaultSettings = (settings) =>
     settings.caseId === DEFAULT_SETTINGS.caseId && settings.smallWords === DEFAULT_SETTINGS.smallWords
 
-export const EXAMPLE_TEXT = 'the quick brown fox: XMLHttpRequest and user_id jump over the lazy dog. it’s 2024!'
+export const EXAMPLE_TEXT = 'the quick brown fox: XMLHttpRequest and user_id jump over the lazy dog. it’s 2026!'
 
 // Words that stay in lower case inside a title (unless they are the first or last word).
 const SMALL_WORDS = new Set(['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'in', 'nor', 'of', 'on', 'or', 'the', 'to', 'vs', 'via'])

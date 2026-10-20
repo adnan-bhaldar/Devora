@@ -18,7 +18,7 @@ export const MIN_MS = -62135596800000
 export const MAX_MS = 253402300799999
 
 export const EXAMPLE_TIMESTAMP = '1700000000'
-export const EXAMPLE_DATE = '2024-03-15 09:30:00'
+export const EXAMPLE_DATE = '2026-03-15 09:30:00'
 
 export const LOCAL = 'local'
 export const DEFAULT_SETTINGS = { zone: LOCAL, unit: 'auto' }
@@ -121,25 +121,25 @@ const formatOffset = (minutes, zone) => {
     return `${sign}${pad(Math.floor(absolute / 60))}:${pad(absolute % 60)}`
 }
 
-// "2024-03-15T09:30:00.000+05:30"
+// "2026-03-15T09:30:00.000+05:30"
 export function formatIso(ms, zone) {
     const p = partsInZone(ms, zone)
     const millisecond = ((ms % 1000) + 1000) % 1000
     return `${pad(p.year, 4)}-${pad(p.month)}-${pad(p.day)}T${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}.${pad(millisecond, 3)}${formatOffset(p.offset, zone)}`
 }
 
-// "2024-03-15 09:30:00", the form the date box accepts.
+// "2026-03-15 09:30:00", the form the date box accepts.
 export function formatPlain(ms, zone) {
     const p = partsInZone(ms, zone)
     return `${pad(p.year, 4)}-${pad(p.month)}-${pad(p.day)} ${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`
 }
 
-// "Friday, March 15, 2024 at 9:30:00 AM GMT+5:30"
+// "Friday, March 15, 2026 at 9:30:00 AM GMT+5:30"
 export function formatHuman(ms, zone) {
     return new Intl.DateTimeFormat('en-US', { timeZone: zone, dateStyle: 'full', timeStyle: 'long' }).format(new Date(ms))
 }
 
-// "Fri, 15 Mar 2024 04:00:00 GMT": the form used by HTTP headers and email.
+// "Fri, 15 Mar 2026 04:00:00 GMT": the form used by HTTP headers and email.
 export const formatUtcString = (ms) => new Date(ms).toUTCString()
 
 const RELATIVE_STEPS = [
@@ -255,7 +255,7 @@ function zonedToMs(year, month, day, hour, minute, second, millisecond, zone) {
 const DATE_PATTERN =
     /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,9}))?)?)?\s*(Z|[+-]\d{2}:?\d{2})?$/i
 
-const DATE_ERROR = 'Use a form such as 2024-03-15 09:30:00 or 2024-03-15T09:30:00Z. Year, month, and day are needed.'
+const DATE_ERROR = 'Use a form such as 2026-03-15 09:30:00 or 2026-03-15T09:30:00Z. Year, month, and day are needed.'
 
 /*
  * Reads a date typed as text: YYYY-MM-DD, optionally followed by a time (HH:mm, HH:mm:ss, or

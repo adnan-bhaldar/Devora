@@ -4,7 +4,7 @@ const docs = {
     howItWorks: [
         'To read a timestamp, type it into “Timestamp to date”. The unit is detected from the number of digits (10 digits are seconds, 13 are milliseconds, 16 are microseconds, 19 are nanoseconds), or you can choose it yourself.',
         'You get the date in UTC, in the time zone you chose, in a readable form, as an HTTP or email date, and as a time relative to now (such as “3 hours ago”).',
-        'To get a timestamp, type a date into “Date to timestamp” as year-month-day with an optional time, such as 2024-03-15 09:30:00. You get the seconds, the milliseconds, and the UTC form.',
+        'To get a timestamp, type a date into “Date to timestamp” as year-month-day with an optional time, such as 2026-03-15 09:30:00. You get the seconds, the milliseconds, and the UTC form.',
         'Without an offset the date is read in the chosen time zone. Add Z (UTC) or an offset such as +05:30 to the end to set the zone in the date itself.',
         '“Use now” fills in the current time, and the box at the top shows the current Unix time as it ticks.',
     ],

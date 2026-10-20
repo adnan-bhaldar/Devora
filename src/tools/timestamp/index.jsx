@@ -246,7 +246,7 @@ export default function TimestampTool() {
                                 className="field field-mono"
                                 value={dateText}
                                 onChange={(event) => setDateText(event.target.value)}
-                                placeholder="2024-03-15 09:30:00"
+                                placeholder="2026-03-15 09:30:00"
                                 aria-invalid={!fromDate.ok}
                                 aria-describedby={!fromDate.ok ? IDS.dateError : undefined}
                             />
