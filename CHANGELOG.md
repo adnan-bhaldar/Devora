@@ -4,6 +4,14 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.11.0
+
+### Added
+
+- **Case Converter.** Change text to UPPERCASE, lowercase, Title Case, Sentence case, aLtErNaTiNg and iNVERSE case, and to camelCase, PascalCase, snake_case, CONSTANT_CASE, kebab-case, Header-Case, COBOL-CASE, dot.case, and path/case, all at once, with a copy button for each. Names such as XMLHttpRequest are split into words correctly.
+- **Unix Timestamp Converter.** Turn a Unix timestamp (seconds, milliseconds, microseconds, or nanoseconds) into a date, or a date into a timestamp, in any time zone, with a live clock and a link that shares your time zone.
+- **Bcrypt Hash Generator.** Make bcrypt hashes with the cost and version you choose, and check whether a password matches a bcrypt hash. It runs in your browser, so your password is never sent anywhere.
+
 ## 1.10.0
 
 ### Added
