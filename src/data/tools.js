@@ -19,6 +19,7 @@ import {
     ServerCrash,
     Film,
     MessageCircle,
+    FileX,
 } from 'lucide-react'
 
 export const categories = [
@@ -278,6 +279,21 @@ export const tools = [
             title: 'WhatsApp & Telegram Link Generator',
             description:
                 'Create a WhatsApp or Telegram chat link with a pre-filled message and download a QR code for it. Everything runs in your browser.',
+        },
+    },
+    {
+        id: 'gitignore',
+        name: '.gitignore Generator',
+        description: 'Build a .gitignore file for your languages, frameworks, editors, and systems.',
+        categories: ['generators'],
+        route: '/gitignore-generator',
+        icon: FileX,
+        keywords: ['gitignore', 'git', 'ignore', 'template', 'node', 'python', 'java', 'vscode', 'macos', 'windows', 'repository', 'version control'],
+        status: 'live',
+        seo: {
+            title: '.gitignore Generator',
+            description:
+                'Generate a .gitignore file by choosing languages, frameworks, editors, and operating systems. Copy or download it. Everything runs in your browser.',
         },
     },
 ]

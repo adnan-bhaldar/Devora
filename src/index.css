@@ -1803,3 +1803,56 @@
     }
   }
 }
+
+/* ---------- Collapsible template groups (.gitignore generator) ---------- */
+@layer components {
+
+  .group-details {
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+
+  .group-details__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--r-md, 0.5rem);
+  }
+
+  /* Hides the browser's own triangle (Safari uses this one); the chevron below replaces it. */
+  .group-details__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .group-details__chevron {
+    flex-shrink: 0;
+    color: var(--fg-muted);
+    transition: rotate 0.15s;
+  }
+
+  .group-details[open]>.group-details__summary .group-details__chevron {
+    rotate: 90deg;
+  }
+
+  .group-details__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .group-details__count {
+    margin-left: auto;
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .group-details__chevron {
+      transition: none;
+    }
+  }
+}
