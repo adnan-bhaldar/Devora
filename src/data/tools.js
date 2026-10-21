@@ -23,6 +23,7 @@ import {
     CaseSensitive,
     CalendarClock,
     LockKeyhole,
+    Radio,
 } from 'lucide-react'
 
 export const categories = [
@@ -342,6 +343,21 @@ export const tools = [
             title: 'Bcrypt Hash Generator and Verifier',
             description:
                 'Generate bcrypt hashes with a cost you choose, and check whether a password matches a bcrypt hash. Runs in your browser, so your password is never sent anywhere.',
+        },
+    },
+    {
+        id: 'morse-code',
+        name: 'Morse Code Translator',
+        description: 'Turn text into Morse code and back, then play the sound or download it as a .wav file.',
+        categories: ['encoders-decoders'],
+        route: '/morse-code-translator',
+        icon: Radio,
+        keywords: ['morse', 'code', 'dot', 'dash', 'telegraph', 'sos', 'translator', 'encode', 'decode', 'audio', 'sound', 'wav', 'beep', 'radio'],
+        status: 'live',
+        seo: {
+            title: 'Morse Code Translator',
+            description:
+                'Translate text to Morse code and Morse code to text. Play the beeps at the speed and pitch you choose, or download them as a .wav file. Runs in your browser.',
         },
     },
 ]
