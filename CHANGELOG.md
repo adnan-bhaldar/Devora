@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.12.0
+
+### Added
+
+- **Morse Code Translator.** Turn text into Morse code and Morse code back into text. Play the beeps at the speed and pitch you choose, flash a light in time with them, or download the sound as a .wav file. A chart lists every letter, number, and symbol, and a link shares your speed and pitch.
+
 ## 1.11.0
 
 ### Added
