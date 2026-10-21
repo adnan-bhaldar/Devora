@@ -44,6 +44,7 @@ export default function MorseCodeTool() {
     const audioRef = useRef(null)
     const segmentsRef = useRef([])
     // The last sound that was made, so playing and downloading the same thing makes it once.
+    // It is one object that is updated in place, so the cleanup on leaving the page always sees the latest file.
     const soundRef = useRef({ key: '', blob: null, url: '' })
 
     const isEncode = settings.mode === 'encode'
@@ -67,10 +68,9 @@ export default function MorseCodeTool() {
 
     const stop = () => {
         const audio = audioRef.current
-        if (audio) {
-            audio.pause()
-            audioRef.current = null
-        }
+        // Forget the sound first, so anything the old one reports later (it ended, or play was cut short) is ignored.
+        audioRef.current = null
+        audio?.pause()
         setPlaying(false)
     }
 
@@ -94,7 +94,9 @@ export default function MorseCodeTool() {
     useEffect(() => {
         const sound = soundRef.current
         return () => {
-            audioRef.current?.pause()
+            const audio = audioRef.current
+            audioRef.current = null
+            audio?.pause()
             if (sound.url) URL.revokeObjectURL(sound.url)
         }
     }, [])
@@ -105,23 +107,37 @@ export default function MorseCodeTool() {
         if (current.key !== key) {
             if (current.url) URL.revokeObjectURL(current.url)
             const blob = renderWav(plan, settings.frequency)
-            soundRef.current = { key, blob, url: URL.createObjectURL(blob) }
+            current.key = key
+            current.blob = blob
+            current.url = URL.createObjectURL(blob)
         }
-        return soundRef.current
+        return current
     }
 
     const play = () => {
         stop()
         const audio = new Audio(getSound().url)
-        audio.onended = () => setPlaying(false)
+        // Each handler first checks that this is still the sound that is playing. A sound that was stopped
+        // or replaced must not change what the page shows.
+        const isCurrent = () => audioRef.current === audio
+        audio.onended = () => {
+            if (!isCurrent()) return
+            audioRef.current = null
+            setPlaying(false)
+        }
         audio.onerror = () => {
+            if (!isCurrent()) return
+            audioRef.current = null
             setPlaying(false)
             toast.error('The sound could not be played in this browser. Try the download instead.')
         }
         segmentsRef.current = plan.segments
         audioRef.current = audio
         setPlaying(true)
-        audio.play().catch(() => {
+        audio.play().catch((error) => {
+            // Pausing before play() finishes starting is expected when someone stops quickly.
+            if (error?.name === 'AbortError' || !isCurrent()) return
+            audioRef.current = null
             setPlaying(false)
             toast.error('The browser blocked the sound. Press Play again.')
         })
