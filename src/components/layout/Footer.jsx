@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
 import { siteConfig } from '../../data/site.js'
 
+// Read once when the page loads, so the year is always the current one without any setup.
+const CURRENT_YEAR = new Date().getFullYear()
+
 export default function Footer() {
     return (
         <footer className="site-footer">
-            <div className="container-page flex flex-col gap-6 py-8 sm:flex-row sm:items-start sm:justify-between">
+            <div className="container-page flex flex-col gap-3 pb-2 pt-5 sm:flex-row sm:items-start sm:justify-between">
                 <div className="max-w-sm">
                     <p className="font-semibold">{siteConfig.name}</p>
                     <p className="text-sm text-fg-muted">{siteConfig.tagline}</p>
@@ -21,6 +24,15 @@ export default function Footer() {
                         Changelog<span className="sr-only"> (opens in a new tab)</span>
                     </a>
                 </nav>
+            </div>
+            <div>
+                <div className="container-page flex flex-col gap-0.5 pb-4 text-sm text-fg-muted sm:flex-row sm:items-center sm:justify-between">
+                    <p>
+                        <span aria-hidden="true">©</span>
+                        <span className="sr-only">Copyright</span> {CURRENT_YEAR} {siteConfig.name}. All rights reserved.
+                    </p>
+                    <p>Everything you enter stays in your browser.</p>
+                </div>
             </div>
         </footer>
     )
