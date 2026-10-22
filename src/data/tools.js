@@ -1,4 +1,5 @@
 import {
+    Database,
     Palette,
     FileText,
     Image,
@@ -358,6 +359,21 @@ export const tools = [
             title: 'Morse Code Translator',
             description:
                 'Translate text to Morse code and Morse code to text. Play the beeps at the speed and pitch you choose, or download them as a .wav file. Runs in your browser.',
+        },
+    },
+    {
+        id: 'dummy-data',
+        name: 'Dummy Data Generator',
+        description: 'Make fake names, addresses, emails, and more, then export them as JSON, CSV, SQL, XML, YAML, and other formats.',
+        categories: ['generators'],
+        route: '/dummy-data-generator',
+        icon: Database,
+        keywords: ['dummy', 'fake', 'mock', 'sample', 'test', 'data', 'faker', 'seed', 'json', 'csv', 'sql', 'insert', 'xml', 'yaml', 'markdown', 'users', 'names', 'addresses', 'database'],
+        status: 'live',
+        seo: {
+            title: 'Dummy Data Generator',
+            description:
+                'Generate fake test data in your browser: names, addresses, emails, phone numbers, IDs and more. Export as JSON, CSV, SQL INSERT, XML, YAML, HTML, or Markdown, with seeds for repeatable results.',
         },
     },
 ]

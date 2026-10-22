@@ -4,6 +4,21 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.13.0
+
+### Added
+
+- **Dummy Data Generator.** Make fake test records from 32 fields (names, addresses, phone numbers, emails, IDs, dates and more) in 12 countries and languages. Choose the order and names of the columns, set limits, add a seed for repeatable results, and leave a share of values empty. Export as JSON, JSON Lines, CSV, HTML, SQL INSERT (PostgreSQL, MySQL, SQLite), XML, YAML, a Markdown table, TypeScript, or JavaScript. Everything is made in your browser.
+
+### Changed
+
+- **FFmpeg Commands.** “What the options mean” now opens one command at a time: opening another closes the first, and Escape closes the open one. The browser’s plain triangle is replaced by a chevron that turns smoothly, like on the HTTP Status Codes page.
+- **Unix Timestamp Converter.** The time zone list now shows each zone’s UTC offset (for example UTC+05:30) in fainter text at the right of every row and of the closed box. You can search by offset, such as +5:30, and by modern names such as Kolkata, Kyiv, and Kathmandu.
+
+### Removed
+
+- Unused styles left over from the docs example block, the changelog list, and the chip dot.
+
 ## 1.12.0
 
 ### Added

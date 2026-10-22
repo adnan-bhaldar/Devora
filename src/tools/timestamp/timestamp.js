@@ -121,6 +121,14 @@ const formatOffset = (minutes, zone) => {
     return `${sign}${pad(Math.floor(absolute / 60))}:${pad(absolute % 60)}`
 }
 
+// How a zone is shown in the dropdown: "UTC", "UTC+05:30", "UTC-04:00". It is the offset at the given
+// moment, so a zone with daylight saving shows the offset it has right now.
+export function offsetText(zone, ms) {
+    if (zone === 'UTC') return 'UTC'
+    const minutes = partsInZone(ms, zone).offset
+    return `UTC${formatOffset(minutes, zone)}`
+}
+
 // "2026-03-15T09:30:00.000+05:30"
 export function formatIso(ms, zone) {
     const p = partsInZone(ms, zone)

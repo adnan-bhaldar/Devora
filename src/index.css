@@ -723,13 +723,6 @@
     background: color-mix(in oklch, var(--tone, var(--accent)) 14%, var(--surface));
   }
 
-  .chip-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 999px;
-    background: var(--tone, var(--accent));
-  }
-
   .tool-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
@@ -897,25 +890,6 @@
 
   .docs-list[data-ordered='true'] {
     list-style: decimal;
-  }
-
-  .docs-example {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 640px) {
-    .docs-example {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .docs-label {
-    margin-bottom: 0.375rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
   .code-block {
@@ -1125,20 +1099,6 @@
 
   .toast[data-type='info']>svg {
     color: var(--accent);
-  }
-
-  /* Changelog */
-  .change-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .change-item {
-    display: grid;
-    gap: 0.375rem;
-    padding-block: 1.5rem;
-    border-top: 1px solid var(--border);
   }
 
   /* Hero. Its background comes from the site-wide .site-bg layer. */
@@ -1738,6 +1698,24 @@
     padding-right: 2.5rem;
   }
 
+  /* A chosen option with a "detail" (such as a UTC offset) shows it in fainter text, to the left of the
+     arrow, while the person is not typing. The box keeps extra room on the right for it. */
+  .search-select .search-select__input--detail {
+    padding-right: 8.5rem;
+  }
+
+  .search-select__detail {
+    position: absolute;
+    top: 50%;
+    right: 2.5rem;
+    translate: 0 -50%;
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
   /* The arrow sits inside the box, centred on the text field (the open list is absolutely
      positioned, so it does not change the height this is centred against). */
   .search-select__icon {
@@ -1829,5 +1807,150 @@
     border-color: var(--accent);
     background: var(--accent);
     box-shadow: 0 0 1.25rem var(--accent);
+  }
+}
+
+/* ---------- Dummy Data Generator ---------- */
+@layer components {
+  .dd-scroll {
+    max-width: 100%;
+    max-height: 28rem;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+  }
+
+  .dd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+  }
+
+  .dd-table th,
+  .dd-table td {
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .dd-table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface-2);
+    font-weight: 600;
+  }
+
+  .dd-table tbody th {
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+
+  .dd-code {
+    display: flex;
+    align-items: stretch;
+    max-height: 28rem;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+    background: var(--surface-2);
+  }
+
+  .dd-code__gutter {
+    margin: 0;
+    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    text-align: right;
+    user-select: none;
+  }
+
+  /* Lines stay on one line so the numbers line up; wide lines scroll sideways. */
+  .dd-code .dd-code__body {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    border-radius: 0;
+    white-space: pre;
+    overflow: visible;
+  }
+}
+
+@layer components {
+
+  /* A grid whose single column may shrink below its content, so a wide table scrolls instead of widening the page. */
+  .dd-stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@layer components {
+  .dd-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.25rem 0.25rem 0;
+    border-radius: 0.5rem;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .dd-toggle__chevron {
+    flex-shrink: 0;
+    color: var(--fg-muted);
+    transition: rotate 0.15s;
+  }
+
+  .dd-toggle[aria-expanded='true'] .dd-toggle__chevron {
+    rotate: 90deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dd-toggle__chevron {
+      transition: none;
+    }
+  }
+}
+
+/* ---------- FFmpeg: "What the options mean" toggle ---------- */
+@layer components {
+  .recipe-more__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  /* Hides the browser's own triangle (Safari uses this one); the chevron replaces it. */
+  .recipe-more__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .recipe-more__toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .recipe-more__chevron {
+    flex-shrink: 0;
+    color: var(--fg-muted);
+    transition: transform 0.2s;
+  }
+
+  .recipe-more[open] .recipe-more__chevron {
+    transform: rotate(90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .recipe-more__chevron {
+      transition: none;
+    }
   }
 }

@@ -27,10 +27,20 @@ import {
     isDefaultSettings,
     listZones,
     localZone,
+    offsetText,
     parseDate,
     parseTimestamp,
     resolveZone,
 } from './timestamp.js'
+
+// Browsers still list some zones under their old names. These modern spellings are searchable too.
+const ALSO_KNOWN_AS = {
+    'Asia/Calcutta': 'Kolkata',
+    'Asia/Saigon': 'Ho Chi Minh',
+    'Asia/Rangoon': 'Yangon',
+    'Asia/Katmandu': 'Kathmandu',
+    'Europe/Kiev': 'Kyiv',
+}
 
 const IDS = {
     zone: 'timestamp-zone',
@@ -77,13 +87,25 @@ export default function TimestampTool() {
     const zone = resolveZone(settings.zone)
     const updateSettings = (patch) => setSettings((current) => ({ ...current, ...patch }))
 
-    const zoneOptions = useMemo(
-        () => [
-            { value: LOCAL, label: `Your local time (${localZone()})`, searchText: `local your own ${localZone()}` },
-            ...listZones().map((name) => ({ value: name, label: name, searchText: `${name} ${name.replaceAll('_', ' ')}` })),
-        ],
-        [],
-    )
+    // Every zone is listed with its UTC offset in fainter text at the right, and in the box once chosen. The offset is the
+    // one in use when the page opens, and typing "+5:30" or "530" finds the zones that have it.
+    const [opened] = useState(() => Date.now())
+    const zoneOptions = useMemo(() => {
+        const describe = (name) => {
+            const offset = offsetText(name, opened)
+            const digits = offset.replace('UTC', '')
+            const short = digits.replace(/([+-])0/, '$1')
+            return { offset, searchText: `${name} ${name.replaceAll('_', ' ')} ${ALSO_KNOWN_AS[name] ?? ''} ${offset} ${digits} ${short} ${digits.replace(':', '')}` }
+        }
+        const local = describe(localZone())
+        return [
+            { value: LOCAL, label: `Your local time (${localZone()})`, detail: local.offset, searchText: `local your own ${local.searchText}` },
+            ...listZones().map((name) => {
+                const { offset, searchText } = describe(name)
+                return { value: name, label: name, detail: offset, searchText }
+            }),
+        ]
+    }, [opened])
 
     const fromTimestamp = useMemo(() => parseTimestamp(timestampText, settings.unit), [timestampText, settings.unit])
     const fromDate = useMemo(() => parseDate(dateText, zone), [dateText, zone])
