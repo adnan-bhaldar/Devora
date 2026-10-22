@@ -8,7 +8,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 
 ### Added
 
-- **Dummy Data Generator.** Make fake test records from 31 fields (names, addresses, phone numbers, emails, IDs, dates and more) in 12 countries and languages. Choose the order and names of the columns, set limits, add a seed for repeatable results, and leave a share of values empty. Export as JSON, JSON Lines, CSV, HTML, SQL INSERT (PostgreSQL, MySQL, SQLite), XML, YAML, a Markdown table, TypeScript, or JavaScript. Everything is made in your browser.
+- **Dummy Data Generator.** Make fake test records from 32 fields (names, addresses, phone numbers, emails, IDs, dates and more) in 12 countries and languages. Choose the order and names of the columns, set limits, add a seed for repeatable results, and leave a share of values empty. Export as JSON, JSON Lines, CSV, HTML, SQL INSERT (PostgreSQL, MySQL, SQLite), XML, YAML, a Markdown table, TypeScript, or JavaScript. Everything is made in your browser.
 
 ### Changed
 

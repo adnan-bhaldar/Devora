@@ -79,8 +79,11 @@ const round = (value, places) => {
     return Math.round(value * factor) / factor
 }
 
+// A blank box counts as "not a number" (Number('') would be 0), so the fallback is used instead.
+const toNumber = (raw) => (String(raw ?? '').trim() === '' ? NaN : Number(raw))
+
 const clampInt = (value, fallback) => {
-    const number = Math.trunc(Number(value))
+    const number = Math.trunc(toNumber(value))
     return Number.isFinite(number) ? Math.min(1e12, Math.max(-1e12, number)) : fallback
 }
 
@@ -156,8 +159,8 @@ export async function generate(settings) {
     const range = {}
     for (const id of ['integer', 'decimal']) {
         if (!ids.has(id)) continue
-        const min = Number(optionOf(id, 'min'))
-        const max = Number(optionOf(id, 'max'))
+        const min = toNumber(optionOf(id, 'min'))
+        const max = toNumber(optionOf(id, 'max'))
         if (!Number.isFinite(min) || !Number.isFinite(max)) {
             issues.push(`${getField(id).label}: the minimum and maximum must be numbers. The defaults were used.`)
             range[id] = [0, 1000]
@@ -194,6 +197,9 @@ export async function generate(settings) {
         if (asOfDay === null) {
             issues.push('Ages counted as of: use a date like 2026-03-05. Today was used.')
             asOfDay = Math.floor(Date.now() / DAY_MS)
+        }
+        if ([settings.ageMin, settings.ageMax].some((raw) => !Number.isFinite(toNumber(raw)))) {
+            issues.push('Age range: an empty or invalid box was replaced by its default (18 for youngest, 80 for oldest).')
         }
         const minAge = clampInt(settings.ageMin, 18)
         const maxAge = clampInt(settings.ageMax, 80)

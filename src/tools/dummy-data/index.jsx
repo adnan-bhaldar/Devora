@@ -388,7 +388,7 @@ export default function DummyDataTool() {
                     )}
 
                     <p className="text-xs text-fg-muted">
-                        All of this is made-up test data, created in your browser. Email addresses use example.com, and nothing is sent anywhere.
+                        All of this is made-up test data, created in your browser. Email addresses use example.com unless you choose another domain, and nothing is sent anywhere.
                     </p>
                 </div>
             </CollapsiblePanel>

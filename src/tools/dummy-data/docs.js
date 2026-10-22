@@ -10,7 +10,7 @@ const docs = {
         'Names, phone numbers, streets and companies come from the Faker library, which runs inside your browser. Only the country you choose is loaded.',
     ],
     notes: [
-        'Everything is made up. Email addresses and websites use example.com, which is reserved for examples. United States phone numbers use the 555-0100 to 555-0199 range kept for fiction. Phone numbers for other countries have a realistic shape, but a number could by chance belong to a real person, so do not call them.',
+        'Everything is made up. Websites use example.com, which is reserved for examples, and email addresses use it too unless you choose another email domain (a real domain such as gmail.com gives realistic-looking addresses, so use it with care). United States phone numbers use the 555-0100 to 555-0199 range kept for fiction. Phone numbers for other countries have a realistic shape, but a number could by chance belong to a real person, so do not call them.',
         'For the United States, United Kingdom, India, Germany, France, Spain, and Brazil, the city, region, postal code, and coordinates of a record match each other. For Australia, Canada, Italy, the Netherlands, and Poland they come from Faker and may not belong together; the coordinates only stay inside a rough box around the country. No address is checked against real maps or postal databases.',
         'The date of birth and age always match each other on the date shown under “Counted as of”, which is today when the page opens.',
         'Empty values are written as null in JSON and YAML, as an empty cell in CSV, HTML, and Markdown, as NULL in SQL, and as an element marked xsi:nil="true" in XML. ID and UUID are never left empty.',
