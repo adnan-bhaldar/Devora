@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { Info, SearchX } from 'lucide-react'
+import { ChevronRight, Info, SearchX } from 'lucide-react'
 import CopyButton from '../../components/common/CopyButton.jsx'
 import EmptyState from '../../components/common/EmptyState.jsx'
 import SearchInput from '../../components/common/SearchInput.jsx'
@@ -32,8 +32,22 @@ function RecipeCard({ recipe }) {
                     </p>
                 )}
 
-                <details className="text-sm">
-                    <summary className="cursor-pointer font-medium">What the options mean</summary>
+                {/* "name" makes the browser keep only one of these open at a time: opening another closes the first. */}
+                <details
+                    className="recipe-more text-sm"
+                    name="ffmpeg-options"
+                    onKeyDown={(event) => {
+                        if (event.key === 'Escape' && event.currentTarget.open) {
+                            event.stopPropagation()
+                            event.currentTarget.open = false
+                            event.currentTarget.querySelector('summary').focus()
+                        }
+                    }}
+                >
+                    <summary className="recipe-more__toggle">
+                        <ChevronRight size={16} aria-hidden="true" className="recipe-more__chevron" />
+                        What the options mean
+                    </summary>
                     <dl className="mt-2 grid gap-2">
                         {recipe.parts.map(([piece, meaning]) => (
                             <div key={piece} className="grid gap-0.5 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:gap-3">

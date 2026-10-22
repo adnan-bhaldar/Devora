@@ -7,8 +7,9 @@ import { Check, ChevronDown } from 'lucide-react'
  * list, then type to narrow the list down. The box shows exactly what you typed, and choosing an
  * option puts its label back in the box.
  *
- * options: [{ value, label, searchText }]. searchText is what the typed words are matched against
- * (it defaults to the label). onChange receives the chosen option's value. Pass `id` so a
+ * options: [{ value, label, detail, searchText }]. `detail` is an optional fainter text shown at the right
+ * end of the row and of the box (for example a UTC offset). searchText is what the typed words are matched
+ * against (it defaults to the label). onChange receives the chosen option's value. Pass `id` so a
  * <label htmlFor={id}> can name the control.
  *
  * Keys: Down and Up move through the list, Enter chooses, Escape closes and puts the chosen
@@ -26,6 +27,8 @@ export default function SearchSelect({ id, options, value, onChange, placeholder
     const [activeIndex, setActiveIndex] = useState(0)
 
     const selected = options.find((option) => option.value === value)
+    // While the person is not typing, a chosen option's detail is shown at the right end of the box.
+    const showDetail = query === null && Boolean(selected?.detail)
 
     const results = useMemo(() => {
         const words = (query ?? '').toLowerCase().split(/\s+/).filter(Boolean)
@@ -115,7 +118,8 @@ export default function SearchSelect({ id, options, value, onChange, placeholder
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                className="field search-select__input"
+                className={`field search-select__input ${showDetail ? 'search-select__input--detail' : ''}`}
+                aria-describedby={showDetail ? `${baseId}-detail` : undefined}
                 placeholder={placeholder}
                 value={query ?? selected?.label ?? ''}
                 onChange={(event) => {
@@ -133,6 +137,11 @@ export default function SearchSelect({ id, options, value, onChange, placeholder
                 onBlur={close}
                 onKeyDown={handleKeyDown}
             />
+            {showDetail && (
+                <span id={`${baseId}-detail`} className="search-select__detail">
+                    {selected.detail}
+                </span>
+            )}
             <ChevronDown
                 size={16}
                 aria-hidden="true"
@@ -160,8 +169,11 @@ export default function SearchSelect({ id, options, value, onChange, placeholder
                                 onClick={() => choose(option)}
                                 className={`flex cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm ${index === activeIndex ? 'bg-surface-2' : ''} ${isSelected ? 'font-semibold' : ''}`}
                             >
-                                <span>{option.label}</span>
-                                {isSelected && <Check size={16} aria-hidden="true" className="shrink-0 text-accent" />}
+                                <span className="min-w-0">{option.label}</span>
+                                <span className="flex shrink-0 items-center gap-2">
+                                    {option.detail && <span className="whitespace-nowrap font-normal tabular-nums text-fg-muted">{option.detail}</span>}
+                                    {isSelected && <Check size={16} aria-hidden="true" className="text-accent" />}
+                                </span>
                             </li>
                         )
                     })}
