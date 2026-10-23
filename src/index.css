@@ -1954,3 +1954,17 @@
     }
   }
 }
+
+@layer components {
+
+  /* The small color square in front of a hex code in the table preview. The border keeps very light colors visible. */
+  .dd-swatch {
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-right: 0.5rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.25rem;
+    vertical-align: -0.1875rem;
+  }
+}

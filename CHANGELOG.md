@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.14.0
+
+### Added
+
+- **CSS Unit Converter.** Convert between px, rem, em, %, pt, pc, in, cm, mm, Q, vw, vh, vmin, and vmax. Set the root font size, parent font size, and window size that the relative units need, list a number in every unit at once, and copy the result with or without its unit. A table shows common pixel sizes as rem, em, pt, and percent, and a link shares your units and settings.
+
 ## 1.13.0
 
 ### Added
