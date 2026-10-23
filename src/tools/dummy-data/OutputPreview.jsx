@@ -1,3 +1,10 @@
+const HEX_COLOR = /^#[0-9a-f]{6}$/i
+
+// A small square showing the color, for the hex color column. It is decoration only: the code next to it says the same.
+function Swatch({ color }) {
+    return <span className="dd-swatch" style={{ backgroundColor: color }} aria-hidden="true" />
+}
+
 const TABLE_ROWS = 100 // rows drawn in the table preview
 const RAW_LINES = 400 // lines drawn in the raw preview
 
@@ -25,7 +32,14 @@ function DataTable({ columns, rows }) {
                                 <th scope="row">{index + 1}</th>
                                 {row.map((value, position) => (
                                     <td key={columns[position].id}>
-                                        {value === null ? <span className="text-fg-muted">null</span> : String(value)}
+                                        {value === null ? (
+                                            <span className="text-fg-muted">null</span>
+                                        ) : (
+                                            <>
+                                                {columns[position].id === 'colorHex' && HEX_COLOR.test(String(value)) && <Swatch color={String(value)} />}
+                                                {String(value)}
+                                            </>
+                                        )}
                                     </td>
                                 ))}
                             </tr>

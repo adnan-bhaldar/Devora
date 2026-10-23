@@ -1,4 +1,5 @@
 import {
+    Ruler,
     Database,
     Palette,
     FileText,
@@ -374,6 +375,21 @@ export const tools = [
             title: 'Dummy Data Generator',
             description:
                 'Generate fake test data in your browser: names, addresses, emails, phone numbers, IDs and more. Export as JSON, CSV, SQL INSERT, XML, YAML, HTML, or Markdown, with seeds for repeatable results.',
+        },
+    },
+    {
+        id: 'css-units',
+        name: 'CSS Unit Converter',
+        description: 'Convert between px, rem, em, %, pt, cm, mm, in, vw, vh and more, with your own font and window sizes.',
+        categories: ['encoders-decoders'],
+        route: '/css-unit-converter',
+        icon: Ruler,
+        keywords: ['css', 'unit', 'units', 'convert', 'px', 'rem', 'em', 'percent', 'pt', 'point', 'pica', 'inch', 'cm', 'mm', 'vw', 'vh', 'vmin', 'vmax', 'viewport', 'font', 'size', 'pixel'],
+        status: 'live',
+        seo: {
+            title: 'CSS Unit Converter',
+            description:
+                'Convert CSS units: px to rem, em, %, pt, cm, mm, in, vw, vh, vmin, and vmax. Set the root font size, parent font size, and window size, and copy the result. Runs in your browser.',
         },
     },
 ]
