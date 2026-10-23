@@ -5,7 +5,7 @@ const docs = {
         'Type a number, choose the unit it is in, and choose the unit you want. The result updates as you type. Swap flips the two units and keeps your number.',
         'Every unit is first turned into CSS pixels and then into the unit you chose. The absolute units have fixed sizes: 1 in is 96 px, 1 cm is 96 ÷ 2.54 px, 1 mm is 96 ÷ 25.4 px, 1 Q is a quarter of a millimeter, 1 pt is 96 ÷ 72 px, and 1 pc is 16 px.',
         'The relative units depend on the settings. rem uses the root font size (the font size of the html element). em and % use the font size of the parent element. vw and vh are 1% of the window width and height, vmin is 1% of the smaller side, and vmax is 1% of the larger side.',
-        'Only the settings that your two units need are shown. Turn on “Show all units” to see the same number in every unit at once, each with its own copy button.',
+        'The font size settings are always available because the table at the bottom uses them. The window size settings appear when a viewport unit is chosen. Turn on “Show all units” to see the same number in every unit at once, each with its own copy button.',
         'The table at the bottom lists common pixel sizes as rem, em, points, and percent, using your current settings.',
     ],
     notes: [

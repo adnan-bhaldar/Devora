@@ -90,15 +90,13 @@ export default function CssUnitsTool() {
     const result = parsed.value === undefined ? null : convert(parsed.value, settings.from, settings.to, context)
     const resultText = result === null ? '' : formatNumber(result, decimals)
 
-    // Which settings matter for the units in use. With "show all" every setting matters.
+    // The viewport sizes only matter for the viewport units. The root and parent font sizes are always shown,
+    // because the "Common sizes" table below uses them whatever units are chosen. With "show all" every setting matters.
     const used = settings.showAll ? UNITS.map((unit) => unit.id) : [settings.from, settings.to]
     const needs = {
-        root: used.includes('rem'),
-        parent: used.includes('em') || used.includes('%'),
         width: used.some((unit) => ['vw', 'vmin', 'vmax'].includes(unit)),
         height: used.some((unit) => ['vh', 'vmin', 'vmax'].includes(unit)),
     }
-    const anySetting = Object.values(needs).some(Boolean)
 
     const everyUnit = useMemo(
         () => (settings.showAll && parsed.value !== undefined ? UNITS.map((unit) => ({ ...unit, text: formatWithUnit(convert(parsed.value, settings.from, unit.id, context), unit.id, decimals) })) : []),
@@ -201,12 +199,8 @@ export default function CssUnitsTool() {
                         onChange={(showAll) => update({ showAll })}
                     />
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {needs.root && (
-                            <NumberSetting label="Root font size (px)" hint="The font size of the html element. Browsers use 16." value={settings.root} limits={LIMITS.root} onCommit={(root) => update({ root })} />
-                        )}
-                        {needs.parent && (
-                            <NumberSetting label="Parent font size (px)" hint="Used by em and %." value={settings.parent} limits={LIMITS.parent} onCommit={(parent) => update({ parent })} />
-                        )}
+                        <NumberSetting label="Root font size (px)" hint="Used by rem. The font size of the html element; browsers use 16." value={settings.root} limits={LIMITS.root} onCommit={(root) => update({ root })} />
+                        <NumberSetting label="Parent font size (px)" hint="Used by em and %." value={settings.parent} limits={LIMITS.parent} onCommit={(parent) => update({ parent })} />
                         {needs.width && (
                             <NumberSetting label="Viewport width (px)" hint="Used by vw, vmin, and vmax." value={settings.width} limits={LIMITS.width} onCommit={(width) => update({ width })} />
                         )}
@@ -215,7 +209,6 @@ export default function CssUnitsTool() {
                         )}
                         <NumberSetting label="Decimal places" hint="From 0 to 6." value={settings.decimals} limits={LIMITS.decimals} onCommit={(next) => update({ decimals: next })} />
                     </div>
-                    {!anySetting && <p className="text-sm text-fg-muted">The units you chose are fixed sizes, so only the decimal places apply.</p>}
                 </div>
             </ToolPanel>
 
