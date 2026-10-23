@@ -1,4 +1,5 @@
 import {
+    Terminal,
     Ruler,
     Database,
     Palette,
@@ -390,6 +391,21 @@ export const tools = [
             title: 'CSS Unit Converter',
             description:
                 'Convert CSS units: px to rem, em, %, pt, cm, mm, in, vw, vh, vmin, and vmax. Set the root font size, parent font size, and window size, and copy the result. Runs in your browser.',
+        },
+    },
+    {
+        id: 'ascii-art',
+        name: 'ASCII Art Generator',
+        description: 'Turn text into banner lettering in many fonts, or turn a picture into characters, then copy or download it.',
+        categories: ['generators', 'text'],
+        route: '/ascii-art-generator',
+        icon: Terminal,
+        keywords: ['ascii', 'art', 'text', 'banner', 'figlet', 'font', 'image', 'picture', 'terminal', 'readme', 'monospace', 'characters', 'logo'],
+        status: 'live',
+        seo: {
+            title: 'ASCII Art Generator',
+            description:
+                'Make ASCII art from text in figlet fonts such as Standard, Slant, Big, Block, Shadow, and 3-D, or turn an image into ASCII characters. Copy it or download a .txt file. Runs in your browser.',
         },
     },
 ]

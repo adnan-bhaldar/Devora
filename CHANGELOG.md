@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.15.0
+
+### Added
+
+- **ASCII Art Generator.** Turn text into banner lettering in 17 fonts (Standard, Slant, Big, Block, Shadow, 3-D, and more) with letter spacing, line wrapping, and a fill character of your choice, or turn a picture into characters with a width, contrast, brightness, character set, and invert option. Copy the art or download it as a .txt file, and a link shares your choices.
+
 ## 1.14.0
 
 ### Added
