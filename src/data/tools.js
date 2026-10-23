@@ -397,7 +397,7 @@ export const tools = [
         id: 'ascii-art',
         name: 'ASCII Art Generator',
         description: 'Turn text into banner lettering in many fonts, or turn a picture into characters, then copy or download it.',
-        categories: ['generators', 'text'],
+        categories: ['generators', 'images', 'text'],
         route: '/ascii-art-generator',
         icon: Terminal,
         keywords: ['ascii', 'art', 'text', 'banner', 'figlet', 'font', 'image', 'picture', 'terminal', 'readme', 'monospace', 'characters', 'logo'],

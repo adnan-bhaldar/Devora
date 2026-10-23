@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Download, Link2, X } from 'lucide-react'
 import ClearButton from '../../components/common/ClearButton.jsx'
 import CopyButton from '../../components/common/CopyButton.jsx'
@@ -45,6 +45,7 @@ export default function AsciiArtTool() {
     const [text, setText] = useState('')
     const [picture, setPicture] = useState(null) // { name, size, bitmap }
     const [pictureError, setPictureError] = useState('')
+    const pictureLoadId = useRef(0) // numbers each load, so an old one that finishes late can be ignored
     const [textArt, setTextArt] = useState({ art: '', error: '' })
     const update = (changes) => setSettings((current) => ({ ...current, ...changes }))
 
@@ -84,14 +85,32 @@ export default function AsciiArtTool() {
         return () => bitmap?.close()
     }, [picture])
 
+    // Leaving the tool cancels any picture that is still loading.
+    useEffect(
+        () => () => {
+            pictureLoadId.current += 1
+        },
+        [],
+    )
+
     const loadPicture = async (file) => {
+        const loadId = ++pictureLoadId.current
         setPictureError('')
         try {
             const bitmap = await openImage(file)
+            if (loadId !== pictureLoadId.current) {
+                bitmap.close() // a newer pick, a removal, or leaving the tool replaced this load
+                return
+            }
             setPicture({ name: file.name, size: file.size, bitmap })
         } catch (error) {
-            setPictureError(error.message)
+            if (loadId === pictureLoadId.current) setPictureError(error.message)
         }
+    }
+
+    const removePicture = () => {
+        pictureLoadId.current += 1
+        setPicture(null)
     }
 
     const imageArt = useMemo(() => {
@@ -145,7 +164,7 @@ export default function AsciiArtTool() {
                                     {' '}· {picture.bitmap.width} × {picture.bitmap.height} px · {formatBytes(picture.size)}
                                 </span>
                             </p>
-                            <Button variant="ghost" onClick={() => setPicture(null)}>
+                            <Button variant="ghost" onClick={removePicture}>
                                 <X size={16} aria-hidden="true" />
                                 Remove picture
                             </Button>

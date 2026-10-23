@@ -8,7 +8,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Whe
 
 ### Added
 
-- **ASCII Art Generator.** Turn text into banner lettering in 17 fonts (Standard, Slant, Big, Block, Shadow, 3-D, and more) with letter spacing, line wrapping, and a fill character of your choice, or turn a picture into characters with a width, contrast, brightness, character set, and invert option. Copy the art or download it as a .txt file, and a link shares your choices.
+- **ASCII Art Generator.** Turn text into banner lettering in 17 fonts (Standard, Slant, Big, Block, Shadow, 3-D, and more) with letter spacing and a fill character of your choice, or turn a picture into characters with a width, contrast, brightness, character set, and invert option. Copy the art or download it as a .txt file, and a link shares your choices.
 
 ## 1.14.0
 

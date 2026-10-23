@@ -1,7 +1,10 @@
-import { MAX_FILE_MB, rowsFor } from './ascii.js'
+import { MAX_FILE_MB, WIDTH, rowsFor } from './ascii.js'
 
 // Pictures with more pixels than this are refused, so a huge file cannot freeze the page.
 const MAX_PIXELS = 100_000_000
+
+// Keeps the sampling canvas inside browser limits for very tall, narrow pictures.
+const MAX_ROWS = 10_000
 
 /** Opens an image file. Resolves to the decoded picture (an ImageBitmap) or throws an Error with a message to show. */
 export async function openImage(file) {
@@ -15,6 +18,10 @@ export async function openImage(file) {
     if (bitmap.width * bitmap.height > MAX_PIXELS) {
         bitmap.close()
         throw new Error('That picture has too many pixels. Try a smaller one.')
+    }
+    if (rowsFor(bitmap.width, bitmap.height, WIDTH.max) > MAX_ROWS) {
+        bitmap.close()
+        throw new Error('That picture is too tall and narrow. Try one with a more even shape.')
     }
     return bitmap
 }
