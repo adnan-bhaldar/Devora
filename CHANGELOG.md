@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.16.0
+
+### Added
+
+- **Diff Checker.** Compare two texts or files and see which lines were added or removed and which words changed inside a line, side by side or in one unified column. Ignore whitespace or letter case, fold unchanged lines, wrap long lines, and swap the two texts. Copy the result or download it as a .patch file, and a link shares your display choices (never your text).
+
 ## 1.15.0
 
 ### Added

@@ -1987,3 +1987,151 @@
     line-height: 1;
   }
 }
+
+/* ---------- Difference checker ---------- */
+@layer components {
+  .diff-input[data-dragging='true'] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .diff-input {
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .diff-input[wrap='soft'] {
+    white-space: pre-wrap;
+  }
+
+  .diff-stat {
+    font-weight: 600;
+  }
+
+  .diff-stat[data-kind='added'] {
+    color: var(--success);
+  }
+
+  .diff-stat[data-kind='removed'] {
+    color: var(--danger);
+  }
+
+  .diff-scroll {
+    position: relative;
+    /* keeps the hidden screen-reader text inside the box */
+    max-width: 100%;
+    max-height: 40rem;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
+    background: var(--surface);
+  }
+
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  /* Columns grow to fit the longest line, so text never spills into the neighbouring column. The box scrolls sideways instead. */
+  .diff-table[data-view='split'] {
+    table-layout: auto;
+    min-width: 44rem;
+  }
+
+  .diff-table[data-view='split'] .diff-text {
+    width: 50%;
+  }
+
+  .diff-no,
+  .diff-sign {
+    width: 3rem;
+    padding: 0 0.5rem;
+    color: var(--fg-muted);
+    text-align: right;
+    user-select: none;
+    vertical-align: top;
+    background: var(--surface-2);
+  }
+
+  .diff-sign {
+    width: 1.5rem;
+    padding: 0 0.25rem;
+    text-align: center;
+  }
+
+  .diff-text {
+    padding: 0 0.75rem;
+    white-space: pre;
+    vertical-align: top;
+  }
+
+  .diff-table[data-wrap='true'] .diff-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .diff-table[data-view='unified'] .diff-text {
+    width: 100%;
+  }
+
+  /* Removed lines are red, added lines are green. The tint is mixed into the page color, so it works in both themes. */
+  .diff-text[data-kind='removed'],
+  .diff-no[data-kind='removed'],
+  .diff-sign[data-kind='removed'] {
+    background: color-mix(in oklch, var(--danger) 14%, var(--surface));
+  }
+
+  .diff-text[data-kind='added'],
+  .diff-no[data-kind='added'],
+  .diff-sign[data-kind='added'] {
+    background: color-mix(in oklch, var(--success) 14%, var(--surface));
+  }
+
+  .diff-text[data-kind='empty'],
+  .diff-no[data-kind='empty'] {
+    background: var(--surface-2);
+  }
+
+  .diff-text[data-kind='removed'] .diff-mark {
+    background: color-mix(in oklch, var(--danger) 38%, transparent);
+  }
+
+  .diff-text[data-kind='added'] .diff-mark {
+    background: color-mix(in oklch, var(--success) 38%, transparent);
+  }
+
+  .diff-mark {
+    border-radius: 0.1875rem;
+    color: inherit;
+  }
+
+  .diff-sign[data-kind='removed'] {
+    color: var(--danger);
+  }
+
+  .diff-sign[data-kind='added'] {
+    color: var(--success);
+  }
+
+  .diff-fold td {
+    padding: 0.25rem 0.75rem;
+    background: var(--surface-2);
+    text-align: center;
+  }
+
+  .diff-expand {
+    border-radius: 0.375rem;
+    color: var(--accent);
+    font-family: var(--font-sans, inherit);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .diff-expand:hover {
+    text-decoration: underline;
+  }
+}

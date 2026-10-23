@@ -1,4 +1,5 @@
 import {
+    GitCompare,
     Terminal,
     Ruler,
     Database,
@@ -406,6 +407,21 @@ export const tools = [
             title: 'ASCII Art Generator',
             description:
                 'Make ASCII art from text in figlet fonts such as Standard, Slant, Big, Block, Shadow, and 3-D, or turn an image into ASCII characters. Copy it or download a .txt file. Runs in your browser.',
+        },
+    },
+    {
+        id: 'diff-checker',
+        name: 'Diff Checker',
+        description: 'Compare two texts or files and see exactly which lines and words were added, removed, or changed.',
+        categories: ['text'],
+        route: '/diff-checker',
+        icon: GitCompare,
+        keywords: ['diff', 'compare', 'difference', 'text', 'file', 'changes', 'patch', 'git', 'merge', 'checker', 'side by side', 'unified'],
+        status: 'live',
+        seo: {
+            title: 'Diff Checker',
+            description:
+                'Compare two texts or files online and see added, removed, and changed lines and words, side by side or unified. Ignore whitespace or case, and copy the result as a patch. Runs in your browser.',
         },
     },
 ]
