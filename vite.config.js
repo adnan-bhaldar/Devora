@@ -45,9 +45,10 @@ function seoFilesPlugin() {
         { tag: 'meta', attrs: { name: 'twitter:image', content: `${base}/icons/icon-512.png` }, injectTo: 'head' },
       ]
     },
-    closeBundle() {
-      // When the build failed, no output folder exists. Do nothing, so the real error is shown instead of a confusing one from here.
-      if (!existsSync(outDir)) return
+    closeBundle(error) {
+      // When the build failed, Rollup passes the error here, and a leftover output folder may exist from an earlier
+      // build. Do nothing, so the real error is shown instead of a confusing one from here.
+      if (error || !existsSync(outDir)) return
       const base = getSiteUrl()
       if (!base) {
         console.warn('[devora] SITE_URL is not set, so sitemap.xml was not generated.')
@@ -87,8 +88,8 @@ function precachePlugin() {
     configResolved(config) {
       outDir = join(config.root, config.build.outDir)
     },
-    closeBundle() {
-      if (!existsSync(outDir)) return // the build failed earlier: let its own error be the one that is shown
+    closeBundle(error) {
+      if (error || !existsSync(outDir)) return // the build failed earlier: let its own error be the one that is shown
       const files = listFiles(outDir)
         .map((file) => '/' + relative(outDir, file).split('\\').join('/'))
         .filter((path) => !['/sw.js', '/robots.txt', '/sitemap.xml'].includes(path) && !path.endsWith('.map'))

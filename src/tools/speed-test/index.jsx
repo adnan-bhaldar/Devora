@@ -79,6 +79,7 @@ export default function SpeedTestTool() {
             if (id !== runId.current) return
             const test = new SpeedTest(ENGINE_OPTIONS)
             engine.current = test
+            let finished = false
             test.onResultsChange = ({ type }) => {
                 if (id !== runId.current) return
                 // The stage only moves forward, even if the library interleaves a ping inside the download stage.
@@ -88,8 +89,21 @@ export default function SpeedTestTool() {
             test.onError = (message) => {
                 if (id === runId.current) setError((current) => current || String(message))
             }
+            // When a measurement fails for good (for example the servers cannot be reached), the library stops
+            // and calls onError, but never onFinish. Its "stopped running" signal is the only sign that the test
+            // is over. A normal finish also stops it, so the check waits a moment and skips runs that finished,
+            // and runs that were stopped or replaced.
+            test.onRunningChange = (isRunning) => {
+                if (isRunning) return
+                window.setTimeout(() => {
+                    if (id !== runId.current || finished) return
+                    engine.current = null
+                    setPhase('error')
+                }, 100)
+            }
             test.onFinish = (results) => {
                 if (id !== runId.current) return
+                finished = true
                 const final = readResults(results)
                 setLive(final)
                 engine.current = null
