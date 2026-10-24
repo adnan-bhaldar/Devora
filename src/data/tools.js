@@ -1,5 +1,7 @@
 import {
+    Gauge,
     GitCompare,
+    Globe,
     Terminal,
     Ruler,
     Database,
@@ -60,6 +62,12 @@ export const categories = [
         name: 'Text',
         description: 'Transform and generate text.',
         icon: Type,
+    },
+    {
+        id: 'network',
+        name: 'Network',
+        description: 'Test and inspect your internet connection.',
+        icon: Globe,
     },
     {
         id: 'reference',
@@ -422,6 +430,21 @@ export const tools = [
             title: 'Diff Checker',
             description:
                 'Compare two texts or files online and see added, removed, and changed lines and words, side by side or unified. Ignore whitespace or case, and copy the result as a patch. Runs in your browser.',
+        },
+    },
+    {
+        id: 'speed-test',
+        name: 'Internet Speed Test',
+        description: 'Measure your download speed, upload speed, ping, and jitter, with a live dial that moves as the test runs.',
+        categories: ['network'],
+        route: '/speed-test',
+        icon: Gauge,
+        keywords: ['speed', 'internet', 'test', 'bandwidth', 'download', 'upload', 'ping', 'latency', 'jitter', 'mbps', 'wifi', 'connection', 'cloudflare', 'network'],
+        status: 'live',
+        seo: {
+            title: 'Internet Speed Test',
+            description:
+                'Test your internet speed online: download, upload, ping, and jitter, with a live animated dial. Powered by Cloudflare’s speed test servers. Nothing is saved.',
         },
     },
 ]

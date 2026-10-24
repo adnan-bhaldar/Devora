@@ -1,7 +1,7 @@
 {
   "name": "devora",
   "private": true,
-  "version": "1.16.0",
+  "version": "1.17.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cloudflare/speedtest": "^1.15.0",
     "@faker-js/faker": "^10.6.0",
     "@tailwindcss/vite": "^4.3.3",
     "bcryptjs": "^3.0.3",

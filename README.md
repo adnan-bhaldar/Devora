@@ -11,6 +11,7 @@ Fast, focused developer utilities that run entirely in your browser. No account,
 | Security & Hashing  | JWT Decoder, Hash Generator (SHA-256/384/512), Bcrypt Hash Generator, Password Generator                                                                                                                                  |
 | Images              | Base64 Image Converter, QR Code Decoder, ASCII Art Generator                                                                                                                                                              |
 | Text                | Base64 Encoder & Decoder, Binary ↔ Text Converter, Lorem Ipsum Generator, Slug Generator, Case Converter, ASCII Art Generator, Diff Checker                                                                               |
+| Network             | Internet Speed Test                                                                                                                                                                                                       |
 | Reference           | HTTP Status Codes, FFmpeg Commands                                                                                                                                                                                        |
 
 Some tools appear in more than one category.

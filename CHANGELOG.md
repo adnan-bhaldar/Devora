@@ -4,6 +4,16 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.17.0
+
+### Added
+
+- **Internet Speed Test.** Measure your download speed, upload speed, ping, and jitter, plus how much your ping rises while downloading and uploading. A live dial, a stage bar, and result tiles with small bar charts animate as the test runs. Switch between Mbps and MB/s, stop a test early, and copy the results. It is powered by Cloudflare’s open-source speed test and sends test data to speed.cloudflare.com, and it is in a new **Network** category.
+
+### Changed
+
+- The Content Security Policy now allows connections to `https://speed.cloudflare.com`, which the speed test needs.
+
 ## 1.16.0
 
 ### Added
