@@ -1,0 +1,53 @@
+/* ---------- Searchable select ----------
+   Styles for this part only. Shared styles stay in src/index.css. */
+@layer components {
+
+    .search-select {
+        position: relative;
+    }
+
+    /* Room on the right so typed text never runs under the arrow. */
+    .search-select .search-select__input {
+        padding-right: 2.5rem;
+    }
+
+    /* A chosen option with a "detail" (such as a UTC offset) shows it in fainter text, to the left of the
+     arrow, while the person is not typing. The box keeps extra room on the right for it. */
+    .search-select .search-select__input--detail {
+        padding-right: 8.5rem;
+    }
+
+    .search-select__detail {
+        position: absolute;
+        top: 50%;
+        right: 2.5rem;
+        translate: 0 -50%;
+        color: var(--fg-muted);
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    /* The arrow sits inside the box, centred on the text field (the open list is absolutely
+     positioned, so it does not change the height this is centred against). */
+    .search-select__icon {
+        position: absolute;
+        top: 50%;
+        right: 0.875rem;
+        translate: 0 -50%;
+        color: var(--fg-muted);
+        pointer-events: none;
+        transition: rotate 0.15s;
+    }
+
+    .search-select__icon--open {
+        rotate: 180deg;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .search-select__icon {
+            transition: none;
+        }
+    }
+}

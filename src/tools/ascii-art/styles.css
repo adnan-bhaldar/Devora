@@ -1,0 +1,19 @@
+/* ---------- ASCII Art Generator ----------
+   Styles for this part only. Shared styles stay in src/index.css. */
+@layer components {
+
+    /* Art needs a fixed-width font and no wrapping, or the lines drift out of line. The text size comes from the
+     "Text size" choice (an inline font-size). */
+    .ascii-art {
+        max-height: 36rem;
+        overflow: auto;
+        white-space: pre;
+        overflow-wrap: normal;
+        line-height: 1.15;
+    }
+
+    /* Pictures use tight lines so they keep their proportions. */
+    .ascii-art[data-mode='image'] {
+        line-height: 1;
+    }
+}

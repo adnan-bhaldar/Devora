@@ -1,9 +1,23 @@
+/* =====================================================================
+   Devora styles. Order of this file:
+     1. Setup                      Tailwind and the dark-mode switch
+     2. Design tokens and theme    colors, light and dark, Tailwind names
+     3. Category tones             one color per category
+     4. Animations                 entrance animation and reduced motion
+     5. Scrollbars
+     6. Base layer                 element defaults (@layer base)
+     7. Components layer           shared classes (@layer components)
+     8. Page, tool and component styles, one file each, joined with @import
+   Styles outside a layer always beat styles inside one.
+   ===================================================================== */
+
+/* ---------- 1. Setup ---------- */
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
 @import 'tailwindcss';
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ---------- Theme tokens ---------- */
+/* ---------- 2. Design tokens and theme ---------- */
 :root {
   color-scheme: light;
   --bg: #fbfbfd;
@@ -87,7 +101,7 @@
   --color-success: var(--success);
 }
 
-/* ---------- Category tones ----------
+/* ---------- 3. Category tones ----------
    Any element with data-tone="<category id>" gets a --tone color.
    Components using --tone fall back to the accent when no tone is set. */
 [data-tone] {
@@ -122,7 +136,98 @@
   --hue: 205;
 }
 
-/* ---------- Base ---------- */
+/* ---------- 4. Animations (entrance, and reduced motion) ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.rise-2 {
+  animation-delay: 0.08s;
+}
+
+.rise-3 {
+  animation-delay: 0.16s;
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Scrollbar parts are not matched by the rule above, so they are listed here. */
+  ::-webkit-scrollbar-thumb {
+    transition: none;
+  }
+
+  .card-link:hover,
+  .card-link:has(.card-stretch:focus-visible) {
+    transform: none;
+  }
+}
+
+/* ---------- 5. Scrollbars ----------
+   Chrome, Edge and Safari use the ::-webkit-scrollbar parts, which allow a hover color and
+   a smooth transition. Chrome ignores those parts when the standard scrollbar-color or
+   scrollbar-width properties are set, so the standard properties are only applied where
+   the WebKit parts do not exist (Firefox). Firefox has no hover state for scrollbars. */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* A transparent border plus background-clip makes the visible thumb thinner than its
+   clickable area, which is easier to grab. */
+::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--scroll-thumb-active);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+}
+
+/* ---------- 6. Base layer ---------- */
 @layer base {
 
   *,
@@ -175,51 +280,10 @@
   }
 }
 
-/* ---------- Scrollbars ----------
-   Chrome, Edge and Safari use the ::-webkit-scrollbar parts, which allow a hover color and
-   a smooth transition. Chrome ignores those parts when the standard scrollbar-color or
-   scrollbar-width properties are set, so the standard properties are only applied where
-   the WebKit parts do not exist (Firefox). Firefox has no hover state for scrollbars. */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-/* A transparent border plus background-clip makes the visible thumb thinner than its
-   clickable area, which is easier to grab. */
-::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-thumb);
-  background-clip: content-box;
-  border: 3px solid transparent;
-  border-radius: 999px;
-  transition: background-color 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scroll-thumb-hover);
-}
-
-::-webkit-scrollbar-thumb:active {
-  background-color: var(--scroll-thumb-active);
-}
-
-@supports not selector(::-webkit-scrollbar) {
-  :root {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scroll-thumb) transparent;
-  }
-}
-
-/* ---------- Reusable semantic classes ---------- */
+/* ---------- 7. Components layer (shared by the whole app) ---------- */
 @layer components {
+  /* ===== Page layout ===== */
+
   .container-page {
     width: 100%;
     max-width: 72rem;
@@ -294,6 +358,9 @@
 
   /* Header: a floating bar. The wrapper ignores pointer events, so the empty space beside
      the bar never blocks clicks on content that scrolls underneath it. */
+
+  /* ===== Site header and navigation ===== */
+
   .site-header {
     position: sticky;
     top: 0.75rem;
@@ -391,6 +458,8 @@
     }
   }
 
+  /* ===== Keyboard key hint ===== */
+
   .kbd {
     display: inline-flex;
     align-items: center;
@@ -409,6 +478,9 @@
   }
 
   /* Buttons */
+
+  /* ===== Buttons ===== */
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -472,6 +544,8 @@
   .btn[aria-pressed='true'] .fav-star {
     color: var(--star);
   }
+
+  /* ===== Icon buttons and favorite stars ===== */
 
   .icon-btn {
     display: inline-flex;
@@ -561,6 +635,9 @@
   }
 
   /* Cards */
+
+  /* ===== Cards ===== */
+
   .card {
     position: relative;
     background: var(--surface);
@@ -640,6 +717,8 @@
     transform: translate(0, 0);
     color: var(--tone, var(--accent));
   }
+
+  /* ===== Icon tiles, badges, pills and chips ===== */
 
   .icon-tile {
     display: inline-flex;
@@ -727,6 +806,8 @@
     background: color-mix(in oklch, var(--tone, var(--accent)) 14%, var(--surface));
   }
 
+  /* ===== Tool grid ===== */
+
   .tool-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
@@ -734,6 +815,9 @@
   }
 
   /* Search input */
+
+  /* ===== Search input ===== */
+
   .search-input {
     display: flex;
     align-items: center;
@@ -778,6 +862,9 @@
   }
 
   /* Form fields */
+
+  /* ===== Form fields ===== */
+
   .field {
     width: 100%;
     padding: 0.625rem 0.75rem;
@@ -813,6 +900,9 @@
   }
 
   /* Tool layout */
+
+  /* ===== Tool page: panels, breadcrumb and docs text ===== */
+
   .tool-stack {
     display: grid;
     gap: 1rem;
@@ -896,6 +986,8 @@
     list-style: decimal;
   }
 
+  /* ===== Code block ===== */
+
   .code-block {
     margin: 0;
     padding: 0.75rem 1rem;
@@ -912,6 +1004,9 @@
   }
 
   /* Drop zone */
+
+  /* ===== File drop zone ===== */
+
   .dropzone {
     display: flex;
     flex-direction: column;
@@ -948,6 +1043,9 @@
   }
 
   /* Command palette */
+
+  /* ===== Command palette ===== */
+
   .palette {
     display: none;
     flex-direction: column;
@@ -1067,6 +1165,9 @@
   }
 
   /* Toasts */
+
+  /* ===== Toasts ===== */
+
   .toast-viewport {
     position: fixed;
     right: 1rem;
@@ -1106,6 +1207,9 @@
   }
 
   /* Hero. Its background comes from the site-wide .site-bg layer. */
+
+  /* ===== Home page hero and code preview ===== */
+
   .hero {
     border-bottom: 1px solid var(--border);
   }
@@ -1230,374 +1334,14 @@
     color: oklch(var(--tone-l) 0.17 350);
   }
 
+  /* ===== Footer ===== */
+
   .site-footer {
     border-top: 1px solid var(--border);
     background: var(--surface);
   }
-}
 
-/* ---------- Entrance animation ---------- */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.rise {
-  animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.rise-2 {
-  animation-delay: 0.08s;
-}
-
-.rise-3 {
-  animation-delay: 0.16s;
-}
-
-/* ---------- Motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  /* Scrollbar parts are not matched by the rule above, so they are listed here. */
-  ::-webkit-scrollbar-thumb {
-    transition: none;
-  }
-
-  .card-link:hover,
-  .card-link:has(.card-stretch:focus-visible) {
-    transform: none;
-  }
-}
-
-/* ---------- About page ---------- */
-@layer components {
-  .about-hero {
-    max-width: 48rem;
-    padding-block: 2rem 2.5rem;
-  }
-
-  .about-stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    background: var(--border);
-    box-shadow: var(--highlight), var(--shadow-sm);
-  }
-
-  @media (min-width: 40rem) {
-    .about-stats {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  .about-stat {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 0.25rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--surface);
-  }
-
-  .about-stat__value {
-    margin: 0;
-    width: fit-content;
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 650;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-  }
-
-  .about-section {
-    margin-top: 4rem;
-  }
-
-  .about-heading {
-    font-size: clamp(1.5rem, 3vw, 1.875rem);
-    font-weight: 650;
-    letter-spacing: -0.03em;
-  }
-
-  .about-lead {
-    margin-top: 0.75rem;
-    max-width: 44rem;
-    color: var(--fg-muted);
-    font-size: 1.0625rem;
-  }
-
-  .about-grid {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1.75rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (min-width: 48rem) {
-    .about-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .about-card {
-    padding: 1.5rem;
-    transition:
-      border-color 0.25s,
-      transform 0.25s,
-      box-shadow 0.25s;
-  }
-
-  .about-card:hover {
-    transform: translateY(-3px);
-    border-color: color-mix(in oklch, var(--accent) 40%, var(--border));
-    box-shadow: var(--highlight), var(--shadow-lg);
-  }
-
-  .about-privacy {
-    margin-top: 1.25rem;
-    padding: 1.5rem;
-    border-left: 3px solid var(--accent);
-  }
-
-  .about-shortcuts {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    margin: 1.25rem 0 0;
-    padding: 1.25rem 1.5rem;
-    list-style: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .about-card:hover {
-      transform: none;
-    }
-  }
-}
-
-/* ---------- HTTP status codes tool ---------- */
-@layer components {
-  .status-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.75rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (min-width: 30rem) {
-    .status-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 48rem) {
-    .status-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .status-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  .status-card {
-    --family-color: var(--accent);
-    /* The coloured strip along the top is an inset shadow, so it follows the rounded corners
-       exactly and is never wider than the card. */
-    --strip: inset 0 3px 0 var(--family-color);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1rem 1rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    background: var(--surface);
-    box-shadow: var(--strip), var(--shadow-sm);
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
-  }
-
-  .status-card:hover,
-  .status-card:has(details[open]) {
-    border-color: color-mix(in oklch, var(--family-color) 45%, var(--border));
-    box-shadow: var(--strip), var(--shadow-md);
-  }
-
-  /* The open card sits above the cards around it, so its floating text is never hidden. */
-  .status-card:has(details[open]) {
-    z-index: 20;
-  }
-
-  .status-card[data-family='1'] {
-    --family-color: var(--fg-muted);
-  }
-
-  .status-card[data-family='2'] {
-    --family-color: var(--success);
-  }
-
-  .status-card[data-family='3'] {
-    --family-color: var(--accent);
-  }
-
-  .status-card[data-family='4'] {
-    --family-color: var(--star);
-  }
-
-  .status-card[data-family='5'] {
-    --family-color: var(--danger);
-  }
-
-  .status-card[data-family='unofficial'] {
-    --family-color: var(--accent-2);
-  }
-
-  .status-card__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.375rem;
-    margin-top: 0.125rem;
-  }
-
-  .status-card__code {
-    font-family: var(--font-mono);
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .status-card__family {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3125rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 999px;
-    background: color-mix(in oklch, var(--family-color) 12%, var(--surface));
-    font-size: 0.6875rem;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .status-card__dot {
-    width: 0.4375rem;
-    height: 0.4375rem;
-    border-radius: 50%;
-    background: var(--family-color);
-  }
-
-  .status-card__name {
-    margin-top: 0.5rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .status-card__summary {
-    margin-top: 0.25rem;
-    color: var(--fg-muted);
-    font-size: 0.8125rem;
-    line-height: 1.45;
-  }
-
-  /* "margin-top: auto" pushes the Details line to the bottom of every card, so the divider
-     above it lines up across a whole row whatever the length of the text above. */
-  .status-card__more {
-    margin-top: auto;
-    padding-top: 0.5rem;
-  }
-
-  .status-card__more::before {
-    content: '';
-    display: block;
-    margin-bottom: 0.5rem;
-    border-top: 1px solid var(--border);
-  }
-
-  /* The opened text is a small floating card under the one that was opened. It is not part of
-     the layout, so opening it never moves or resizes any other card. */
-  .status-card__panel {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    right: 0;
-    left: 0;
-    z-index: 20;
-    padding: 0.875rem 1rem;
-    border: 1px solid color-mix(in oklch, var(--family-color) 45%, var(--border));
-    border-radius: var(--r-lg);
-    background: var(--surface);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .status-card__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    border-radius: 0.375rem;
-    color: var(--fg-muted);
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .status-card__toggle::-webkit-details-marker {
-    display: none;
-  }
-
-  .status-card__toggle:hover {
-    color: var(--fg);
-  }
-
-  .status-card__toggle:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  .status-card__chevron {
-    transition: transform 0.2s;
-  }
-
-  .status-card__more[open] .status-card__chevron {
-    transform: rotate(90deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .status-card__chevron {
-      transition: none;
-    }
-  }
-}
-
-/* ---------- Tooltips that must not stick out past the screen edge ---------- */
-@layer components {
-
+  /* ===== Tooltips that must not stick out past the screen edge ===== */
   /* The theme button sits at the right end of the header. Its tooltip is wider than the button
      and was centred under it, so (even while invisible) it stuck out past the screen edge and
      made the whole page scroll sideways on tablet-sized screens. Aligning the tooltip's right
@@ -1609,143 +1353,50 @@
     right: 0;
     transform: none;
   }
-}
 
-/* ---------- FFmpeg commands tool ---------- */
-@layer components {
-
-  /* Each group of commands has its own colour, used for the strip along the top of the card and
-     for the group label. Like the status cards, the strip is an inset shadow so it follows the
-     rounded corners exactly. The colours are mid-tone, so they read on light and dark themes. */
-  .recipe-card {
-    --family-color: var(--accent);
-    --strip: inset 0 3px 0 var(--family-color);
-    padding-top: 1.25rem;
-    box-shadow: var(--strip), var(--shadow-sm);
-    transition: border-color 0.2s;
+  /* ===== Layout helpers shared by several tools ===== */
+  .dd-scroll {
+    max-width: 100%;
+    max-height: 28rem;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.625rem;
   }
 
-  .recipe-card:hover {
-    border-color: color-mix(in oklch, var(--family-color) 45%, var(--border));
+  .dd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
   }
 
-  .recipe-card[data-group='inspect'] {
-    --family-color: oklch(0.68 0.14 250);
-  }
-
-  .recipe-card[data-group='convert'] {
-    --family-color: oklch(0.68 0.16 290);
-  }
-
-  .recipe-card[data-group='compress'] {
-    --family-color: oklch(0.68 0.14 170);
-  }
-
-  .recipe-card[data-group='resize'] {
-    --family-color: oklch(0.72 0.15 55);
-  }
-
-  .recipe-card[data-group='trim'] {
-    --family-color: oklch(0.67 0.17 22);
-  }
-
-  .recipe-card[data-group='audio'] {
-    --family-color: oklch(0.68 0.16 340);
-  }
-
-  .recipe-card[data-group='images'] {
-    --family-color: oklch(0.7 0.12 205);
-  }
-
-  .recipe-card[data-group='effects'] {
-    --family-color: oklch(0.76 0.14 90);
-  }
-
-  .recipe-card[data-group='subtitles'] {
-    --family-color: oklch(0.7 0.15 125);
-  }
-
-  .recipe-card[data-group='misc'] {
-    --family-color: var(--fg-muted);
-  }
-
-  .recipe-card__group {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3125rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 999px;
-    background: color-mix(in oklch, var(--family-color) 12%, var(--surface));
-    font-size: 0.6875rem;
-    font-weight: 500;
+  .dd-table th,
+  .dd-table td {
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
     white-space: nowrap;
   }
 
-  .recipe-card__group::before {
-    content: '';
-    width: 0.4375rem;
-    height: 0.4375rem;
-    border-radius: 50%;
-    background: var(--family-color);
-  }
-}
-
-/* ---------- Searchable select ---------- */
-@layer components {
-
-  .search-select {
-    position: relative;
+  .dd-table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface-2);
+    font-weight: 600;
   }
 
-  /* Room on the right so typed text never runs under the arrow. */
-  .search-select .search-select__input {
-    padding-right: 2.5rem;
-  }
-
-  /* A chosen option with a "detail" (such as a UTC offset) shows it in fainter text, to the left of the
-     arrow, while the person is not typing. The box keeps extra room on the right for it. */
-  .search-select .search-select__input--detail {
-    padding-right: 8.5rem;
-  }
-
-  .search-select__detail {
-    position: absolute;
-    top: 50%;
-    right: 2.5rem;
-    translate: 0 -50%;
+  .dd-table tbody th {
     color: var(--fg-muted);
-    font-size: 0.875rem;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    pointer-events: none;
+    font-weight: 400;
   }
 
-  /* The arrow sits inside the box, centred on the text field (the open list is absolutely
-     positioned, so it does not change the height this is centred against). */
-  .search-select__icon {
-    position: absolute;
-    top: 50%;
-    right: 0.875rem;
-    translate: 0 -50%;
-    color: var(--fg-muted);
-    pointer-events: none;
-    transition: rotate 0.15s;
+
+  /* A grid whose single column may shrink below its content, so a wide table scrolls instead of widening the page. */
+  .dd-stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .search-select__icon--open {
-    rotate: 180deg;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .search-select__icon {
-      transition: none;
-    }
-  }
-}
-
-/* ---------- Collapsible template groups (.gitignore generator) ---------- */
-@layer components {
-
+  /* ===== Collapsible groups (.gitignore generator and Dummy Data field picker) ===== */
   .group-details {
     border-top: 1px solid var(--border);
     padding-top: 0.75rem;
@@ -1796,766 +1447,27 @@
   }
 }
 
-/* ---------- Morse code tool ---------- */
-@layer components {
-  .morse-lamp {
-    flex: none;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 2px solid var(--border-strong);
-    border-radius: 999px;
-    background: var(--surface-2);
-  }
-
-  .morse-lamp[data-on='true'] {
-    border-color: var(--accent);
-    background: var(--accent);
-    box-shadow: 0 0 1.25rem var(--accent);
-  }
-}
-
-/* ---------- Dummy Data Generator ---------- */
-@layer components {
-  .dd-scroll {
-    max-width: 100%;
-    max-height: 28rem;
-    overflow: auto;
-    border: 1px solid var(--border);
-    border-radius: 0.625rem;
-  }
-
-  .dd-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.8125rem;
-  }
-
-  .dd-table th,
-  .dd-table td {
-    padding: 0.4rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  .dd-table thead th {
-    position: sticky;
-    top: 0;
-    background: var(--surface-2);
-    font-weight: 600;
-  }
-
-  .dd-table tbody th {
-    color: var(--fg-muted);
-    font-weight: 400;
-  }
-
-  .dd-code {
-    display: flex;
-    align-items: stretch;
-    max-height: 28rem;
-    overflow: auto;
-    border: 1px solid var(--border);
-    border-radius: 0.625rem;
-    background: var(--surface-2);
-  }
-
-  .dd-code__gutter {
-    margin: 0;
-    padding: 0.75rem 0.75rem 0.75rem 1rem;
-    color: var(--fg-muted);
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    line-height: 1.7;
-    text-align: right;
-    user-select: none;
-  }
-
-  /* Lines stay on one line so the numbers line up; wide lines scroll sideways. */
-  .dd-code .dd-code__body {
-    flex: 1;
-    min-width: 0;
-    border: 0;
-    border-radius: 0;
-    white-space: pre;
-    overflow: visible;
-  }
-}
-
-@layer components {
-
-  /* A grid whose single column may shrink below its content, so a wide table scrolls instead of widening the page. */
-  .dd-stack {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@layer components {
-  .dd-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.25rem 0.25rem 0;
-    border-radius: 0.5rem;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-  }
-
-  .dd-toggle__chevron {
-    flex-shrink: 0;
-    color: var(--fg-muted);
-    transition: rotate 0.15s;
-  }
-
-  .dd-toggle[aria-expanded='true'] .dd-toggle__chevron {
-    rotate: 90deg;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .dd-toggle__chevron {
-      transition: none;
-    }
-  }
-}
-
-/* ---------- FFmpeg: "What the options mean" toggle ---------- */
-@layer components {
-  .recipe-more__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    border-radius: 0.375rem;
-    font-weight: 500;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  /* Hides the browser's own triangle (Safari uses this one); the chevron replaces it. */
-  .recipe-more__toggle::-webkit-details-marker {
-    display: none;
-  }
-
-  .recipe-more__toggle:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  .recipe-more__chevron {
-    flex-shrink: 0;
-    color: var(--fg-muted);
-    transition: transform 0.2s;
-  }
-
-  .recipe-more[open] .recipe-more__chevron {
-    transform: rotate(90deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .recipe-more__chevron {
-      transition: none;
-    }
-  }
-}
-
-@layer components {
-
-  /* The small color square in front of a hex code in the table preview. The border keeps very light colors visible. */
-  .dd-swatch {
-    display: inline-block;
-    width: 0.875rem;
-    height: 0.875rem;
-    margin-right: 0.5rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 0.25rem;
-    vertical-align: -0.1875rem;
-  }
-}
-
-/* ---------- ASCII Art Generator ---------- */
-@layer components {
-
-  /* Art needs a fixed-width font and no wrapping, or the lines drift out of line. The text size comes from the
-     "Text size" choice (an inline font-size). */
-  .ascii-art {
-    max-height: 36rem;
-    overflow: auto;
-    white-space: pre;
-    overflow-wrap: normal;
-    line-height: 1.15;
-  }
-
-  /* Pictures use tight lines so they keep their proportions. */
-  .ascii-art[data-mode='image'] {
-    line-height: 1;
-  }
-}
-
-/* ---------- Difference checker ---------- */
-@layer components {
-  .diff-input[data-dragging='true'] {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-
-  .diff-input {
-    white-space: pre;
-    overflow-x: auto;
-  }
-
-  .diff-input[wrap='soft'] {
-    white-space: pre-wrap;
-  }
-
-  .diff-stat {
-    font-weight: 600;
-  }
-
-  .diff-stat[data-kind='added'] {
-    color: var(--success);
-  }
-
-  .diff-stat[data-kind='removed'] {
-    color: var(--danger);
-  }
-
-  .diff-scroll {
-    position: relative;
-    /* keeps the hidden screen-reader text inside the box */
-    max-width: 100%;
-    max-height: 40rem;
-    overflow: auto;
-    border: 1px solid var(--border);
-    border-radius: 0.625rem;
-    background: var(--surface);
-  }
-
-  .diff-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    line-height: 1.6;
-  }
-
-  /* Columns grow to fit the longest line, so text never spills into the neighbouring column. The box scrolls sideways instead. */
-  .diff-table[data-view='split'] {
-    table-layout: auto;
-    min-width: 44rem;
-  }
-
-  .diff-table[data-view='split'] .diff-text {
-    width: 50%;
-  }
-
-  .diff-no,
-  .diff-sign {
-    width: 3rem;
-    padding: 0 0.5rem;
-    color: var(--fg-muted);
-    text-align: right;
-    user-select: none;
-    vertical-align: top;
-    background: var(--surface-2);
-  }
-
-  .diff-sign {
-    width: 1.5rem;
-    padding: 0 0.25rem;
-    text-align: center;
-  }
-
-  .diff-text {
-    padding: 0 0.75rem;
-    white-space: pre;
-    vertical-align: top;
-  }
-
-  .diff-table[data-wrap='true'] .diff-text {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-  }
-
-  .diff-table[data-view='unified'] .diff-text {
-    width: 100%;
-  }
-
-  /* Removed lines are red, added lines are green. The tint is mixed into the page color, so it works in both themes. */
-  .diff-text[data-kind='removed'],
-  .diff-no[data-kind='removed'],
-  .diff-sign[data-kind='removed'] {
-    background: color-mix(in oklch, var(--danger) 14%, var(--surface));
-  }
-
-  .diff-text[data-kind='added'],
-  .diff-no[data-kind='added'],
-  .diff-sign[data-kind='added'] {
-    background: color-mix(in oklch, var(--success) 14%, var(--surface));
-  }
-
-  .diff-text[data-kind='empty'],
-  .diff-no[data-kind='empty'] {
-    background: var(--surface-2);
-  }
-
-  .diff-text[data-kind='removed'] .diff-mark {
-    background: color-mix(in oklch, var(--danger) 38%, transparent);
-  }
-
-  .diff-text[data-kind='added'] .diff-mark {
-    background: color-mix(in oklch, var(--success) 38%, transparent);
-  }
-
-  .diff-mark {
-    border-radius: 0.1875rem;
-    color: inherit;
-  }
-
-  .diff-sign[data-kind='removed'] {
-    color: var(--danger);
-  }
-
-  .diff-sign[data-kind='added'] {
-    color: var(--success);
-  }
-
-  .diff-fold td {
-    padding: 0.25rem 0.75rem;
-    background: var(--surface-2);
-    text-align: center;
-  }
-
-  .diff-expand {
-    border-radius: 0.375rem;
-    color: var(--accent);
-    font-family: var(--font-sans, inherit);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    cursor: pointer;
-  }
-
-  .diff-expand:hover {
-    text-decoration: underline;
-  }
-}
-
-/* ---------- Internet speed test ---------- */
-@layer components {
-  .speed-steps {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    margin: 0 0 1rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  .speed-steps__item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--fg-muted);
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .speed-steps__dot {
-    display: grid;
-    width: 1.75rem;
-    height: 1.75rem;
-    place-items: center;
-    border: 1px solid var(--border-strong);
-    border-radius: 999px;
-    background: var(--surface);
-    transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
-  }
-
-  .speed-steps__line {
-    width: clamp(1.5rem, 8vw, 4rem);
-    height: 2px;
-    margin: 0 0.5rem;
-    border-radius: 2px;
-    background: var(--border);
-    overflow: hidden;
-    position: relative;
-  }
-
-  .speed-steps__line::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.6s ease;
-  }
-
-  .speed-steps__item[data-state='done'] .speed-steps__line::after {
-    transform: scaleX(1);
-  }
-
-  .speed-steps__item[data-state='done'] {
-    color: var(--fg);
-  }
-
-  .speed-steps__item[data-state='done'] .speed-steps__dot {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--accent-fg);
-    animation: speed-pop 0.45s ease;
-  }
-
-  .speed-steps__item[data-state='active'] {
-    color: var(--fg);
-  }
-
-  .speed-steps__item[data-state='active'] .speed-steps__dot {
-    border-color: var(--accent);
-    color: var(--accent);
-    animation: speed-pulse 1.4s ease-out infinite;
-  }
-
-  /* On a narrow screen only the stage that is running keeps its visible name. */
-  @media (max-width: 30rem) {
-    .speed-steps__item:not([data-state='active']) .speed-steps__label {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    .speed-steps__item {
-      position: relative;
-    }
-
-    .speed-steps__line {
-      width: 1.5rem;
-      margin: 0 0.375rem;
-    }
-  }
-
-  .speed-gauge {
-    --speed-color: var(--accent);
-    position: relative;
-    width: min(100%, 26rem);
-    margin: 0 auto;
-  }
-
-  .speed-gauge[data-stage='upload'] {
-    --speed-color: var(--success);
-  }
-
-  .speed-gauge svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-  }
-
-  .speed-gauge__track,
-  .speed-gauge__arc {
-    fill: none;
-    stroke-width: 12;
-    stroke-linecap: round;
-  }
-
-  .speed-gauge__track {
-    stroke: var(--surface-2);
-  }
-
-  .speed-gauge__arc {
-    stroke: var(--speed-color);
-    transition: stroke 0.5s;
-    filter: drop-shadow(0 0 6px color-mix(in oklch, var(--speed-color) 55%, transparent));
-  }
-
-  .speed-gauge[data-stage='latency'] .speed-gauge__arc,
-  .speed-gauge[data-stage='download'] .speed-gauge__arc,
-  .speed-gauge[data-stage='upload'] .speed-gauge__arc {
-    animation: speed-glow 1.6s ease-in-out infinite;
-  }
-
-  .speed-gauge__tick line {
-    stroke: var(--border-strong);
-    stroke-width: 1;
-  }
-
-  .speed-gauge__tick text {
-    fill: var(--fg-muted);
-    font-size: 7px;
-  }
-
-  .speed-gauge__needle {
-    fill: var(--fg);
-  }
-
-  .speed-gauge__hub {
-    fill: var(--surface);
-    stroke: var(--fg);
-    stroke-width: 3;
-  }
-
-  .speed-gauge__readout {
-    margin-top: 0.5rem;
-    text-align: center;
-  }
-
-  .speed-gauge__number {
-    margin: 0;
-    font-size: clamp(2rem, 9vw, 3rem);
-    font-weight: 700;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .speed-gauge__unit {
-    margin-left: 0.375rem;
-    color: var(--fg-muted);
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
-  .speed-status {
-    margin: 0.75rem 0 0;
-    text-align: center;
-    font-size: 0.9375rem;
-    font-weight: 500;
-  }
-
-  .speed-status[data-phase='running'] {
-    animation: speed-fade 1.4s ease-in-out infinite;
-  }
-
-  .speed-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-
-  .speed-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-    gap: 0.75rem;
-  }
-
-  .speed-metric {
-    --metric-color: var(--accent);
-    min-width: 0;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    background: var(--surface);
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .speed-metric[data-tone='success'] {
-    --metric-color: var(--success);
-  }
-
-  .speed-metric[data-tone='warn'] {
-    --metric-color: var(--star);
-  }
-
-  .speed-metric[data-active='true'] {
-    border-color: var(--metric-color);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--metric-color) 18%, transparent);
-    animation: speed-pulse-card 1.4s ease-in-out infinite;
-  }
-
-  .speed-metric__label {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    margin: 0;
-    color: var(--fg-muted);
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-
-  .speed-metric[data-ready='true'] .speed-metric__label svg {
-    color: var(--metric-color);
-  }
-
-  .speed-metric__value {
-    display: flex;
-    align-items: baseline;
-    gap: 0.375rem;
-    margin: 0.375rem 0 0.5rem;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .speed-metric[data-ready='false'] .speed-metric__value>span:first-child {
-    color: var(--fg-muted);
-  }
-
-  .speed-metric__unit {
-    color: var(--fg-muted);
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-
-  .speed-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 2rem;
-  }
-
-  .speed-bars__bar {
-    flex: 1 1 0;
-    min-width: 2px;
-    max-width: 10px;
-    border-radius: 2px 2px 0 0;
-    background: var(--metric-color);
-    opacity: 0.85;
-    transform-origin: bottom;
-    transition: height 0.5s ease;
-    animation: speed-grow 0.5s ease;
-  }
-
-  @keyframes speed-grow {
-    from {
-      transform: scaleY(0);
-    }
-  }
-
-  @keyframes speed-pop {
-    50% {
-      transform: scale(1.25);
-    }
-  }
-
-  @keyframes speed-pulse {
-    0% {
-      box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 45%, transparent);
-    }
-
-    100% {
-      box-shadow: 0 0 0 0.6rem transparent;
-    }
-  }
-
-  @keyframes speed-pulse-card {
-    50% {
-      box-shadow: 0 0 0 5px color-mix(in oklch, var(--metric-color) 10%, transparent);
-    }
-  }
-
-  @keyframes speed-glow {
-    50% {
-      filter: drop-shadow(0 0 12px color-mix(in oklch, var(--speed-color) 80%, transparent));
-    }
-  }
-
-  @keyframes speed-fade {
-    50% {
-      opacity: 0.55;
-    }
-  }
-
-  /* With "reduce motion" on, the numbers jump (see useAnimatedNumber) and nothing here moves on its own. */
-  @media (prefers-reduced-motion: reduce) {
-
-    .speed-steps__dot,
-    .speed-steps__line::after,
-    .speed-gauge__arc,
-    .speed-bars__bar,
-    .speed-status,
-    .speed-metric {
-      animation: none !important;
-      transition: none !important;
-    }
-  }
-}
-
-/* ---------- New version message ---------- */
-@layer components {
-  .update-prompt {
-    position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    z-index: 95;
-    display: flex;
-    gap: 0.75rem;
-    width: min(24rem, calc(100vw - 2rem));
-    padding: 1rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 0.875rem;
-    background: var(--surface);
-    box-shadow: var(--highlight), var(--shadow-lg);
-    animation: update-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  .update-prompt__icon {
-    display: grid;
-    flex: none;
-    width: 2.25rem;
-    height: 2.25rem;
-    place-items: center;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
-  .update-prompt__icon svg {
-    animation: update-spin 3s ease-in-out infinite;
-  }
-
-  .update-prompt__body {
-    min-width: 0;
-  }
-
-  .update-prompt__title {
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .update-prompt__text {
-    margin: 0.25rem 0 0.75rem;
-    color: var(--fg-muted);
-    font-size: 0.875rem;
-  }
-
-  .update-prompt__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  @keyframes update-in {
-    from {
-      opacity: 0;
-      transform: translateY(1rem) scale(0.97);
-    }
-  }
-
-  @keyframes update-spin {
-
-    0%,
-    60% {
-      transform: rotate(0);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-
-    .update-prompt,
-    .update-prompt__icon svg {
-      animation: none;
-    }
-  }
-}
+/* ---------- 8. Page, tool and component styles ----------
+   Each file sits next to the code it styles. They are joined here, in this order,
+   so the final CSS is the same as one big file. New tool? Add its file below. */
+
+/* About page */
+@import './pages/About.css';
+/* HTTP status codes tool */
+@import './tools/http-status/styles.css';
+/* FFmpeg commands tool */
+@import './tools/ffmpeg/styles.css';
+/* Searchable select (component) */
+@import './components/ui/SearchSelect.css';
+/* Morse code tool */
+@import './tools/morse-code/styles.css';
+/* Dummy Data Generator */
+@import './tools/dummy-data/styles.css';
+/* ASCII Art Generator */
+@import './tools/ascii-art/styles.css';
+/* Difference checker */
+@import './tools/diff-checker/styles.css';
+/* Internet speed test */
+@import './tools/speed-test/styles.css';
+/* New version message (component) */
+@import './components/layout/UpdatePrompt.css';

@@ -1,0 +1,117 @@
+/* ---------- FFmpeg commands tool ----------
+   Styles for this part only. Shared styles stay in src/index.css. */
+@layer components {
+
+    /* Each group of commands has its own colour, used for the strip along the top of the card and
+     for the group label. Like the status cards, the strip is an inset shadow so it follows the
+     rounded corners exactly. The colours are mid-tone, so they read on light and dark themes. */
+    .recipe-card {
+        --family-color: var(--accent);
+        --strip: inset 0 3px 0 var(--family-color);
+        padding-top: 1.25rem;
+        box-shadow: var(--strip), var(--shadow-sm);
+        transition: border-color 0.2s;
+    }
+
+    .recipe-card:hover {
+        border-color: color-mix(in oklch, var(--family-color) 45%, var(--border));
+    }
+
+    .recipe-card[data-group='inspect'] {
+        --family-color: oklch(0.68 0.14 250);
+    }
+
+    .recipe-card[data-group='convert'] {
+        --family-color: oklch(0.68 0.16 290);
+    }
+
+    .recipe-card[data-group='compress'] {
+        --family-color: oklch(0.68 0.14 170);
+    }
+
+    .recipe-card[data-group='resize'] {
+        --family-color: oklch(0.72 0.15 55);
+    }
+
+    .recipe-card[data-group='trim'] {
+        --family-color: oklch(0.67 0.17 22);
+    }
+
+    .recipe-card[data-group='audio'] {
+        --family-color: oklch(0.68 0.16 340);
+    }
+
+    .recipe-card[data-group='images'] {
+        --family-color: oklch(0.7 0.12 205);
+    }
+
+    .recipe-card[data-group='effects'] {
+        --family-color: oklch(0.76 0.14 90);
+    }
+
+    .recipe-card[data-group='subtitles'] {
+        --family-color: oklch(0.7 0.15 125);
+    }
+
+    .recipe-card[data-group='misc'] {
+        --family-color: var(--fg-muted);
+    }
+
+    .recipe-card__group {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3125rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--family-color) 12%, var(--surface));
+        font-size: 0.6875rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .recipe-card__group::before {
+        content: '';
+        width: 0.4375rem;
+        height: 0.4375rem;
+        border-radius: 50%;
+        background: var(--family-color);
+    }
+}
+
+@layer components {
+    .recipe-more__toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    /* Hides the browser's own triangle (Safari uses this one); the chevron replaces it. */
+    .recipe-more__toggle::-webkit-details-marker {
+        display: none;
+    }
+
+    .recipe-more__toggle:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    .recipe-more__chevron {
+        flex-shrink: 0;
+        color: var(--fg-muted);
+        transition: transform 0.2s;
+    }
+
+    .recipe-more[open] .recipe-more__chevron {
+        transform: rotate(90deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .recipe-more__chevron {
+            transition: none;
+        }
+    }
+}

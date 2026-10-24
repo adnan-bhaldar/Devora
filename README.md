@@ -65,7 +65,7 @@ The GitHub Action in `.github/workflows/lint.yml` runs `lint` and `check:tools` 
 └── src/
     ├── main.jsx               Entry point
     ├── App.jsx                Providers (theme, toasts, favorites) and router
-    ├── index.css              Design tokens, themes, component styles
+    ├── index.css              Design tokens, themes, shared component styles; imports the per-tool style files
     ├── routes/AppRoutes.jsx   All routes, built from the registry
     ├── data/
     │   ├── tools.js           THE tool registry (categories and tools)

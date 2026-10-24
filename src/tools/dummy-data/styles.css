@@ -1,0 +1,77 @@
+/* ---------- Dummy Data Generator ----------
+   Styles for this part only. Shared styles stay in src/index.css. */
+@layer components {
+    .dd-code {
+        display: flex;
+        align-items: stretch;
+        max-height: 28rem;
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: 0.625rem;
+        background: var(--surface-2);
+    }
+
+    .dd-code__gutter {
+        margin: 0;
+        padding: 0.75rem 0.75rem 0.75rem 1rem;
+        color: var(--fg-muted);
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        line-height: 1.7;
+        text-align: right;
+        user-select: none;
+    }
+
+    /* Lines stay on one line so the numbers line up; wide lines scroll sideways. */
+    .dd-code .dd-code__body {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        border-radius: 0;
+        white-space: pre;
+        overflow: visible;
+    }
+}
+
+@layer components {
+    .dd-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.25rem 0.25rem 0;
+        border-radius: 0.5rem;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .dd-toggle__chevron {
+        flex-shrink: 0;
+        color: var(--fg-muted);
+        transition: rotate 0.15s;
+    }
+
+    .dd-toggle[aria-expanded='true'] .dd-toggle__chevron {
+        rotate: 90deg;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dd-toggle__chevron {
+            transition: none;
+        }
+    }
+}
+
+@layer components {
+
+    /* The small color square in front of a hex code in the table preview. The border keeps very light colors visible. */
+    .dd-swatch {
+        display: inline-block;
+        width: 0.875rem;
+        height: 0.875rem;
+        margin-right: 0.5rem;
+        border: 1px solid var(--border-strong);
+        border-radius: 0.25rem;
+        vertical-align: -0.1875rem;
+    }
+}

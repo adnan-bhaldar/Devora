@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.18.1
+
+### Changed
+
+- Styles that belong to one tool, page, or component now live next to it (for example `src/tools/diff-checker/styles.css`), and `src/index.css` keeps only the shared styles and imports the rest. `src/index.css` is also organized into numbered sections. The built CSS is unchanged.
+
 ## 1.18.0
 
 ### Added

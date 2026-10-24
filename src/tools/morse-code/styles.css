@@ -1,0 +1,18 @@
+/* ---------- Morse code tool ----------
+   Styles for this part only. Shared styles stay in src/index.css. */
+@layer components {
+    .morse-lamp {
+        flex: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 2px solid var(--border-strong);
+        border-radius: 999px;
+        background: var(--surface-2);
+    }
+
+    .morse-lamp[data-on='true'] {
+        border-color: var(--accent);
+        background: var(--accent);
+        box-shadow: 0 0 1.25rem var(--accent);
+    }
+}

@@ -37,7 +37,8 @@ Then try your change in the browser in both the light and dark theme, with the k
 1. Create `src/tools/<id>/index.jsx` and `src/tools/<id>/docs.js`. Copy the shape from an existing tool such as `uuid`. Keep calculations in a separate plain-JavaScript file.
 2. Add one entry to `tools` in `src/data/tools.js`. The `id` must equal the folder name.
 3. Run `npm run check:tools`. It catches duplicate routes, missing folders and similar mistakes.
-4. Add a line under **Unreleased** in [CHANGELOG.md](CHANGELOG.md).
+4. If the tool needs its own styles, put them in `src/tools/<id>/styles.css` (wrapped in `@layer components { ... }`) and add `@import './tools/<id>/styles.css';` at the bottom of `src/index.css`. Styles shared by several tools stay in `src/index.css`.
+5. Add a line under **Unreleased** in [CHANGELOG.md](CHANGELOG.md).
 
 The tool then appears on the home page, its category page, search, the command palette and the offline cache automatically. A **new category** also needs a color block, `[data-tone='<id>'] { --hue: ... }`, in `src/index.css`.
 
