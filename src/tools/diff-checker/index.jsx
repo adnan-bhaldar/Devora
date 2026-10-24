@@ -230,9 +230,7 @@ export default function DiffCheckerTool() {
                                 No differences. The two texts are the same{settings.ignoreWhitespace || settings.ignoreCase ? ' with the ignore options you chose' : ''}.
                             </p>
                         ) : (
-                            // A new key when the texts change closes any folded stretches that were opened.
                             <DiffView
-                                key={`${slowOriginal.length}-${slowChanged.length}-${settings.ignoreWhitespace}-${settings.ignoreCase}`}
                                 segments={result.segments}
                                 view={settings.view}
                                 hideUnchanged={settings.hideUnchanged}

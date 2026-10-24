@@ -63,10 +63,28 @@ function makeKey({ ignoreWhitespace, ignoreCase }) {
     }
 }
 
+// Finds how much of `source`, starting at `offset`, is the same text as `piece` once the "ignore" options are applied.
+// The diff library reports unchanged pieces using the changed text, so the original's own spelling has to be looked up.
+function takeMatching(source, offset, piece, { ignoreWhitespace, ignoreCase }) {
+    const normalize = (text) => {
+        let result = ignoreWhitespace ? text.replace(/\s+/g, ' ') : text
+        if (ignoreCase) result = result.toLowerCase()
+        return result
+    }
+    const wanted = normalize(piece)
+    for (let end = offset; end <= source.length; end += 1) {
+        if (normalize(source.slice(offset, end)) === wanted) return end
+    }
+    return -1
+}
+
 // Colors the differences inside a changed line. Returns { left, right } as lists of { text, changed }, or null.
-function inlineParts(before, after, { precision, ignoreWhitespace, ignoreCase }) {
+// `deadline` is the time (in ms) when the whole comparison has used up its time budget.
+function inlineParts(before, after, { precision, ignoreWhitespace, ignoreCase }, deadline) {
     if (precision === 'line' || before.length > MAX_INLINE_LENGTH || after.length > MAX_INLINE_LENGTH) return null
-    const options = { ignoreCase }
+    const remaining = deadline - Date.now()
+    if (remaining <= 0) return null
+    const options = { ignoreCase, timeout: remaining }
     let changes
     if (precision === 'char') changes = diffChars(before, after, options)
     else changes = (ignoreWhitespace ? diffWords : diffWordsWithSpace)(before, after, options)
@@ -78,12 +96,24 @@ function inlineParts(before, after, { precision, ignoreWhitespace, ignoreCase })
 
     const left = []
     const right = []
+    let leftAt = 0
+    let rightAt = 0
     for (const change of changes) {
-        if (change.added) right.push({ text: change.value, changed: true })
-        else if (change.removed) left.push({ text: change.value, changed: true })
-        else {
-            left.push({ text: change.value, changed: false })
-            right.push({ text: change.value, changed: false })
+        if (change.added) {
+            right.push({ text: change.value, changed: true })
+            rightAt += change.value.length
+        } else if (change.removed) {
+            left.push({ text: change.value, changed: true })
+            leftAt += change.value.length
+        } else {
+            // An unchanged piece is shown exactly as each side wrote it (it can differ in case or spacing).
+            const leftEnd = takeMatching(before, leftAt, change.value, { ignoreWhitespace, ignoreCase })
+            const rightEnd = takeMatching(after, rightAt, change.value, { ignoreWhitespace, ignoreCase })
+            if (leftEnd < 0 || rightEnd < 0) return null
+            left.push({ text: before.slice(leftAt, leftEnd), changed: false })
+            right.push({ text: after.slice(rightAt, rightEnd), changed: false })
+            leftAt = leftEnd
+            rightAt = rightEnd
         }
     }
     return { left, right }
@@ -101,6 +131,7 @@ export function compareTexts(original, changed, options) {
         return { ok: false, error: `Each text can have up to ${MAX_LINES.toLocaleString('en-US')} lines. Compare smaller parts of the files.` }
     }
 
+    const deadline = Date.now() + TIME_LIMIT_MS // one time budget for the whole comparison, shared by the line and the inline steps
     const key = makeKey(options)
     const changes = diffArrays(a, b, { comparator: (x, y) => key(x) === key(y), timeout: TIME_LIMIT_MS })
     if (!changes) return { ok: false, error: 'These texts are too different to compare quickly. Try comparing smaller parts.' }
@@ -115,7 +146,7 @@ export function compareTexts(original, changed, options) {
         if (!pending) return
         const pairs = Math.min(pending.removed.length, pending.added.length)
         for (let index = 0; index < pairs; index += 1) {
-            const parts = inlineParts(pending.removed[index].text, pending.added[index].text, options)
+            const parts = inlineParts(pending.removed[index].text, pending.added[index].text, options, deadline)
             if (parts) {
                 pending.removed[index].parts = parts.left
                 pending.added[index].parts = parts.right

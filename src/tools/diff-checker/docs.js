@@ -4,7 +4,7 @@ const docs = {
     howItWorks: [
         'Put the older text in Original text and the newer text in Changed text. You can type, paste, use Open file, or drop a file onto a box. The comparison updates as you type.',
         'Side by side shows the two texts in two columns, with matching lines next to each other. Unified shows one column with removed lines above added lines, the way Git shows changes. Small screens start in Unified.',
-        'Highlight changes inside a line by decides how much of a changed line is marked. Smart marks words, but skips lines that are mostly different. Word and Character always mark inside the line. Line marks whole lines only.',
+        'The “Highlight changes inside a line by” choice sets how much of a changed line is marked. Smart marks words, but skips lines that are mostly different. Word and Character always mark inside the line. Line marks whole lines only.',
         'Ignore whitespace treats lines as the same when only spaces or tabs differ. Ignore upper and lower case treats Hello and hello as the same.',
         'Hide unchanged lines folds long stretches of identical lines and keeps three lines around each change. Click “Show unchanged lines” on a fold to open it.',
         'Swap exchanges the two texts. Copy diff and Download .patch give you the changes as a unified diff, which Git and most editors understand.',

@@ -50,13 +50,17 @@ function buildRows(segments, view, hideUnchanged, expanded) {
     return rows
 }
 
+const EMPTY_SET = new Set()
+
 export default function DiffView({ segments, view, hideUnchanged, wrap }) {
-    // Folded stretches the person opened. Keyed by position, so it is reset (by a new key) when the texts change.
-    const [expanded, setExpanded] = useState(() => new Set())
+    // Folded stretches the person opened, remembered together with the comparison they belong to. When the texts or
+    // options change, `segments` is a new list, so the old choices are ignored instead of opening the wrong stretch.
+    const [opened, setOpened] = useState({ segments, set: new Set() })
+    const expanded = opened.segments === segments ? opened.set : EMPTY_SET
     const rows = useMemo(() => buildRows(segments, view, hideUnchanged, expanded), [segments, view, hideUnchanged, expanded])
     const shown = rows.slice(0, MAX_ROWS)
 
-    const expand = (segment) => setExpanded((current) => new Set(current).add(segment))
+    const expand = (segment) => setOpened({ segments, set: new Set(expanded).add(segment) })
 
     return (
         <>
