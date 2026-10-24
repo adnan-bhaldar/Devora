@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.18.0
+
+### Added
+
+- **New version message.** When a new version of Devora has been downloaded in the background, a message offers **Reload now** (which loads the new version, like a hard refresh) or **Later**. Before, a new version only appeared after every Devora tab had been closed, or after a hard refresh. Open tabs also check for a new version when you come back to them and every 30 minutes.
+
 ## 1.17.0
 
 ### Added
