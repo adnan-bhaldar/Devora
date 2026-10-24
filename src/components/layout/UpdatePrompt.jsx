@@ -6,6 +6,7 @@ import { applyUpdate, getWaitingWorker, subscribe } from '../../pwa/updateStore.
 /**
  * Appears when a newer version of Devora has been downloaded in the background. It does not block the page
  * (a modal would trap someone who is in the middle of using a tool), and "Later" hides it until the next visit.
+ * It is a status message, not a dialog: screen readers announce it, and keyboard focus stays where it was.
  */
 export default function UpdatePrompt() {
     const waiting = useSyncExternalStore(subscribe, getWaitingWorker)
@@ -17,9 +18,7 @@ export default function UpdatePrompt() {
     return (
         <div
             className="update-prompt"
-            role="alertdialog"
-            aria-labelledby="update-title"
-            aria-describedby="update-text"
+            role="status"
             onKeyDown={(event) => {
                 if (event.key === 'Escape' && !reloading) setDismissed(true)
             }}
@@ -28,10 +27,10 @@ export default function UpdatePrompt() {
                 <RefreshCw size={18} />
             </span>
             <div className="update-prompt__body">
-                <p id="update-title" className="update-prompt__title">
+                <p className="update-prompt__title">
                     A new version of Devora is ready
                 </p>
-                <p id="update-text" className="update-prompt__text">
+                <p className="update-prompt__text">
                     Reload to get the latest tools and fixes. Reloading clears anything you have typed into a tool.
                 </p>
                 <div className="update-prompt__actions">
