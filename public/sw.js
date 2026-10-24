@@ -8,8 +8,9 @@
  *   that point at a file (sitemap.xml, robots.txt, ...) are left to the network instead.
  * - The site font (Google Fonts) is saved as it is used, so it also works offline.
  * - Nothing else is intercepted: no tool data ever goes through this file.
- * - A new version waits until every open Devora tab is closed, then takes over. This avoids an
- *   open page asking for files that the new version has already removed.
+ * - A new version waits instead of taking over at once, so an open page never asks for files that the
+ *   new version has already removed. It takes over when every Devora tab is closed, or when the person
+ *   presses "Reload" in the update message (the page then sends SKIP_WAITING, see the listener below).
  */
 const VERSION = '__BUILD_VERSION__'
 const PRECACHE = '__PRECACHE_LIST__'
@@ -20,6 +21,10 @@ const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com']
 
 self.addEventListener('install', (event) => {
     event.waitUntil(caches.open(APP_CACHE).then((cache) => cache.addAll(PRECACHE)))
+})
+
+self.addEventListener('message', (event) => {
+    if (event.data?.type === 'SKIP_WAITING') self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {

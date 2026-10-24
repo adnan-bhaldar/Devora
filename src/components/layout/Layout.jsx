@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Header from './Header.jsx'
 import Footer from './Footer.jsx'
 import CommandPalette from './CommandPalette.jsx'
+import UpdatePrompt from './UpdatePrompt.jsx'
 import useHotkey from '../../hooks/useHotkey.js'
 
 export default function Layout() {
@@ -37,6 +38,7 @@ export default function Layout() {
                 <Outlet />
             </main>
             <Footer />
+            <UpdatePrompt />
             {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
         </div>
     )
