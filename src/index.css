@@ -114,6 +114,10 @@
   --hue: 350;
 }
 
+[data-tone='network'] {
+  --hue: 25;
+}
+
 [data-tone='reference'] {
   --hue: 205;
 }
@@ -2133,5 +2137,343 @@
 
   .diff-expand:hover {
     text-decoration: underline;
+  }
+}
+
+/* ---------- Internet speed test ---------- */
+@layer components {
+  .speed-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .speed-steps__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .speed-steps__dot {
+    display: grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
+  }
+
+  .speed-steps__line {
+    width: clamp(1.5rem, 8vw, 4rem);
+    height: 2px;
+    margin: 0 0.5rem;
+    border-radius: 2px;
+    background: var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .speed-steps__line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+  }
+
+  .speed-steps__item[data-state='done'] .speed-steps__line::after {
+    transform: scaleX(1);
+  }
+
+  .speed-steps__item[data-state='done'] {
+    color: var(--fg);
+  }
+
+  .speed-steps__item[data-state='done'] .speed-steps__dot {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-fg);
+    animation: speed-pop 0.45s ease;
+  }
+
+  .speed-steps__item[data-state='active'] {
+    color: var(--fg);
+  }
+
+  .speed-steps__item[data-state='active'] .speed-steps__dot {
+    border-color: var(--accent);
+    color: var(--accent);
+    animation: speed-pulse 1.4s ease-out infinite;
+  }
+
+  /* On a narrow screen only the stage that is running keeps its visible name. */
+  @media (max-width: 30rem) {
+    .speed-steps__item:not([data-state='active']) .speed-steps__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .speed-steps__item {
+      position: relative;
+    }
+
+    .speed-steps__line {
+      width: 1.5rem;
+      margin: 0 0.375rem;
+    }
+  }
+
+  .speed-gauge {
+    --speed-color: var(--accent);
+    position: relative;
+    width: min(100%, 26rem);
+    margin: 0 auto;
+  }
+
+  .speed-gauge[data-stage='upload'] {
+    --speed-color: var(--success);
+  }
+
+  .speed-gauge svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .speed-gauge__track,
+  .speed-gauge__arc {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+  }
+
+  .speed-gauge__track {
+    stroke: var(--surface-2);
+  }
+
+  .speed-gauge__arc {
+    stroke: var(--speed-color);
+    transition: stroke 0.5s;
+    filter: drop-shadow(0 0 6px color-mix(in oklch, var(--speed-color) 55%, transparent));
+  }
+
+  .speed-gauge[data-stage='latency'] .speed-gauge__arc,
+  .speed-gauge[data-stage='download'] .speed-gauge__arc,
+  .speed-gauge[data-stage='upload'] .speed-gauge__arc {
+    animation: speed-glow 1.6s ease-in-out infinite;
+  }
+
+  .speed-gauge__tick line {
+    stroke: var(--border-strong);
+    stroke-width: 1;
+  }
+
+  .speed-gauge__tick text {
+    fill: var(--fg-muted);
+    font-size: 7px;
+  }
+
+  .speed-gauge__needle {
+    fill: var(--fg);
+  }
+
+  .speed-gauge__hub {
+    fill: var(--surface);
+    stroke: var(--fg);
+    stroke-width: 3;
+  }
+
+  .speed-gauge__readout {
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .speed-gauge__number {
+    margin: 0;
+    font-size: clamp(2rem, 9vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .speed-gauge__unit {
+    margin-left: 0.375rem;
+    color: var(--fg-muted);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .speed-status {
+    margin: 0.75rem 0 0;
+    text-align: center;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .speed-status[data-phase='running'] {
+    animation: speed-fade 1.4s ease-in-out infinite;
+  }
+
+  .speed-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .speed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0.75rem;
+  }
+
+  .speed-metric {
+    --metric-color: var(--accent);
+    min-width: 0;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--surface);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .speed-metric[data-tone='success'] {
+    --metric-color: var(--success);
+  }
+
+  .speed-metric[data-tone='warn'] {
+    --metric-color: var(--star);
+  }
+
+  .speed-metric[data-active='true'] {
+    border-color: var(--metric-color);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--metric-color) 18%, transparent);
+    animation: speed-pulse-card 1.4s ease-in-out infinite;
+  }
+
+  .speed-metric__label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .speed-metric[data-ready='true'] .speed-metric__label svg {
+    color: var(--metric-color);
+  }
+
+  .speed-metric__value {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    margin: 0.375rem 0 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .speed-metric[data-ready='false'] .speed-metric__value>span:first-child {
+    color: var(--fg-muted);
+  }
+
+  .speed-metric__unit {
+    color: var(--fg-muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .speed-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 2rem;
+  }
+
+  .speed-bars__bar {
+    flex: 1 1 0;
+    min-width: 2px;
+    max-width: 10px;
+    border-radius: 2px 2px 0 0;
+    background: var(--metric-color);
+    opacity: 0.85;
+    transform-origin: bottom;
+    transition: height 0.5s ease;
+    animation: speed-grow 0.5s ease;
+  }
+
+  @keyframes speed-grow {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes speed-pop {
+    50% {
+      transform: scale(1.25);
+    }
+  }
+
+  @keyframes speed-pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 45%, transparent);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0.6rem transparent;
+    }
+  }
+
+  @keyframes speed-pulse-card {
+    50% {
+      box-shadow: 0 0 0 5px color-mix(in oklch, var(--metric-color) 10%, transparent);
+    }
+  }
+
+  @keyframes speed-glow {
+    50% {
+      filter: drop-shadow(0 0 12px color-mix(in oklch, var(--speed-color) 80%, transparent));
+    }
+  }
+
+  @keyframes speed-fade {
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  /* With "reduce motion" on, the numbers jump (see useAnimatedNumber) and nothing here moves on its own. */
+  @media (prefers-reduced-motion: reduce) {
+
+    .speed-steps__dot,
+    .speed-steps__line::after,
+    .speed-gauge__arc,
+    .speed-bars__bar,
+    .speed-status,
+    .speed-metric {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 }
