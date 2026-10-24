@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -46,6 +46,8 @@ function seoFilesPlugin() {
       ]
     },
     closeBundle() {
+      // When the build failed, no output folder exists. Do nothing, so the real error is shown instead of a confusing one from here.
+      if (!existsSync(outDir)) return
       const base = getSiteUrl()
       if (!base) {
         console.warn('[devora] SITE_URL is not set, so sitemap.xml was not generated.')
@@ -86,6 +88,7 @@ function precachePlugin() {
       outDir = join(config.root, config.build.outDir)
     },
     closeBundle() {
+      if (!existsSync(outDir)) return // the build failed earlier: let its own error be the one that is shown
       const files = listFiles(outDir)
         .map((file) => '/' + relative(outDir, file).split('\\').join('/'))
         .filter((path) => !['/sw.js', '/robots.txt', '/sitemap.xml'].includes(path) && !path.endsWith('.map'))
