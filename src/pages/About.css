@@ -1,6 +1,73 @@
 /* ---------- About page ----------
    Styles for this part only. Shared styles stay in src/index.css. */
 @layer components {
+
+    /* The version badge: a gradient outline, a soft glow, and a light that sweeps across now and then. */
+    .about-version {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+        overflow: hidden;
+        padding: 0.25rem 0.3125rem 0.25rem 0.875rem;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        /* Two backgrounds: the plain fill inside, and the gradient behind the (transparent) border. */
+        background:
+            linear-gradient(var(--surface), var(--surface)) padding-box,
+            linear-gradient(120deg, var(--accent), var(--accent-2), var(--accent)) border-box;
+        box-shadow:
+            var(--highlight),
+            0 6px 20px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+        font-size: 0.8125rem;
+        font-weight: 500;
+    }
+
+    .about-version::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--accent-2) 22%, transparent) 50%, transparent 65%);
+        transform: translateX(-120%);
+        animation: about-version-sweep 5s ease-in-out 1s infinite;
+        pointer-events: none;
+    }
+
+    .about-version__label {
+        color: var(--fg-muted);
+        letter-spacing: 0.02em;
+    }
+
+    .about-version__number {
+        padding: 0.1875rem 0.625rem;
+        border-radius: 999px;
+        background: var(--grad);
+        color: var(--accent-fg);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25);
+    }
+
+    @keyframes about-version-sweep {
+
+        0%,
+        55% {
+            transform: translateX(-120%);
+        }
+
+        100% {
+            transform: translateX(120%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .about-version::after {
+            animation: none;
+        }
+    }
+
     .about-hero {
         max-width: 48rem;
         padding-block: 2rem 2.5rem;

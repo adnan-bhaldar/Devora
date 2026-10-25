@@ -4,6 +4,8 @@ import usePageMeta from '../hooks/usePageMeta.js'
 import { shortcuts } from '../data/shortcuts.js'
 import { siteConfig } from '../data/site.js'
 import { categories, tools } from '../data/tools.js'
+// Read from package.json when the site is built, so it can never go out of date.
+import { version } from '../../package.json'
 
 const liveTools = tools.filter((tool) => tool.status === 'live')
 
@@ -53,9 +55,14 @@ export default function About() {
     return (
         <div className="container-page page about">
             <header className="about-hero">
-                <span className="pill rise">
-                    <span className="pill-dot" aria-hidden="true" />
-                    Open source · Client-side
+                <span className="about-version rise">
+                    {/* Tailwind's animate-ping grows and fades the outer circle, which gives the pulsing ring. */}
+                    <span className="relative flex size-2" aria-hidden="true">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-60 motion-safe:animate-ping" />
+                        <span className="relative inline-flex size-2 rounded-full bg-accent" />
+                    </span>
+                    <span className="about-version__label">Version</span>
+                    <span className="about-version__number">{version}</span>
                 </span>
                 <h1 className="hero-title rise rise-2 mt-6">
                     Small tools, <span className="text-gradient">done properly.</span>
