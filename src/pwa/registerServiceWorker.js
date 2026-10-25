@@ -19,16 +19,27 @@ export default function registerServiceWorker() {
                     if (worker && navigator.serviceWorker.controller) setWaitingWorker(worker)
                 }
 
-                offer(registration.waiting)
-                registration.addEventListener('updatefound', () => {
-                    const worker = registration.installing
-                    worker?.addEventListener('statechange', () => {
+                // Offers a new version once it has finished downloading.
+                const watch = (worker) => {
+                    if (!worker) return
+                    if (worker.state === 'installed') {
+                        offer(worker)
+                        return
+                    }
+                    worker.addEventListener('statechange', () => {
                         if (worker.state === 'installed') offer(registration.waiting ?? worker)
                     })
-                })
+                }
+
+                // The browser looks for a new version as soon as the page opens, which can be before this code runs.
+                // So a version may already be waiting, or already downloading, and "updatefound" will not fire again for it.
+                // Both cases are handled here, and later updates are caught by the listener below.
+                offer(registration.waiting)
+                watch(registration.installing)
+                registration.addEventListener('updatefound', () => watch(registration.installing))
 
                 // Tabs stay open for days, so also look for a new version when the person comes back to the tab.
-                const check = () => registration.update().catch(() => { })
+                const check = () => registration.update().catch(() => {})
                 document.addEventListener('visibilitychange', () => {
                     if (document.visibilityState === 'visible') check()
                 })

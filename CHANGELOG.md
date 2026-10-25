@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.18.2
+
+### Fixed
+
+- The "new version" message now appears for every release, not only some. A new version that was already downloading when the page opened was missed, and saved files could fail to match on servers that send a `Vary` header, which could leave a page blank right after a release.
+
 ## 1.18.1
 
 ### Changed
