@@ -85,11 +85,12 @@ self.addEventListener('fetch', (event) => {
     const lastPart = url.pathname.split('/').pop()
     if (request.mode === 'navigate' && !lastPart.includes('.')) {
         event.respondWith(
-            caches.match('/index.html').then((shell) => shell ?? fetch(request)),
+            caches.match('/index.html', { ignoreVary: true }).then((shell) => shell ?? fetch(request)),
         )
         return
     }
 
     // Everything else: the saved copy if there is one, otherwise the network.
-    event.respondWith(caches.match(request).then((saved) => saved ?? fetch(request)))
+    // ignoreVary: some servers add "Vary: Origin", and a saved file would then never match the browser's own request.
+    event.respondWith(caches.match(request, { ignoreVary: true }).then((saved) => saved ?? fetch(request)))
 })
