@@ -13,7 +13,7 @@ const root = fileURLToPath(new URL('..', import.meta.url))
 const problems = []
 const problem = (message) => problems.push(message)
 
-const RESERVED_ROUTES = ['/', '/about', '/whats-new', '/_playground', '/categories']
+const RESERVED_ROUTES = ['/', '/about', '/whats-new', '/categories']
 const STATUSES = ['live', 'coming-soon']
 const categoryIds = new Set(categories.map((category) => category.id))
 
