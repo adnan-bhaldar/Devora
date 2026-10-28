@@ -58,6 +58,7 @@ function seoFilesPlugin() {
       const paths = [
         '/',
         '/about',
+        '/categories',
         ...categories
           .filter((category) => tools.some((tool) => tool.categories.includes(category.id)))
           .map((category) => `/categories/${category.id}`),

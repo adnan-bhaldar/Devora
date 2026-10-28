@@ -5,6 +5,7 @@ import EmptyState from '../components/common/EmptyState.jsx'
 import SearchInput from '../components/common/SearchInput.jsx'
 import CategoryCard from '../components/tools/CategoryCard.jsx'
 import CategorySection from '../components/tools/CategorySection.jsx'
+import ShowAllCategoriesCard from '../components/tools/ShowAllCategoriesCard.jsx'
 import ToolCard from '../components/tools/ToolCard.jsx'
 import Button from '../components/ui/Button.jsx'
 import useHotkey from '../hooks/useHotkey.js'
@@ -13,8 +14,10 @@ import useToolPrefs from '../hooks/useToolPrefs.js'
 import { modKeyLabel } from '../data/shortcuts.js'
 import { categories, getToolById, getToolsByCategory } from '../data/tools.js'
 import { searchTools } from '../utils/search.js'
+import { previewCategories } from '../utils/toolOrder.js'
 
 const visibleCategories = categories.filter((category) => getToolsByCategory(category.id).length > 0)
+const { shown: shownCategories, hasMore: hasMoreCategories } = previewCategories(visibleCategories)
 
 function HeroPreview() {
     return (
@@ -109,13 +112,14 @@ export default function Home() {
                         Browse by category
                     </h2>
                     <div className="tool-grid">
-                        {visibleCategories.map((category) => (
+                        {shownCategories.map((category) => (
                             <CategoryCard
                                 key={category.id}
                                 category={category}
                                 count={getToolsByCategory(category.id).length}
                             />
                         ))}
+                        {hasMoreCategories && <ShowAllCategoriesCard count={visibleCategories.length} />}
                     </div>
                 </section>
 

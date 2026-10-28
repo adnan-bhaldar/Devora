@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from '../components/layout/Layout.jsx'
 import LoadingState from '../components/common/LoadingState.jsx'
+import CategoriesPage from '../pages/CategoriesPage.jsx'
 import CategoryPage from '../pages/CategoryPage.jsx'
 import Home from '../pages/Home.jsx'
 import About from '../pages/About.jsx'
@@ -20,7 +21,7 @@ export default function AppRoutes() {
                 <Route path="about" element={<About />} />
                 {/* The changelog now lives in CHANGELOG.md. Keep old links and bookmarks working. */}
                 <Route path="whats-new" element={<Navigate to="/about" replace />} />
-                <Route path="categories" element={<Navigate to="/" replace />} />
+                <Route path="categories" element={<CategoriesPage />} />
                 <Route path="categories/:categoryId" element={<CategoryPage />} />
                 {tools.map((tool) => (
                     <Route key={tool.id} path={tool.route} element={<ToolPage tool={tool} />} />
