@@ -53,6 +53,38 @@
         --family-color: oklch(0.7 0.15 125);
     }
 
+    .recipe-card[data-group='timing'] {
+        --family-color: oklch(0.7 0.13 235);
+    }
+
+    .recipe-card[data-group='streams'] {
+        --family-color: oklch(0.66 0.15 305);
+    }
+
+    .recipe-card[data-group='quality'] {
+        --family-color: oklch(0.7 0.15 130);
+    }
+
+    .recipe-card[data-group='hardware'] {
+        --family-color: oklch(0.66 0.14 35);
+    }
+
+    .recipe-card[data-group='info'] {
+        --family-color: oklch(0.68 0.11 190);
+    }
+
+    .recipe-card[data-group='debug'] {
+        --family-color: oklch(0.64 0.1 70);
+    }
+
+    .recipe-card[data-group='ffprobe'] {
+        --family-color: oklch(0.7 0.13 160);
+    }
+
+    .recipe-card[data-group='ffplay'] {
+        --family-color: oklch(0.68 0.16 350);
+    }
+
     .recipe-card[data-group='misc'] {
         --family-color: var(--fg-muted);
     }
