@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.20.0
+
+### Changed
+
+- **FFmpeg Commands** now has a card for every option of ffmpeg, ffprobe, and ffplay, as listed by their own `-h long`, and not only for the common jobs. Eight new groups hold them: Timing & sync, Streams & tags, Codec & quality, Hardware & performance, Help & capabilities, Logs & debug, ffprobe, and ffplay. The page grows from 61 to 159 cards.
+
 ## 1.19.0
 
 ### Added
