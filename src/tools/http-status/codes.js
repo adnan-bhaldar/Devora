@@ -1,8 +1,10 @@
 /*
  * The reference data. Each entry is [code, name, summary, usage, source, flag]:
  *  - source: where it is defined, like "RFC 9110 §15.5.5", or who uses it for unofficial codes.
- *  - flag: "deprecated" (do not use in new work), "reserved" (not for general use), or
+ *  - flag: "deprecated" (do not use in new work), "reserved" (not for general use),
+ *          "draft" (registered only for a draft that is not a standard yet), or
  *          "unofficial" (not part of the standard, used by one product).
+ *  The same number can appear twice when two products use it in different ways, such as 499.
  */
 const ROWS = [
     // 1xx: the request was received and the process continues.
@@ -14,6 +16,8 @@ const ROWS = [
         'Stops the client from timing out during long WebDAV operations. It was later removed from the specification, so avoid it in new work.', 'RFC 2518', 'deprecated'],
     [103, 'Early Hints', 'The server sends some headers early so the browser can start loading resources.',
         'Typically Link headers with rel=preload, sent while the server is still preparing the full response.', 'RFC 8297'],
+    [104, 'Upload Resumption Supported', 'The server tells the client that an interrupted upload can be resumed.',
+        'An interim response sent while an upload is still arriving. It gives the address of an upload resource in the Location header, and later the number of bytes received in Upload-Offset. It is registered only for a draft standard for resumable uploads, so it may change.', 'draft-ietf-httpbis-resumable-upload', 'draft'],
 
     // 2xx: success.
     [200, 'OK', 'The request succeeded.',
@@ -142,12 +146,48 @@ const ROWS = [
         'For example, a Wi-Fi captive portal that appears before you can reach the internet.', 'RFC 6585'],
 
     // Not part of the standard, but common enough to meet in real projects.
+    [218, 'This Is Fine', 'An informal “everything is fine” code, sometimes used to let an error page pass through a proxy.',
+        'Often linked to the Apache HTTP Server and its ProxyErrorOverride setting, but it is not part of any official Apache specification, and that link is disputed. Do not rely on it.', 'Apache (informal)', 'unofficial'],
     [419, 'Page Expired', 'The session or security token has expired.',
         'Used by the Laravel framework when a CSRF token is missing or out of date. Reload the page and try again.', 'Laravel', 'unofficial'],
+    [420, 'Enhance Your Calm', 'The client is sending too many requests and is being rate limited.',
+        'Returned by version 1 of the Twitter Search and Trends API. Later versions use 429 Too Many Requests instead.', 'Twitter', 'unofficial'],
+    [420, 'Method Failure', 'A method failed. The code comes from an early WebDAV draft.',
+        'The Spring Framework lists it but has marked it as deprecated. Avoid it in new work.', 'Spring Framework', 'unofficial'],
+    [430, 'Shopify Security Rejection', 'Shopify rejected the request because it looked malicious.',
+        'Used by Shopify to block a request for security reasons. Older Shopify versions used 430 as a deprecated form of “Request Header Fields Too Large”, when too many URLs were requested in a short time.', 'Shopify', 'unofficial'],
+    [440, 'Login Time-out', 'The session has expired and the user must sign in again.',
+        'Used by Microsoft’s IIS web server, for example by Outlook Web Access with Exchange 2007.', 'IIS', 'unofficial'],
     [444, 'No Response', 'The server closed the connection without sending a response.',
         'Used by nginx to drop unwanted requests quietly. The client never sees this code.', 'nginx', 'unofficial'],
+    [449, 'Retry With', 'The server needs more information from the user to do the request.',
+        'Used by Microsoft’s IIS web server when the user has not given the details that the request needs. Send the request again with them.', 'IIS', 'unofficial'],
+    [450, 'Blocked by Windows Parental Controls', 'Windows Parental Controls blocked the page.',
+        'A Microsoft code shown on a computer where parental controls block the website.', 'Microsoft', 'unofficial'],
+    [451, 'Redirect', 'The client should find a better server.',
+        'Used by Microsoft Exchange ActiveSync when a more efficient server is available, or when the mailbox cannot be reached from this one. The client then runs the AutoDiscover step again. This is not the standard 451, “Unavailable For Legal Reasons”.', 'IIS (Exchange ActiveSync)', 'unofficial'],
+    [460, 'Client Closed Connection', 'The client closed the connection before the load balancer’s idle timeout.',
+        'Used by the AWS Elastic Load Balancer. It usually means the client’s own timeout is shorter than the load balancer’s timeout.', 'AWS Elastic Load Balancing', 'unofficial'],
+    [463, 'Too Many Forwarded Addresses', 'The request has an X-Forwarded-For header with too many IP addresses.',
+        'Used by the AWS Elastic Load Balancer when that header holds more than 30 addresses.', 'AWS Elastic Load Balancing', 'unofficial'],
+    [464, 'Incompatible Protocol Versions', 'The client and the origin server use protocol versions that do not work together.',
+        'Used by the AWS Elastic Load Balancer.', 'AWS Elastic Load Balancing', 'unofficial'],
+    [494, 'Request Header Too Large', 'The request, or one of its header lines, is too large.',
+        'Used by nginx. It is a more specific form of 400 Bad Request.', 'nginx', 'unofficial'],
+    [495, 'SSL Certificate Error', 'The client sent a certificate that is not valid.',
+        'Used by nginx. It is a more specific form of 400 Bad Request.', 'nginx', 'unofficial'],
+    [496, 'SSL Certificate Required', 'A client certificate is required, but none was sent.',
+        'Used by nginx. It is a more specific form of 400 Bad Request.', 'nginx', 'unofficial'],
+    [497, 'HTTP Request Sent to HTTPS Port', 'A plain HTTP request was sent to a port that expects HTTPS.',
+        'Used by nginx. It is a more specific form of 400 Bad Request. Use an address that starts with https://.', 'nginx', 'unofficial'],
+    [498, 'Invalid Token', 'The token in the request is not valid or has expired.',
+        'Used by ArcGIS Server with token-based authentication.', 'ArcGIS Server', 'unofficial'],
     [499, 'Client Closed Request', 'The client closed the connection before the server replied.',
         'Recorded by nginx in its logs when a browser or app gives up waiting.', 'nginx', 'unofficial'],
+    [499, 'Token Required', 'The request needs a token and has none.',
+        'Used by ArcGIS Server with token-based authentication. nginx uses 499 for something else: a client that closed the connection.', 'ArcGIS Server', 'unofficial'],
+    [509, 'Bandwidth Limit Exceeded', 'The site has used more data transfer than its plan allows.',
+        'Used on Apache servers with cPanel hosting. The site owner has to wait for the limit to reset, or raise it.', 'cPanel', 'unofficial'],
     [520, 'Web Server Returned an Unknown Error', 'The origin server sent something Cloudflare could not understand.',
         'A catch-all Cloudflare error. Check the origin server’s logs.', 'Cloudflare', 'unofficial'],
     [521, 'Web Server Is Down', 'Cloudflare could not connect to the origin server.',
@@ -162,6 +202,26 @@ const ROWS = [
         'Check that the origin supports TLS and offers compatible settings.', 'Cloudflare', 'unofficial'],
     [526, 'Invalid SSL Certificate', 'The origin’s security certificate is not valid.',
         'It may be expired, self-signed, or issued for another name.', 'Cloudflare', 'unofficial'],
+    [527, 'Railgun Error', 'The connection between Cloudflare and the origin’s Railgun server was interrupted.',
+        'Obsolete. Cloudflare has retired Railgun, so you should no longer see this code.', 'Cloudflare', 'unofficial'],
+    [529, 'Site Is Overloaded', 'The service cannot handle the request.',
+        'Used by the Qualys SSL Labs API when its service is overloaded.', 'Qualys SSL Labs', 'unofficial'],
+    [530, 'Origin Unavailable', 'Cloudflare could not resolve the address of the origin server.',
+        'The response body holds a Cloudflare 1xxx error with the exact reason. Check the DNS record that points to your origin.', 'Cloudflare', 'unofficial'],
+    [530, 'Site Is Frozen', 'The site has been frozen because it was not used for a while.',
+        'Used by the Pantheon web platform for inactive sites.', 'Pantheon', 'unofficial'],
+    [540, 'Temporarily Disabled', 'The endpoint has been switched off for now.',
+        'Used by Shopify when the requested endpoint is temporarily disabled.', 'Shopify', 'unofficial'],
+    [561, 'Unauthorized', 'The identity provider returned an error when the user signed in.',
+        'Used by the AWS Elastic Load Balancer when a listener rule asks users to sign in and the identity provider reports an error.', 'AWS Elastic Load Balancing', 'unofficial'],
+    [598, 'Network Read Timeout Error', 'A proxy did not get data from the server behind it in time.',
+        'An informal code that some proxies send to the client when reading from the server behind them times out.', 'Some proxies (informal)', 'unofficial'],
+    [599, 'Network Connect Timeout Error', 'A proxy could not connect to the server behind it in time.',
+        'An informal code that some proxies send to the client when connecting to the server behind them times out.', 'Some proxies (informal)', 'unofficial'],
+    [783, 'Unexpected Token', 'The request body has a JSON syntax error.',
+        'Used by Shopify when the JSON in the request cannot be read.', 'Shopify', 'unofficial'],
+    [999, 'Request Denied', 'The site blocks requests that do not come from a signed-in browser.',
+        'Used by LinkedIn to block automated or signed-out access to its pages.', 'LinkedIn', 'unofficial'],
 ]
 
 export const STATUS_CODES = ROWS.map(([code, name, summary, usage, source, flag = null]) => ({
@@ -204,7 +264,7 @@ export const FAMILY_NAMES = {
     unofficial: 'Unofficial',
 }
 
-export const FLAG_LABELS = { deprecated: 'Deprecated', reserved: 'Reserved', unofficial: 'Unofficial' }
+export const FLAG_LABELS = { deprecated: 'Deprecated', reserved: 'Reserved', draft: 'Draft', unofficial: 'Unofficial' }
 
 // "RFC 9110 §15.5.5" -> a link to that section. Other sources have no link.
 export function getSourceUrl(source) {

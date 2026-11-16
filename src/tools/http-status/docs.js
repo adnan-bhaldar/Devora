@@ -8,8 +8,8 @@ const docs = {
         'Each card shows the code, its family, and a short meaning. Open “Details” on a card to see when the code is used and where it is defined. The “Defined in” links open the official specification.',
     ],
     notes: [
-        'The standard codes come from RFC 9110 and the other RFCs shown beside each code. Codes marked Deprecated should not be used in new work, and codes marked Reserved are not meant for general use.',
-        'The Unofficial group lists a few codes from nginx, Cloudflare, and Laravel that you may meet in real projects. They are not part of the HTTP standard.',
+        'The standard codes come from RFC 9110 and the other RFCs shown beside each code, and match the IANA registry. Codes marked Deprecated should not be used in new work, and codes marked Reserved are not meant for general use. A code marked Draft, such as 104, is registered only for a draft standard, so it may change.',
+        'The Unofficial group lists codes that products add on their own, such as nginx, Cloudflare, IIS, AWS, Shopify, and Laravel. They are not part of the HTTP standard, and the same number can mean different things in different products. For example, 499 appears for nginx and for ArcGIS Server, and 530 for Cloudflare and Pantheon.',
         'Choose the most specific code that is correct. For example, use 401 when someone is not logged in, 403 when they are logged in but not allowed, and 404 when the resource does not exist.',
         'Redirects differ in whether the method is kept: 301 and 302 may turn a POST into a GET, while 307 and 308 never do.',
         'This page is a general reference. Servers and frameworks sometimes use a code in their own way, so check the documentation of the service you are working with.',

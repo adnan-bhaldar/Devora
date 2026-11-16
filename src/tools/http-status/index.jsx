@@ -114,7 +114,7 @@ export default function HttpStatusTool() {
                     <h2 className="sr-only">Status codes</h2>
                     <ul className="status-grid">
                         {results.map((entry) => (
-                            <StatusCard key={entry.code} entry={entry} />
+                            <StatusCard key={`${entry.code}-${entry.source}`} entry={entry} />
                         ))}
                     </ul>
                 </>
