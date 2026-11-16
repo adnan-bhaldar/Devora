@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.21.0
+
+### Changed
+
+- **HTTP Status Codes** now matches the IANA registry. It adds 104 (Upload Resumption Supported), which is registered temporarily for a draft standard and has a new **Draft** badge. The Unofficial group grows from 10 to 38 codes, with more from nginx, Cloudflare, IIS, AWS load balancers, Shopify, ArcGIS Server, and others. Some numbers, such as 499 and 530, now appear twice because two products use them differently.
+
 ## 1.20.0
 
 ### Changed
