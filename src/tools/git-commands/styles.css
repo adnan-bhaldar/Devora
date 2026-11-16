@@ -1,0 +1,92 @@
+/* ---------- Git commands tool ----------
+   Styles for this part only. Shared styles stay in src/index.css.
+   The "What the options mean" toggle reuses the .recipe-more styles from the FFmpeg tool. */
+@layer components {
+
+    /* Each group of commands has its own colour, used for the strip along the top of the card and
+     for the group label. Like the status cards, the strip is an inset shadow so it follows the
+     rounded corners exactly. The colours are mid-tone, so they read on light and dark themes. */
+    .git-card {
+        --family-color: var(--accent);
+        --strip: inset 0 3px 0 var(--family-color);
+        padding-top: 1.25rem;
+        box-shadow: var(--strip), var(--shadow-sm);
+        transition: border-color 0.2s;
+    }
+
+    .git-card:hover {
+        border-color: color-mix(in oklch, var(--family-color) 45%, var(--border));
+    }
+
+    .git-card[data-group='setup'] {
+        --family-color: oklch(0.68 0.14 250);
+    }
+
+    .git-card[data-group='basics'] {
+        --family-color: oklch(0.68 0.14 170);
+    }
+
+    .git-card[data-group='branches'] {
+        --family-color: oklch(0.68 0.16 290);
+    }
+
+    .git-card[data-group='remote'] {
+        --family-color: oklch(0.7 0.12 205);
+    }
+
+    .git-card[data-group='history'] {
+        --family-color: oklch(0.76 0.14 90);
+    }
+
+    .git-card[data-group='undo'] {
+        --family-color: oklch(0.67 0.17 22);
+    }
+
+    .git-card[data-group='stash'] {
+        --family-color: oklch(0.72 0.15 55);
+    }
+
+    .git-card[data-group='merge'] {
+        --family-color: oklch(0.68 0.16 340);
+    }
+
+    .git-card[data-group='tags'] {
+        --family-color: oklch(0.7 0.15 125);
+    }
+
+    .git-card[data-group='maintenance'] {
+        --family-color: oklch(0.64 0.11 70);
+    }
+
+    .git-card[data-group='share'] {
+        --family-color: oklch(0.68 0.13 150);
+    }
+
+    .git-card[data-group='plumbing'] {
+        --family-color: oklch(0.62 0.05 260);
+    }
+
+    .git-card[data-group='misc'] {
+        --family-color: var(--fg-muted);
+    }
+
+    .git-card__group {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3125rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--family-color) 12%, var(--surface));
+        font-size: 0.6875rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .git-card__group::before {
+        content: '';
+        width: 0.4375rem;
+        height: 0.4375rem;
+        border-radius: 50%;
+        background: var(--family-color);
+    }
+}
