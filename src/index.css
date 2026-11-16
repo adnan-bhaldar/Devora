@@ -1457,6 +1457,8 @@
 @import './tools/http-status/styles.css';
 /* FFmpeg commands tool */
 @import './tools/ffmpeg/styles.css';
+/* Git commands tool */
+@import './tools/git-commands/styles.css';
 /* Searchable select (component) */
 @import './components/ui/SearchSelect.css';
 /* Morse code tool */

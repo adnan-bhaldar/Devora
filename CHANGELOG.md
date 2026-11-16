@@ -4,6 +4,12 @@ All notable changes to Devora are listed here, newest first. Each heading is a v
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). When you change something users can notice, add a line under an **Unreleased** heading at the top. At release time, rename it to the new version number (for example `## 1.10.1`).
 
+## 1.19.0
+
+### Added
+
+- **Git Commands** in the Reference category. A searchable reference with a copy-ready card for every command in Git’s own command list, from everyday jobs (committing, branching, syncing with a remote, reading history, undoing mistakes, stashing, merging and rebasing, tagging) to maintenance, patches by email, other version control systems, and the low-level plumbing commands. Each command explains its options, and risky ones carry a warning.
+
 ## 1.18.3
 
 ### Added

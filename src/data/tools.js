@@ -30,6 +30,7 @@ import {
     CalendarClock,
     LockKeyhole,
     Radio,
+    GitBranch,
 } from 'lucide-react'
 
 export const categories = [
@@ -280,6 +281,21 @@ export const tools = [
             title: 'FFmpeg Commands',
             description:
                 'Searchable FFmpeg command reference: convert, compress, resize, cut, and join video, extract audio, make GIFs, and more, with explanations.',
+        },
+    },
+    {
+        id: 'git-commands',
+        name: 'Git Commands',
+        description: 'Copy-ready cards for every Git command: committing, branching, undoing mistakes, and more.',
+        categories: ['reference'],
+        route: '/git-commands',
+        icon: GitBranch,
+        keywords: ['git', 'github', 'commit', 'branch', 'merge', 'rebase', 'stash', 'undo', 'reset', 'revert', 'cheat sheet', 'command line', 'terminal', 'version control', 'plumbing', 'gc', 'fsck', 'bisect', 'reflog', 'cherry-pick'],
+        status: 'live',
+        seo: {
+            title: 'Git Commands',
+            description:
+                'Searchable reference for every Git command: commit, branch, merge, rebase, stash, undo mistakes, work with remotes, maintenance, and low-level plumbing, with explanations.',
         },
     },
     {
