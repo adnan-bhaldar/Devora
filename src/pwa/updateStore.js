@@ -33,7 +33,14 @@ export async function applyUpdate() {
     }
     const worker = registration?.waiting ?? (waiting?.state === 'installed' ? waiting : null)
 
-    // Nothing is waiting any more (for example, another tab already applied the update), so there is nothing to offer.
+    // Another tab may already have applied the update. The offered version is then active, and it is also in charge
+    // of this tab, but this tab still runs the old page code. Reload now, so the page matches the version that serves it.
+    if (!worker && waiting?.state === 'activated' && navigator.serviceWorker.controller === waiting) {
+        window.location.reload()
+        return true
+    }
+
+    // Nothing usable is waiting, and the offered version is not in charge of this tab, so there is nothing to offer.
     if (!worker) {
         setWaitingWorker(null)
         return false
