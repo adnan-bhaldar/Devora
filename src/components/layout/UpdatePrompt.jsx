@@ -12,6 +12,7 @@ export default function UpdatePrompt() {
     const waiting = useSyncExternalStore(subscribe, getWaitingWorker)
     const [dismissed, setDismissed] = useState(false)
     const [reloading, setReloading] = useState(false)
+    const [failed, setFailed] = useState(false)
 
     if (!waiting || dismissed) return null
 
@@ -33,13 +34,24 @@ export default function UpdatePrompt() {
                 <p className="update-prompt__text">
                     Reload to get the latest tools and fixes. Reloading clears anything you have typed into a tool.
                 </p>
+                {failed && (
+                    <p className="update-prompt__text">
+                        The update did not start. Try again, or close every Devora tab and open the site again.
+                    </p>
+                )}
                 <div className="update-prompt__actions">
                     <Button
                         variant="primary"
                         disabled={reloading}
-                        onClick={() => {
+                        onClick={async () => {
                             setReloading(true)
-                            applyUpdate()
+                            setFailed(false)
+                            const switched = await applyUpdate()
+                            // On success the page reloads. If the new version did not take over, say so.
+                            if (!switched) {
+                                setReloading(false)
+                                setFailed(true)
+                            }
                         }}
                     >
                         {reloading ? 'Reloading…' : 'Reload now'}

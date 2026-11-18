@@ -8,6 +8,10 @@
  *   that point at a file (sitemap.xml, robots.txt, ...) are left to the network instead.
  * - The site font (Google Fonts) is saved as it is used, so it also works offline.
  * - Nothing else is intercepted: no tool data ever goes through this file.
+ * - Every version has its own cache (devora-app-<version>). A page is only ever served from the cache of the
+ *   version that is running, so files of an older version can never show up in a newer one.
+ * - Every file of a new version is fetched from the server, never from the browser's own saved copies,
+ *   so a new version can never be built from old files.
  * - A new version waits instead of taking over at once, so an open page never asks for files that the
  *   new version has already removed. It takes over when every Devora tab is closed, or when the person
  *   presses "Reload" in the update message (the page then sends SKIP_WAITING, see the listener below).
@@ -20,7 +24,13 @@ const FONT_CACHE = 'devora-fonts'
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com']
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(caches.open(APP_CACHE).then((cache) => cache.addAll(PRECACHE)))
+    // cache: 'reload' skips the browser's own saved copies and always asks the server. Without it, addAll() can save
+    // a file that the browser still holds from an older visit, and the new version would be built from old files.
+    event.waitUntil(
+        caches
+            .open(APP_CACHE)
+            .then((cache) => cache.addAll(PRECACHE.map((path) => new Request(path, { cache: 'reload' })))),
+    )
 })
 
 self.addEventListener('message', (event) => {
@@ -41,6 +51,13 @@ self.addEventListener('activate', (event) => {
         })(),
     )
 })
+
+// Looks only in the cache of this version. caches.match() on its own searches every cache, oldest first, so a file
+// that an older version left behind could be served instead of the new one.
+async function fromAppCache(request) {
+    const cache = await caches.open(APP_CACHE)
+    return cache.match(request, { ignoreVary: true })
+}
 
 async function fontResponse(event) {
     const { request } = event
@@ -85,12 +102,12 @@ self.addEventListener('fetch', (event) => {
     const lastPart = url.pathname.split('/').pop()
     if (request.mode === 'navigate' && !lastPart.includes('.')) {
         event.respondWith(
-            caches.match('/index.html', { ignoreVary: true }).then((shell) => shell ?? fetch(request)),
+            fromAppCache('/index.html').then((shell) => shell ?? fetch(request)),
         )
         return
     }
 
     // Everything else: the saved copy if there is one, otherwise the network.
     // ignoreVary: some servers add "Vary: Origin", and a saved file would then never match the browser's own request.
-    event.respondWith(caches.match(request, { ignoreVary: true }).then((saved) => saved ?? fetch(request)))
+    event.respondWith(fromAppCache(request).then((saved) => saved ?? fetch(request)))
 })
